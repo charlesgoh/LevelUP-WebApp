@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "firebase": "^4.0.0",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-router-dom": "^4.1.1",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
