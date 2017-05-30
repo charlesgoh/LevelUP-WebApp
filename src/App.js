@@ -1,6 +1,7 @@
 import React, { Component }from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
+import CategoryPage from './CategoryPage/CategoryPage';
 
 export default class App extends Component {
   render() {
@@ -10,7 +11,7 @@ export default class App extends Component {
           <NavBar title="LevelUP"/>
         </header>
         <main>
-          <Homepage />
+          <CategoryPage />
         </main>
         <footer>
 
