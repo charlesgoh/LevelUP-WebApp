@@ -1,5 +1,5 @@
 a {
-  color: maroon;
+  color: grey;
 }
 
 .profile-image {
@@ -9,16 +9,6 @@ a {
   border-style: solid;
 }
 
-.boxed {
-  border: 1px solid black ;
-  radius: 2px;
-}
-
-.title {
-  color: gray;
-}
-
-.page-hyperlink {
-  color: maroon;
-  font-size: 150%;
+.round-corners {
+  border-radius: 20px;
 }

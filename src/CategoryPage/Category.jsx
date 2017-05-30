@@ -1,25 +1,24 @@
 import React, { Component }from 'react';
-import './CategoryPage.css';
 
 export default class Category extends Component {
   render() {
     return (
-      <div className = 'boxed'>
+      <div className = 'card-panel z-depth-1'>
 
-        <p className = 'title center'>
+        <p className = 'grey-text text-lighten-1 center-align'>
           Coaches/Tutors
         </p>
 
-        <p className='page-hyperlink center'>
-          <a href = '#'>
+        <h4 className='center-align'>
+          <a href = '#' className='flow-text red-text text-darken-4'>
             Fitness / Strength
           </a>
-        </p>
-        <p className='page-hyperlink center'>
-          <a href = '#'>
+        </h4>
+        <h4 className='center-align'>
+          <a href = '#' className='flow-text red-text text-darken-4'>
             Sports
           </a>
-        </p>
+        </h4>
       </div>
     );
   }
