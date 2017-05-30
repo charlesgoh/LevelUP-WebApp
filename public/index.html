@@ -16,7 +16,6 @@
     -->
 
   <!-- Custom CSS Styles -->
-  <link type="text/css" href="./main.css" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Compiled and minified CSS -->
@@ -31,6 +30,23 @@
 
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+  <style>
+    /* Settings to offset content by width of side menu*/
+    header,
+    main,
+    footer {
+      padding-left: 300px;
+    }
+
+    @media only screen and (max-width: 992px) {
+      header,
+      main,
+      footer {
+        padding-left: 0;
+      }
+    }
+  </style>
 
   <script>
     $(document).ready(function() {

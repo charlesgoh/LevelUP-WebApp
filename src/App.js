@@ -2,7 +2,7 @@ import React, { Component }from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
 
-export default class AppContainer extends Component {
+export default class App extends Component {
   render() {
     return (
       <div>
