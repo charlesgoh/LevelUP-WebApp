@@ -38,7 +38,9 @@ export default class AuthPage extends Component {
         <h2> {this.state.err} </h2>
 
         {/* Create New Account */}
-        <button onClick={this.signup} className="orange darken-4 waves-effect waves-light btn-large" onClick={this.login}>Log In</button>
+        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>SIGN UP</button>
+        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>LOG IN</button>
+        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4 disabled" onClick={this.login}>LOG OUT</button>
       </div>
     )
   }
