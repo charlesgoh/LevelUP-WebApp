@@ -9,37 +9,37 @@ export default class SortFilter extends Component {
           Sort/Filter
         </p>
 
-        <div className = 'container center-align grey lighten-2 round-corners'>
-          <a href = '#' className = 'grey-text text-darken-1'>
-            <div className = 'row valign-wrapper  '>
-              <div className = 'col s1'>
-                <i className = 'small material-icons'>
-                  room
-                </i>
-              </div>
-              <div className = 'col s10 text-grey left-align'>
+        <div className = 'container center-align grey lighten-2'>
+          <div className = 'row'>
+            <div className = 'input-field col s6'>
+              <i className = 'material-icons prefix'>
+                room
+              </i>
+              <input id="location" type="text" className="validate" />
+              <label for="location">
                 Location
-              </div>
+              </label>
             </div>
-          </a>
-        </div>
 
-
-        <div className = 'container center-align grey lighten-2 round-corners'>
-          <a href = '#' className = 'grey-text text-darken-1'>
-            <div className = 'row valign-wrapper'>
-              <div className = 'col s1'>
-                <i className = 'small material-icons'>
-                  credit_card
-                </i>
-              </div>
-              <div className = 'col s10 text-grey left-align'>
+            <div className = 'input-field col s6'>
+              <i className = 'material-icons prefix'>
+                credit_card
+              </i>
+              <input id="price-hour" type="text" className="validate" />
+              <label for="price-hour">
                 Price/Hour
-              </div>
+              </label>
             </div>
-          </a>
+          </div>
+
+
         </div>
 
+        <div className = 'center-align'>
+          <button className = 'btn waves-effect waves-light' type = 'submit' name = 'action'>
+            Search
+          </button>
+        </div>
       </div>
     );
   }
