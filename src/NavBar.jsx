@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Auth from './Auth';
 
 export default class NavBar extends Component {
   render() {
@@ -11,12 +12,14 @@ export default class NavBar extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              <a className="waves-effect waves-light btn-large"><i className="large material-icons left">perm_identity</i>LOG IN</a>
+              <a className="waves-effect waves-light btn-large">
+                <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              <a className="waves-effect waves-light btn-large"><i className="large material-icons left">perm_identity</i>LOG IN</a>
+              <a className="waves-effect waves-light btn-large">
+                <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
         </div>
