@@ -1,6 +1,7 @@
 import React, { Component }from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
+import AuthPage from './Auth/AuthPage';
 
 export default class App extends Component {
   render() {
@@ -10,7 +11,8 @@ export default class App extends Component {
           <NavBar title="LevelUP"/>
         </header>
         <main>
-          <Homepage />
+          {/* <Homepage /> */}
+          <AuthPage />
         </main>
         <footer>
 
