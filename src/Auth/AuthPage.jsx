@@ -19,11 +19,11 @@ export default class AuthPage extends Component {
   render() {
     return (
       // Email Address
-      <div className="container center">
+      <div className="container center padding-top: 50px">
         <div className="row">
           <div className="input-field col s12">
             <input type="email" ref="email" className="validate"></input>
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
           </div>
         </div>
 
@@ -31,16 +31,24 @@ export default class AuthPage extends Component {
         <div className="row">
           <div className="input-field col s12">
             <input type="password" ref="pass" className="validate"></input>
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
           </div>
         </div>
 
         <h2> {this.state.err} </h2>
 
         {/* Create New Account */}
-        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>SIGN UP</button>
-        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>LOG IN</button>
-        <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4 disabled" onClick={this.login}>LOG OUT</button>
+        <div className="row">
+          <div className="col s4">
+            <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>SIGN UP</button>
+          </div>
+          <div className="col s4">
+            <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4" onClick={this.login}>LOG IN</button>
+          </div>
+          <div className="col s4">
+            <button onClick={this.signup} className="red darken-4 waves-effect waves-light btn-large s4 disabled" onClick={this.login}>LOG OUT</button>
+          </div>
+        </div>
       </div>
     )
   }
