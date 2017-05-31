@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Auth from './Auth';
+import Auth from './Auth/Auth';
 
 export default class NavBar extends Component {
   render() {
@@ -12,19 +12,18 @@ export default class NavBar extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              <a className="waves-effect waves-light btn-large">
+              <a onClick={Auth.login} className="waves-effect waves-light btn">
                 <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              <a className="waves-effect waves-light btn-large">
+              <a onClick={Auth.login} className="waves-effect waves-light btn">
                 <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
         </div>
       </nav>
-
     );
   }
 };
