@@ -2,6 +2,7 @@ import React, { Component }from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
 import CategoryPage from './CategoryPage/CategoryPage';
+import ProfilePage from './ProfilePage/ProfilePage';
 
 export default class App extends Component {
   render() {
@@ -11,7 +12,7 @@ export default class App extends Component {
           <NavBar title="LevelUP"/>
         </header>
         <main>
-          <CategoryPage />
+          <ProfilePage />
         </main>
         <footer>
 
