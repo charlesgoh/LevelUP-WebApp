@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
-import Auth from './Auth/Auth';
 
 export default class NavBar extends Component {
+
+  onLogin() {
+    this.props.onLogin();
+  }
+
   render() {
     return (
       <nav>
@@ -12,13 +16,13 @@ export default class NavBar extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              <a onClick={Auth.login} className="waves-effect waves-light btn">
+              <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn">
                 <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              <a onClick={Auth.login} className="waves-effect waves-light btn">
+              <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn">
                 <i className="material-icons left">perm_identity</i>LOG IN</a>
             </li>
           </ul>
