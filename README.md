@@ -33,9 +33,20 @@ Run this in bash/terminal before running anything important:<br/>
 In your development branch: <br/>
 `$ git merge master` <br/>
 Resolve merge conflicts. <br/>
-`$ git checkout master`<br/>
-`$ git merge development` <br/>
-Or do a pull request. This will be updated as we learn more about collaborating using git.
+**Important**: Create new Pull Request. Once all conflicts and issues have been resolved, proceed to merge.
+
+### Deleting Branch After Merge
+Three choices for deleting development branches:<br/>
+
+#### Delete via Pull Request
+When confirming merge to master using pull requests, select the option to delete branch
+
+#### Delete Manually Through Github (Not Recommended)
+Use SourceTree to delete local branch, and go to repository settings to delete remote branch. 
+
+#### Delete via Terminal
+`$ git push origin --delete development` to delete remote branch.<br/>
+`$ git branch -d development` to delete local branch.
 
 ### **NOTE**
-The master branch is protected from any **rubbish** pull requests or force pushes. Resolve merge conflicts before attempting to merge into master. 
+The master branch is protected from any **rubbish** pull requests or force pushes. Resolve merge conflicts before attempting to merge into master.
