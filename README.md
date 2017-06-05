@@ -35,6 +35,11 @@ In your development branch: <br/>
 Resolve merge conflicts. <br/>
 **Important**: Create new Pull Request. Once all conflicts and issues have been resolved, proceed to merge.
 
+#### Resolving Merge Conflicts
+1. Notify all parties affected
+2. Resolve conflict together using Github's online **Web Editor**
+3. Delete redundant files. This is also an effective way to resolve merge conflicts
+
 ### Deleting Branch After Merge
 Three choices for deleting development branches:<br/>
 
@@ -42,7 +47,7 @@ Three choices for deleting development branches:<br/>
 When confirming merge to master using pull requests, select the option to delete branch
 
 #### Delete Manually Through Github (Not Recommended)
-Use SourceTree to delete local branch, and go to repository settings to delete remote branch. 
+Use SourceTree to delete local branch, and go to repository settings to delete remote branch.
 
 #### Delete via Terminal
 `$ git push origin --delete development` to delete remote branch.<br/>
