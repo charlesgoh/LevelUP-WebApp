@@ -1,4 +1,4 @@
-import React, { Component }from 'react';
+import React, {Component} from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
 import Auth0Lock from 'auth0-lock';
@@ -39,18 +39,15 @@ export default class App extends Component {
           console.log(error);
           return;
         }
-
         // console.log(profile);
         this.setProfile(authResult.idToken, profile);
       });
     });
-
     this.getProfile();
-
   }
 
   getProfile() {
-    if(localStorage.getItem('idToken') != null) {
+    if (localStorage.getItem('idToken') != null) {
       this.setState({
         idToken: localStorage.getItem('idToken'),
         profile: JSON.parse(localStorage.getItem('profile'))
@@ -78,27 +75,31 @@ export default class App extends Component {
     this.auth0.authorize();
   }
 
+  logout() {
+    this.setState({
+      idToken: '',
+      profile: ''
+    }, () => {
+      localStorage.removeItem('idToken');
+      localStorage.removeItem('profile');
+    });
+  }
+
   render() {
-    //Quick Check of Login Statement using Authentication Button
-    let authButtonAction;
-
-    if (this.state.idToken) {
-      authButtonAction = "LOG OUT";
-    } else {
-      authButtonAction = "LOG IN";
-    }
-
     return (
       <div>
         <header>
-          <NavBar title="LevelUP" onLogin={this.showLock.bind(this)} authButton={authButtonAction}/>
+          <NavBar
+            title="LevelUP"
+            lock={this.lock}
+            idToken={this.state.idToken}
+            onLogin={this.showLock.bind(this)}
+            onLogout={this.logout.bind(this)}/>
         </header>
         <main>
-          <Homepage />
+          <Homepage/>
         </main>
-        <footer>
-
-        </footer>
+        <footer></footer>
       </div>
     );
   }
