@@ -6,7 +6,24 @@ export default class NavBar extends Component {
     this.props.onLogin();
   }
 
+  onLogout() {
+    this.props.onLogout();
+  }
+
   render() {
+    let authButton;
+    if (this.props.idToken) {
+      authButton = (
+        <a onClick={this.onLogout.bind(this)} className="waves-effect waves-light btn">
+          <i className="material-icons left">perm_identity</i>LOG OUT</a>
+      )
+    } else {
+      authButton = (
+        <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn">
+          <i className="material-icons left">perm_identity</i>LOG IN</a>
+      )
+    }
+
     return (
       <nav>
         <div className="nav-wrapper red darken-4">
@@ -16,14 +33,12 @@ export default class NavBar extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn" >
-                <i className="material-icons left">perm_identity</i>{this.props.authButton}</a>
+              {authButton}
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn">
-                <i className="material-icons left">perm_identity</i>{this.props.authButton}</a>
+              {authButton}
             </li>
           </ul>
         </div>
