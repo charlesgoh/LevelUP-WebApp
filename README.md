@@ -29,10 +29,13 @@ Run this in bash/terminal before running anything important:<br/>
 `$ git checkout development` to move into development branch
 `$ git checkout master` to move into master branch
 
-### After Making Changes
+### SOP After Making Changes
 In your development branch: <br/>
 `$ git merge master` <br/>
 Resolve merge conflicts. <br/>
 `$ git checkout master`<br/>
 `$ git merge development` <br/>
 Or do a pull request. This will be updated as we learn more about collaborating using git.
+
+### **NOTE**
+The master branch is protected from any **rubbish** pull requests or force pushes. Resolve merge conflicts before attempting to merge into master. 
