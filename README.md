@@ -60,7 +60,7 @@ Node Packet Manager (NPM) is unavailable in China. Use either the cnpmjs or taob
 `$ npm config set registry` https://registry.npm.taobao.org/`<br/>
 The taobao npm mirror is suggested to be faster.<br/>
 
-##### Switching NPM Config Battery To Default Registry
+##### Switching NPM Registry Back to Default
 `$ npm config set registry: http://registry.npmjs.eu` <br/>
 
 ### **NOTE**
