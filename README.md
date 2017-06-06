@@ -53,5 +53,15 @@ Use SourceTree to delete local branch, and go to repository settings to delete r
 `$ git push origin --delete development` to delete remote branch.<br/>
 `$ git branch -d development` to delete local branch.
 
+#### Using Node Packet Manager in China
+Node Packet Manager (NPM) is unavailable in China. Use either the cnpmjs or taobao npm packet managers.
+##### Switching NPM Config Registry to Chinese Registry
+`$ npm config set registry` http://r.cnpmjs.org`<br/>
+`$ npm config set registry` https://registry.npm.taobao.org/`<br/>
+The taobao npm mirror is suggested to be faster.<br/>
+
+##### Switching NPM Config Battery To Default Registry
+`$ npm config set registry: http://registry.npmjs.eu` <br/>
+
 ### **NOTE**
 The master branch is protected from any **rubbish** pull requests or force pushes. Resolve merge conflicts before attempting to merge into master.
