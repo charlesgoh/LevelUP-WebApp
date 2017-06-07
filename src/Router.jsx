@@ -7,7 +7,7 @@ import Homepage from './Homepage/Homepage';
 import CategoryPage from './CategoryPage/CategoryPage';
 import NotFound from './NotFound';
 
-export default class Routes extends Component {
+export default class Router extends Component {
   render() {
     return (
       <BrowserRouter>
