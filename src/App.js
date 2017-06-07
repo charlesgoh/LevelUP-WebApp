@@ -28,7 +28,6 @@ export default class App extends Component {
   componentWillMount() {
     var options = {
       theme: {
-        logo: './logo.png',
         primaryColor: '#b71c1c'
       }
     };
