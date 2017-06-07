@@ -26,7 +26,14 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    this.lock = new Auth0Lock(this.props.clientID, this.props.domain);
+    var options = {
+      theme: {
+        logo: './logo.png',
+        primaryColor: '#b71c1c'
+      }
+    };
+
+    this.lock = new Auth0Lock(this.props.clientID, this.props.domain, options);
 
     this.lock.on('authenticated', (authResult) => {
       // console.log(authResult);
