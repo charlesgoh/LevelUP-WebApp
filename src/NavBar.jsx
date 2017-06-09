@@ -1,16 +1,9 @@
 import React, {Component} from 'react';
+import Authen from './Authen';
 
 export default class NavBar extends Component {
 
   render() {
-
-    let authButton;
-    authButton = (
-      <a className="waves-effect waves-light btn" href="#modal1">
-        <i className="material-icons left">perm_identity</i>LOGIN
-      </a>
-    );
-
     return (
       <nav>
         {/* This is the login Modal */}
@@ -19,7 +12,9 @@ export default class NavBar extends Component {
             <h1>LevelUP</h1>
           </div>
           <div>
-            <div className="" id="firebaseui-auth-container"></div>
+            <div className="center">
+              <a className="waves-effect waves-light btn"><i className="material-icons left">cloud</i>Button</a>
+            </div>
             <p></p>
           </div>
         </div>
@@ -31,12 +26,12 @@ export default class NavBar extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              {authButton}
+              <Authen />
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              {authButton}
+              <Authen />
             </li>
           </ul>
         </div>
