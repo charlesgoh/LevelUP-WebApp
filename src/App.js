@@ -19,7 +19,32 @@ export const auth = firebaseApp.auth();
 
 export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
 
+export const isAuthenticated = () => {
+  return !!auth.currentUser || !!localStorage.getItem(storageKey);
+}
+
 export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uid: null,
+      err: ''
+    }
+  }
+
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        window.localStorage.setItem(storageKey, user.uid);
+        this.setState({uid: user.uid});
+      } else {
+        window.localStorage.removeItem(storageKey);
+        this.setState({uid: null});
+      }
+    });
+  }
 
   render() {
     return (
