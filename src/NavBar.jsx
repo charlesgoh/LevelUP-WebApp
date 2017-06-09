@@ -3,13 +3,12 @@ import React, {Component} from 'react';
 export default class NavBar extends Component {
 
   render() {
+
     let authButton;
     authButton = (
-      <div>
-          <a className="waves-effect waves-light btn" href="#modal1">
-            <i className="material-icons left">perm_identity</i>LOGIN
-          </a>
-      </div>
+      <a className="waves-effect waves-light btn" href="#modal1">
+        <i className="material-icons left">perm_identity</i>LOGIN
+      </a>
     );
 
     return (
