@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import NavBar from './NavBar';
 import Homepage from './Homepage/Homepage';
-import firebase from 'firebase';
+
 
 export default class App extends Component {
 
