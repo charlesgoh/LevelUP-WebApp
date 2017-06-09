@@ -18,8 +18,9 @@ export default class NavBar extends Component {
           <div className="center modal-content red darken-4">
             <h1>LevelUP</h1>
           </div>
-          <div className="modal-footer">
-            <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+          <div>
+            <div className="" id="firebaseui-auth-container"></div>
+            <p></p>
           </div>
         </div>
 
