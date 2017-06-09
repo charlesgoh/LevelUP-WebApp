@@ -2,27 +2,12 @@ import React, {Component} from 'react';
 
 export default class NavBar extends Component {
 
-  onLogin() {
-    this.props.onLogin();
-  }
-
-  onLogout() {
-    this.props.onLogout();
-  }
-
   render() {
     let authButton;
-    if (this.props.idToken) {
-      authButton = (
-        <a onClick={this.onLogout.bind(this)} className="waves-effect waves-light btn">
-          <i className="material-icons left">perm_identity</i>LOG OUT</a>
-      )
-    } else {
-      authButton = (
-        <a onClick={this.onLogin.bind(this)} className="waves-effect waves-light btn">
-          <i className="material-icons left">perm_identity</i>LOG IN</a>
-      )
-    }
+    authButton = (
+      <a className="waves-effect waves-light btn">
+        <i className="material-icons left">perm_identity</i>LOG IN BUTTON</a>
+    )
 
     return (
       <nav>
