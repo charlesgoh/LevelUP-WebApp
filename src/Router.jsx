@@ -11,14 +11,14 @@ export default class Router extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Route exact path="/" component={ App }>
+        <App>
           <Route path="index" component= { Homepage }/>
           <Route path="categories" component={ CategoryPage }/>
           {/* <Route path="users" component={ Users }>
             <Route path="/users/:userID" component={ Users } />
           </Route> */}
           <Route path="*" component={ NotFound } />
-        </Route>
+        </App>
       </BrowserRouter>
     )
   }
