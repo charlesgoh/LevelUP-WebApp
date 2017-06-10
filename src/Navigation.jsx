@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Authen from './Authen';
 
-export default class NavBar extends Component {
+export default class Navigation extends Component {
 
   render() {
     return (
