@@ -3,5 +3,6 @@
   email: "",
   gender: "",
   locations: [],
-  description: ""
+  description: "",
+  listings: {}
 }
