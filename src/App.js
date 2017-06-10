@@ -1,108 +1,35 @@
 import React, {Component} from 'react';
-import NavBar from './NavBar';
-import Homepage from './Homepage/Homepage';
-import Auth0Lock from 'auth0-lock';
 
 export default class App extends Component {
-
-  static defaultProps = {
-    domain: 'charlesgoh.auth0.com',
-    clientID: '6H3dOxMf1KkYNUZ30dE7FCyBiSm_GXbe',
-    redirectUri: 'http://localhost:3000',
-    audience: 'https://charlesgoh.auth0.com/userinfo',
-    responseType: 'token id_token',
-    scope: 'openid'
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      idToken: '',
-      profile: {}
-    };
-
-    this.login = this.login.bind(this);
-  }
-
-  componentWillMount() {
-    var options = {
-      theme: {
-        primaryColor: '#b71c1c'
-      }
-    };
-
-    this.lock = new Auth0Lock(this.props.clientID, this.props.domain, options);
-
-    this.lock.on('authenticated', (authResult) => {
-      // console.log(authResult);
-
-      this.lock.getProfile(authResult.idToken, (error, profile) => {
-        if (error) {
-          console.log(error);
-          return;
-        }
-        // console.log(profile);
-        this.setProfile(authResult.idToken, profile);
-      });
-    });
-    this.getProfile();
-  }
-
-  getProfile() {
-    if (localStorage.getItem('idToken') != null) {
-      this.setState({
-        idToken: localStorage.getItem('idToken'),
-        profile: JSON.parse(localStorage.getItem('profile'))
-      }, () => {
-        console.log(this.state);
-      });
-    }
-  }
-
-  setProfile(idToken, profile) {
-    localStorage.setItem('idToken', idToken);
-    localStorage.setItem('profile', JSON.stringify(profile));
-
-    this.setState({
-      idToken: localStorage.getItem('idToken'),
-      profile: JSON.parse(localStorage.getItem('profile'))
-    });
-  }
-
-  showLock() {
-    this.lock.show();
-  }
-
-  login() {
-    this.auth0.authorize();
-  }
-
-  logout() {
-    this.setState({
-      idToken: '',
-      profile: ''
-    }, () => {
-      localStorage.removeItem('idToken');
-      localStorage.removeItem('profile');
-    });
-  }
-
   render() {
+    var carousel = (
+      <div className="carousel carousel-slider center" data-indicators="true">
+        <div className="carousel-fixed-item center">
+          <a className="btn waves-effect white grey-text darken-text-2">button</a>
+        </div>
+        <div className="carousel-item red white-text" href="#one!">
+          <h2>First Panel</h2>
+          <p className="white-text">This is your first panel</p>
+        </div>
+        <div className="carousel-item amber white-text" href="#two!">
+          <h2>Second Panel</h2>
+          <p className="white-text">This is your second panel</p>
+        </div>
+        <div className="carousel-item green white-text" href="#three!">
+          <h2>Third Panel</h2>
+          <p className="white-text">This is your third panel</p>
+        </div>
+        <div className="carousel-item blue white-text" href="#four!">
+          <h2>Fourth Panel</h2>
+          <p className="white-text">This is your fourth panel</p>
+        </div>
+      </div>
+    );
+
     return (
       <div>
-        <header>
-          <NavBar
-            title="LevelUP"
-            lock={this.lock}
-            idToken={this.state.idToken}
-            onLogin={this.showLock.bind(this)}
-            onLogout={this.logout.bind(this)}/>
-        </header>
-        <main>
-          <Homepage/>
-        </main>
-        <footer></footer>
+        {carousel}
+        <h1 className="center">This is the Homepage</h1>
       </div>
     );
   }
