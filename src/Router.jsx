@@ -15,17 +15,18 @@ let config = {
   storageBucket: "levelup-30839.appspot.com",
   messagingSenderId: "109258915713"
 }
+firebase.initializeApp(config);
 
-export const firebaseApp = firebase.initializeApp(config);
-
-export const db = firebaseApp.database();
-export const auth = firebaseApp.auth();
-
-export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
-
-export const isAuthenticated = () => {
-  return !!auth.currentUser || !!localStorage.getItem(storageKey);
-}
+// export const firebaseApp = firebase.initializeApp(config);
+//
+// export const db = firebaseApp.database();
+// export const auth = firebaseApp.auth();
+//
+// export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
+//
+// export const isAuthenticated = () => {
+//   return !!auth.currentUser || !!localStorage.getItem(storageKey);
+// }
 
 export default class Router extends Component {
 
