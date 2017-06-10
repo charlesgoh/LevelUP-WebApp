@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
 
 
 import App from './App';
@@ -12,7 +11,7 @@ export default class Router extends Component {
     return (
       <BrowserRouter>
         <App>
-          <Route path="index" component= { Homepage }/>
+          <Route exact path="/" component= { Homepage }/>
           <Route path="categories" component={ CategoryPage }/>
           {/* <Route path="users" component={ Users }>
             <Route path="/users/:userID" component={ Users } />

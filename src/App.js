@@ -52,9 +52,9 @@ export default class App extends Component {
         <header>
           <NavBar/>
         </header>
-        <main>
+        {/* <main>
           <Homepage/>
-        </main>
+        </main> */}
         <footer></footer>
       </div>
     );
