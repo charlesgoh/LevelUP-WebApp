@@ -13,7 +13,25 @@ export default class NavBar extends Component {
           </div>
           <div>
             <div className="center">
-              <a className="waves-effect waves-light btn"><i className="material-icons left">cloud</i>Button</a>
+              <button className="waves-effect waves-light btn-large red">
+                <i className="fa fa-google left"></i>
+                Sign In With Google
+                {/* <img
+                  width="32"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                  className="left">
+                </img> */}
+              </button>
+              <br/>
+              <button className="waves-effect waves-light btn-large blue">
+                <i className="fa fa-facebook left"></i>
+                Sign In With Facebook
+              </button>
+              <br/>
+              <button className="waves-effect waves-light btn-large black">
+                <i className="fa fa-github left"></i>
+                Sign In With Github
+              </button>
             </div>
             <p></p>
           </div>
