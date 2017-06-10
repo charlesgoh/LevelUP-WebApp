@@ -1,21 +1,22 @@
 import React, {Component} from 'react';
 import Authen from './Authen';
-// import firebase from 'firebase';
-import * as ReusableClass from './ReusableComponents'
+import firebase from 'firebase';
+
+const storageKey = 'KEY_FOR_LOCAL_STORAGE'
 
 export default class Navigation extends Component {
 
   googleSignIn() {
     console.log("Attempting to log in using Google");
 
-    var provider = new ReusableClass.firebaseApp.auth.GoogleAuthProvider();
-    var promise = ReusableClass.firebaseApp.auth().signInWithPopup(provider);
+    var provider = new firebase.auth.GoogleAuthProvider();
+    var promise = firebase.auth().signInWithPopup(provider);
 
     // Handle Successful Login
     promise.then(result => {
       var user = result.user;
       console.log(result);
-      ReusableClass.firebaseApp.database().ref('users/' + user.uid).set({
+      firebase.database().ref('users/' + user.uid).set({
         email: user.email,
         name: user.displayName
       });
@@ -40,12 +41,12 @@ export default class Navigation extends Component {
   }
 
   componentDidMount() {
-    ReusableClass.firebaseApp.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        window.localStorage.setItem(ReusableClass.storageKey, user.uid);
+        window.localStorage.setItem(storageKey, user.uid);
         this.setState({uid: user.uid});
       } else {
-        window.localStorage.removeItem(ReusableClass.storageKey);
+        window.localStorage.removeItem(storageKey);
         this.setState({uid: null});
       }
     });
