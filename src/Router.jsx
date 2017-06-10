@@ -30,26 +30,26 @@ firebase.initializeApp(config);
 
 export default class Router extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      uid: null,
-      err: ''
-    }
-  }
-
-  componentDidMount() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        window.localStorage.setItem(storageKey, user.uid);
-        this.setState({uid: user.uid});
-      } else {
-        window.localStorage.removeItem(storageKey);
-        this.setState({uid: null});
-      }
-    });
-  }
+  // constructor(props) {
+  //   super(props);
+  //
+  //   this.state = {
+  //     uid: null,
+  //     err: ''
+  //   }
+  // }
+  //
+  // componentDidMount() {
+  //   auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //       window.localStorage.setItem(storageKey, user.uid);
+  //       this.setState({uid: user.uid});
+  //     } else {
+  //       window.localStorage.removeItem(storageKey);
+  //       this.setState({uid: null});
+  //     }
+  //   });
+  // }
 
   render() {
     return (

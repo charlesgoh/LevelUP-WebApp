@@ -1,7 +1,56 @@
 import React, {Component} from 'react';
 import Authen from './Authen';
+import firebase from 'firebase';
+
+const storageKey = 'KEY_FOR_LOCAL_STORAGE'
 
 export default class Navigation extends Component {
+
+  googleSignIn() {
+    console.log("Attempting to log in using Google");
+
+    var provider = new firebase.auth.GoogleAuthProvider();
+    var promise = firebase.auth().signInWithPopup(provider);
+
+    // Handle Successful Login
+    promise.then(result => {
+      var user = result.user;
+      console.log(result);
+      firebase.database().ref('users/' + user.uid).set({
+        email: user.email,
+        name: user.displayName
+      });
+    });
+
+    // Handle Exceptions and errors
+    promise.catch(error => {
+      var msg = error.message;
+      console.log(msg);
+    });
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uid: null,
+      err: ""
+    };
+
+    this.googleSignIn = this.googleSignIn.bind(this);
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        window.localStorage.setItem(storageKey, user.uid);
+        this.setState({uid: user.uid});
+      } else {
+        window.localStorage.removeItem(storageKey);
+        this.setState({uid: null});
+      }
+    });
+  }
 
   render() {
     return (
@@ -13,7 +62,11 @@ export default class Navigation extends Component {
           </div>
           <div>
             <div className="center">
-              <button className="waves-effect waves-light btn-large red">
+              <h2>{this.state.error}</h2>
+              <button
+                onClick={this.googleSignIn}
+                id="google"
+                className="waves-effect waves-light btn-large red">
                 <i className="fa fa-google left"></i>
                 Sign In With Google
                 {/* <img
