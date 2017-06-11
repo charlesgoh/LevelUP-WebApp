@@ -14,6 +14,7 @@ export default class Navigation extends Component {
 
     // Handle Successful Login
     promise.then(result => {
+      console.log("Google Login Successful!");
       var user = result.user;
       console.log(result);
       firebase.database().ref('users/' + user.uid).set({
@@ -29,32 +30,27 @@ export default class Navigation extends Component {
     });
   }
 
-  // facebookSignIn() {
-  //   console.log("Attempting to log in using Facebook");
-  //
-  //   // Sign in using redirect. Case 1: If already authenticated
-  //   firebase.auth().getRedirectResult().then(result => {
-  //     if (result.credential) {
-  //       // This is the Google Access Token
-  //       var token = result.credential.accessToken;
-  //     }
-  //     var user = result.user;
-  //     //Sign in for unauthenticated user
-  //
-  //   })
-  //
-  //   var provider = new firebase.auth.FacebookAuthProvider();
-  //   provider.addScope("public_profile");
-  //   provider.addScope("email");
-  //   provider.addScope("user_about_me");
-  //
-  //   //Handle Successful Login
-  //   promise.then(result => {
-  //
-  //   })
-  //
-  //   // Handle Exceptions and Errors
-  // }
+  facebookSignIn() {
+    console.log("Attempting to log in using Facebook");
+
+    var provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope("public_profile");
+    provider.addScope("email");
+    provider.addScope("user_about_me");
+    var promise = firebase.auth().signInWithRedirect(provider);
+
+    //Handle Successful Login
+    promise.then(result => {
+      console.log("Facebook Login Successful!")
+      console.log(result);
+    });
+
+    // Handle Exceptions and Errors
+    promise.catch(error => {
+      var msg = error.message;
+      console.log(msg);
+    });
+  }
 
   constructor(props) {
     super(props);
@@ -65,7 +61,7 @@ export default class Navigation extends Component {
     };
 
     this.googleSignIn = this.googleSignIn.bind(this);
-    //this.facebookSignIn = this.facebookSignIn.bind(this);
+    this.facebookSignIn = this.facebookSignIn.bind(this);
   }
 
   componentDidMount() {
@@ -91,8 +87,7 @@ export default class Navigation extends Component {
           <div>
             <div className="center">
               <h2>{this.state.error}</h2>
-              <button
-                onClick={this.googleSignIn}
+              <button onClick={this.googleSignIn}
                 id="google"
                 className="waves-effect waves-light btn-large red">
                 <i className="fa fa-google left"></i>
@@ -104,7 +99,7 @@ export default class Navigation extends Component {
                 </img> */}
               </button>
               <br/>
-              <button className="waves-effect waves-light btn-large blue">
+              <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large blue">
                 <i className="fa fa-facebook left"></i>
                 Sign In With Facebook
               </button>
