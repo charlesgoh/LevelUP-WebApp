@@ -30,10 +30,16 @@ Run this in bash/terminal before running anything important:<br/>
 `$ git checkout master` to move into master branch
 
 ### SOP After Making Changes
+**Important**: Create new Pull Request. Once all conflicts and issues have been resolved, proceed to merge.
+
+#### Alternative Merge Method
+In your master branch: <br/>
+`$ git pull --rebase` <br/>
 In your development branch: <br/>
 `$ git merge master` <br/>
-Resolve merge conflicts. <br/>
-**Important**: Create new Pull Request. Once all conflicts and issues have been resolved, proceed to merge.
+In your master branch: <br/>
+`$ git merge branch` <br/>
+**Note:** Only do this when you are absolutely sure that there will be no merge conflicts. Otherwise always do a pull request. This is for convenience and to prevent confusion. 
 
 #### Resolving Merge Conflicts
 1. Notify all parties affected
