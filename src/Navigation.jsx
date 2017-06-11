@@ -6,11 +6,16 @@ const storageKey = 'KEY_FOR_LOCAL_STORAGE'
 
 export default class Navigation extends Component {
 
+  logoutUser(event) {
+    console.log("Logging Out Now...");
+    firebase.auth().signOut();
+  }
+
   googleSignIn() {
     console.log("Attempting to log in using Google");
 
     var provider = new firebase.auth.GoogleAuthProvider();
-    var promise = firebase.auth().signInWithRedirect(provider);
+    var promise = firebase.auth().signInWithPopup(provider);
 
     // Handle Successful Login
     promise.then(result => {
@@ -60,6 +65,7 @@ export default class Navigation extends Component {
       err: ""
     };
 
+    this.logoutUser = this.logoutUser.bind(this);
     this.googleSignIn = this.googleSignIn.bind(this);
     this.facebookSignIn = this.facebookSignIn.bind(this);
   }
@@ -77,9 +83,28 @@ export default class Navigation extends Component {
   }
 
   render() {
+    let masterAuthButton;
+
+    if (!this.state.uid) {
+      console.log("Rendering Sign In Button");
+      masterAuthButton = (
+        <a className="waves-effect waves-light btn" href="#modal1">
+          <i className="material-icons left">perm_identity</i>SIGN IN
+        </a>
+      );
+    } else {
+      console.log("Rendering Sign Out Button");
+      masterAuthButton = (
+        <a onClick={this.logoutUser} className="waves-effect waves-light btn">
+          <i className="material-icons left">exit_to_app</i>SIGN OUT
+        </a>
+      );
+    }
+
     return (
       <nav>
-        {/* This is the login Modal */}
+
+        {/* This is the login modal */}
         <div id="modal1" className="modal">
           <div className="center modal-content red darken-4">
             <h1>LevelUP</h1>
@@ -109,7 +134,7 @@ export default class Navigation extends Component {
                 Sign In With Github
               </button>
             </div>
-            <p></p>
+            <br/>
           </div>
         </div>
 
@@ -120,12 +145,12 @@ export default class Navigation extends Component {
           </a>
           <ul className="right hide-on-med-and-down">
             <li>
-              <Authen />
+              {masterAuthButton}
             </li>
           </ul>
           <ul className="side-nav" id="mobile-demo">
             <li>
-              <Authen />
+              {masterAuthButton}
             </li>
           </ul>
         </div>
