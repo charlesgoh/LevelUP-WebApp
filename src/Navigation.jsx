@@ -10,7 +10,7 @@ export default class Navigation extends Component {
     console.log("Attempting to log in using Google");
 
     var provider = new firebase.auth.GoogleAuthProvider();
-    var promise = firebase.auth().signInWithPopup(provider);
+    var promise = firebase.auth().signInWithRedirect(provider);
 
     // Handle Successful Login
     promise.then(result => {
@@ -22,12 +22,39 @@ export default class Navigation extends Component {
       });
     });
 
-    // Handle Exceptions and errors
+    // Handle Exceptions and Errors
     promise.catch(error => {
       var msg = error.message;
       console.log(msg);
     });
   }
+
+  // facebookSignIn() {
+  //   console.log("Attempting to log in using Facebook");
+  //
+  //   // Sign in using redirect. Case 1: If already authenticated
+  //   firebase.auth().getRedirectResult().then(result => {
+  //     if (result.credential) {
+  //       // This is the Google Access Token
+  //       var token = result.credential.accessToken;
+  //     }
+  //     var user = result.user;
+  //     //Sign in for unauthenticated user
+  //
+  //   })
+  //
+  //   var provider = new firebase.auth.FacebookAuthProvider();
+  //   provider.addScope("public_profile");
+  //   provider.addScope("email");
+  //   provider.addScope("user_about_me");
+  //
+  //   //Handle Successful Login
+  //   promise.then(result => {
+  //
+  //   })
+  //
+  //   // Handle Exceptions and Errors
+  // }
 
   constructor(props) {
     super(props);
@@ -38,6 +65,7 @@ export default class Navigation extends Component {
     };
 
     this.googleSignIn = this.googleSignIn.bind(this);
+    //this.facebookSignIn = this.facebookSignIn.bind(this);
   }
 
   componentDidMount() {
