@@ -9,9 +9,9 @@ export default class SortFilter extends Component {
           Sort/Filter
         </p>
 
-        <div className = 'container center-align grey lighten-2'>
-          <div className = 'row'>
-            <div className = 'input-field col s6'>
+        <div className = 'container center-align'>
+          <div className = 'card-panel row grey lighten-2'>
+            <div className = 'input-field'>
               <i className = 'material-icons prefix'>
                 room
               </i>
@@ -21,7 +21,7 @@ export default class SortFilter extends Component {
               </label>
             </div>
 
-            <div className = 'input-field col s6'>
+            <div className = 'input-field'>
               <i className = 'material-icons prefix'>
                 credit_card
               </i>
