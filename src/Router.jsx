@@ -2,30 +2,12 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import firebase from 'firebase';
 
+import * as FirebaseService from './FirebaseService';
+
 import App from './App';
 import CategoryPage from './CategoryPage/CategoryPage';
 import NotFound from './NotFound';
 import Navigation from './Navigation';
-
-let config = {
-  apiKey: "AIzaSyCNY41AjwQcTN2bRSc76jd9biY67j5HKEo",
-  authDomain: "levelup-30839.firebaseapp.com",
-  databaseURL: "https://levelup-30839.firebaseio.com",
-  projectId: "levelup-30839",
-  storageBucket: "levelup-30839.appspot.com",
-  messagingSenderId: "109258915713"
-}
-
-export const firebaseApp = firebase.initializeApp(config);
-
-export const firebaseDB = firebaseApp.database();
-export const firebaseAuth = firebaseApp.auth();
-
-export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
-
-export const isAuthenticated = () => {
-  return !!firebaseAuth.currentUser || !!localStorage.getItem(storageKey);
-}
 
 export default class Router extends Component {
 
@@ -39,12 +21,12 @@ export default class Router extends Component {
   }
 
   componentDidMount() {
-    auth.onAuthStateChanged(user => {
+    FirebaseService.firebaseApp.auth().onAuthStateChanged(user => {
       if (user) {
-        window.localStorage.setItem(storageKey, user.uid);
+        window.localStorage.setItem(FirebaseService.storageKey, user.uid);
         this.setState({uid: user.uid});
       } else {
-        window.localStorage.removeItem(storageKey);
+        window.localStorage.removeItem(FirebaseService.storageKey);
         this.setState({uid: null});
       }
     });

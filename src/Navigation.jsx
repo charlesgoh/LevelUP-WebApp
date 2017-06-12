@@ -3,25 +3,27 @@ import Authen from './Authen';
 import firebase from 'firebase';
 import Router from './Router';
 
+import * as FirebaseService from './FirebaseService';
+
 export default class Navigation extends Component {
 
   logoutUser(event) {
     console.log("Logging Out Now...");
-    firebase.auth().signOut();
+    FirebaseService.firebaseAuth.signOut();
   }
 
   googleSignIn() {
     console.log("Attempting to log in using Google");
 
-    var provider = new firebase.auth.GoogleAuthProvider();
-    var promise = firebase.auth().signInWithPopup(provider);
+    var provider = new FirebaseService.firebaseApp.auth.GoogleAuthProvider();
+    var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
 
     // Handle Successful Login
     promise.then(result => {
       console.log("Google Login Successful!");
       var user = result.user;
       console.log(result);
-      firebase.database().ref('users/' + user.uid).set({
+      FirebaseService.firebaseDB.ref('users/' + user.uid).set({
         email: user.email,
         name: user.displayName
       });
@@ -37,11 +39,11 @@ export default class Navigation extends Component {
   facebookSignIn() {
     console.log("Attempting to log in using Facebook");
 
-    var provider = new firebase.auth.FacebookAuthProvider();
+    var provider = new FirebaseService.firebaseApp.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
     provider.addScope("user_about_me");
-    var promise = firebase.auth().signInWithRedirect(provider);
+    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
 
     //Handle Successful Login
     promise.then(result => {
@@ -70,12 +72,12 @@ export default class Navigation extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
+    FirebaseService.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
-        window.localStorage.setItem(storageKey, user.uid);
+        window.localStorage.setItem(FirebaseService.storageKey, user.uid);
         this.setState({uid: user.uid});
       } else {
-        window.localStorage.removeItem(storageKey);
+        window.localStorage.removeItem(FirebaseService.storageKey);
         this.setState({uid: null});
       }
     });
