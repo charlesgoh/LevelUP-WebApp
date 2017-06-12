@@ -15,7 +15,6 @@ let config = {
   storageBucket: "levelup-30839.appspot.com",
   messagingSenderId: "109258915713"
 }
-firebase.initializeApp(config);
 
 export const firebaseApp = firebase.initializeApp(config);
 

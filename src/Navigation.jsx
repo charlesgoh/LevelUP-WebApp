@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import Authen from './Authen';
 import firebase from 'firebase';
-
-const storageKey = 'KEY_FOR_LOCAL_STORAGE'
+import Router from './Router';
 
 export default class Navigation extends Component {
 
