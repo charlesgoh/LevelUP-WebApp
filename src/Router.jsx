@@ -17,39 +17,39 @@ let config = {
 }
 firebase.initializeApp(config);
 
-// export const firebaseApp = firebase.initializeApp(config);
-//
-// export const db = firebaseApp.database();
-// export const auth = firebaseApp.auth();
-//
-// export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
-//
-// export const isAuthenticated = () => {
-//   return !!auth.currentUser || !!localStorage.getItem(storageKey);
-// }
+export const firebaseApp = firebase.initializeApp(config);
+
+export const firebaseDB = firebaseApp.database();
+export const firebaseAuth = firebaseApp.auth();
+
+export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
+
+export const isAuthenticated = () => {
+  return !!firebaseAuth.currentUser || !!localStorage.getItem(storageKey);
+}
 
 export default class Router extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     uid: null,
-  //     err: ''
-  //   }
-  // }
-  //
-  // componentDidMount() {
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       window.localStorage.setItem(storageKey, user.uid);
-  //       this.setState({uid: user.uid});
-  //     } else {
-  //       window.localStorage.removeItem(storageKey);
-  //       this.setState({uid: null});
-  //     }
-  //   });
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      uid: null,
+      err: ''
+    }
+  }
+
+  componentDidMount() {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        window.localStorage.setItem(storageKey, user.uid);
+        this.setState({uid: user.uid});
+      } else {
+        window.localStorage.removeItem(storageKey);
+        this.setState({uid: null});
+      }
+    });
+  }
 
   render() {
     return (
