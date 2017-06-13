@@ -1,4 +1,5 @@
 import React, { Component }from 'react';
+import firebase from 'firebase';
 
 export default class ProfileBar extends Component {
   render() {
@@ -14,7 +15,7 @@ export default class ProfileBar extends Component {
 
             <div className = 'col s7 left-align'>
               <p className = 'flow-text grey-text'>
-                Name
+                {firebase.auth().currentUser.displayName}
               </p>
 
               <p className = 'flow-text'>
