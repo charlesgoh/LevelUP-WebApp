@@ -15,7 +15,7 @@ export default class Navigation extends Component {
   googleSignIn() {
     console.log("Attempting to log in using Google");
 
-    var provider = new firebase.auth.GoogleAuthProvider();
+    var provider = new FirebaseService.firebaseApp.auth.GoogleAuthProvider();
     var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
 
     // Handle Successful Login
@@ -39,7 +39,7 @@ export default class Navigation extends Component {
   facebookSignIn() {
     console.log("Attempting to log in using Facebook");
 
-    var provider = new firebase.auth.FacebookAuthProvider();
+    var provider = new FirebaseService.firebaseApp.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
     provider.addScope("user_about_me");
