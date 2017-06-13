@@ -17,7 +17,7 @@ export default class ProfilePage extends Component {
               </h3>
             </div>
             <div className = 'col s4 center-align'>
-              <img src = "https://i.imgur.com/2HxCx9i.png" className = 'circle responsive-img' />
+              <img src = "https://i.imgur.com/2HxCx9i.png" className = 'circle responsive-img' alt=""/>
             </div>
           </div>
 

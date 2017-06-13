@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import Authen from './Authen';
 import firebase from 'firebase';
-import Router from './Router';
 
 import * as FirebaseService from './FirebaseService';
 
