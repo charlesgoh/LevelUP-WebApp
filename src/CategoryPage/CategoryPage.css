@@ -1,3 +1,14 @@
+a {
+  color: grey;
+}
+
+.profile-image {
+  border-color: gray;
+  border-radius: 50%;
+  border-width: 10px;
+  border-style: solid;
+}
+
 .round-corners {
   border-radius: 20px;
 }

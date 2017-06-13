@@ -9,37 +9,37 @@ export default class SortFilter extends Component {
           Sort/Filter
         </p>
 
-        <div className = 'container center-align'>
-          <div className = 'card-panel row grey lighten-2'>
-            <div className = 'input-field'>
-              <i className = 'material-icons prefix'>
-                room
-              </i>
-              <input id="location" type="text" className="validate" />
-              <label for="location">
+        <div className = 'container center-align grey lighten-2 round-corners'>
+          <a href = '#' className = 'grey-text text-darken-1'>
+            <div className = 'row valign-wrapper  '>
+              <div className = 'col s1'>
+                <i className = 'small material-icons'>
+                  room
+                </i>
+              </div>
+              <div className = 'col s10 text-grey left-align'>
                 Location
-              </label>
+              </div>
             </div>
+          </a>
+        </div>
 
-            <div className = 'input-field'>
-              <i className = 'material-icons prefix'>
-                credit_card
-              </i>
-              <input id="price-hour" type="text" className="validate" />
-              <label for="price-hour">
+
+        <div className = 'container center-align grey lighten-2 round-corners'>
+          <a href = '#' className = 'grey-text text-darken-1'>
+            <div className = 'row valign-wrapper'>
+              <div className = 'col s1'>
+                <i className = 'small material-icons'>
+                  credit_card
+                </i>
+              </div>
+              <div className = 'col s10 text-grey left-align'>
                 Price/Hour
-              </label>
+              </div>
             </div>
-          </div>
-
-
+          </a>
         </div>
 
-        <div className = 'center-align'>
-          <button className = 'btn waves-effect waves-light' type = 'submit' name = 'action'>
-            Search
-          </button>
-        </div>
       </div>
     );
   }
