@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Category from './Category';
 import ProfileBar from './ProfileBar';
-import LoginBar from './LoginBar';
+import Authen from '../Authen.jsx';
 import SortFilter from './SortFilter';
+import firebase from 'firebase';
 
 export default class CategoryPage extends Component {
   render() {
@@ -13,8 +14,10 @@ export default class CategoryPage extends Component {
         </header>
           <Category />
           <SortFilter />
-          <ProfileBar />
-          <LoginBar />
+          {firebase.auth().currentUser ? <ProfileBar /> :
+          <div className = 'center-align'>
+            <Authen />
+          </div>}
       </div>
     );
   }
