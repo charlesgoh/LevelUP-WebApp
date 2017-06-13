@@ -144,11 +144,11 @@ export default class Navigation extends Component {
           <a href="#" data-activates="slide-out" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
-          <ul className="right hide-on-med-and-down">
+          {/* <ul className="right hide-on-med-and-down">
             <li>
               {masterAuthButton}
             </li>
-          </ul>
+          </ul> */}
           <ul className="side-nav fixed" id="slide-out">
             <li>
               {masterAuthButton}
