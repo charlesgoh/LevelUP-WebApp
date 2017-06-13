@@ -8,6 +8,8 @@ import App from './App';
 import CategoryPage from './CategoryPage/CategoryPage';
 import NotFound from './NotFound';
 import Navigation from './Navigation';
+import ListingsPage from './ListingsPage/ListingsPage.jsx';
+import ProfilePage from './ProfilePage/ProfilePage.jsx';
 
 export default class Router extends Component {
 
@@ -40,6 +42,8 @@ export default class Router extends Component {
           <Switch>
             <Route exact path="/" component= { App }/>
             <Route path="/categories" component={ CategoryPage }/>
+            <Route path="/listing" component={ ListingsPage }/>
+            <Route path="/profile" component={ ProfilePage }/>
             {/* <Route path="users" component={ Users }>
               <Route path="/users/:userID" component={ Users } />
             </Route> */}
