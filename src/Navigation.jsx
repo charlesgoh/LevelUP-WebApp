@@ -38,7 +38,7 @@ export default class Navigation extends Component {
 
   facebookSignIn() {
     console.log("Attempting to log in using Facebook");
-
+    
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
