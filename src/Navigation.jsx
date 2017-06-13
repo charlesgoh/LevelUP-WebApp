@@ -38,7 +38,7 @@ export default class Navigation extends Component {
 
   facebookSignIn() {
     console.log("Attempting to log in using Facebook");
-    
+
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
@@ -141,7 +141,7 @@ export default class Navigation extends Component {
 
         <div className="nav-wrapper red darken-4">
           <a href="#" className="brand-logo center">LevelUP</a>
-          <a href="#" data-activates="mobile-demo" className="button-collapse">
+          <a href="#" data-activates="slide-out" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
           <ul className="right hide-on-med-and-down">
@@ -149,7 +149,7 @@ export default class Navigation extends Component {
               {masterAuthButton}
             </li>
           </ul>
-          <ul className="side-nav" id="mobile-demo">
+          <ul className="side-nav fixed" id="slide-out">
             <li>
               {masterAuthButton}
             </li>
