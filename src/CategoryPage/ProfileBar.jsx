@@ -4,36 +4,20 @@ import firebase from 'firebase';
 export default class ProfileBar extends Component {
   render() {
     return (
-      <div className = 'card-panel z-depth-1'>
-        <div className = 'container center-align grey lighten-2'>
-          <div className = 'row valign-wrapper'>
-            <div className = 'col s2'>
-              <i className = 'small material-icons'>
-                info_outline
-              </i>
-            </div>
+      <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div className = 'card-panel z-depth-1'>
+          <div className = 'center-align'>
+            <div className = 'row valign-wrapper'>
+              <div className = 'col s4'>
+                <img className = "circle responsive-img" src={firebase.auth().currentUser.photoURL} />
+              </div>
 
-            <div className = 'col s7 left-align'>
-              <p className = 'flow-text grey-text'>
-                {firebase.auth().currentUser.displayName}
-              </p>
-
-              <p className = 'flow-text'>
-                <a href = '#' className = 'red-text text-darken-4'>
-                  Profile
+              <div className = 'col s8 left-align'>
+                <a href="#" className = 'flow-text grey-text text-darken-2'>
+                    {firebase.auth().currentUser.displayName}
                 </a>
-              </p>
+              </div>
             </div>
-
-            <div className = 'col s3 grey-text center-align'>
-              <img src = "./images/Logout.png" className = 'responsive-image' />
-              <p>
-                <a href ='#' className = 'flow-text grey-text'>
-                  LOG OUT
-                </a>
-              </p>
-            </div>
-
           </div>
         </div>
       </div>
