@@ -1,23 +1,40 @@
 import React, { Component } from 'react';
-// edit is not visible if !current user
+import firebase from 'firebase';
+
+
+
 export default class ProfilePage extends Component {
+
+
   render () {
+
+    var user = firebase.auth().currentUser;
+    var name = '';
+    var photoUrl = '';
+
+    if (user){
+      name = user.displayName;
+      photoUrl = user.photoURL;
+    }
+
     return (
       <div className = "card-panel z-depth-1">
-        <h6 className = 'right-align flow-text'>
+
+        {user ? <h6 className = 'right-align flow-text'>
           <a href ='#'>
             Edit
           </a>
-        </h6>
+        </h6> : ''}
+
         <div className = "container">
           <div className = 'row'>
-            <div className = 'col s8'>
-              <h3 className = 'flow-text left-align'>
-                Amatsu Yukikaze
-              </h3>
+            <div className = 'col s9'>
+              <h1 className =  'left-align'>
+                {name}
+              </h1>
             </div>
-            <div className = 'col s4 center-align'>
-              <img src = "https://i.imgur.com/2HxCx9i.png" className = 'circle responsive-img' alt=""/>
+            <div className = 'col s3 center-align'>
+              <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
             </div>
           </div>
 
