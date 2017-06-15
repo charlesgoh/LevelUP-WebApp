@@ -38,6 +38,9 @@ export default class ProfilePage extends Component {
             <div className = 'col s3 center-align'>
               <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
               <h4 className="center-align">{name}</h4>
+              <button className="center-align btn-large waves-effect waves-light">
+                {user? "Messages" : "Message"}
+              </button>
             </div>
           </div>
 
