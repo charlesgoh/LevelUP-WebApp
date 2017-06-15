@@ -73,10 +73,22 @@ export default class Navigation extends Component {
     FirebaseService.firebaseAuth.onAuthStateChanged(user => {
       if (user) {
         window.localStorage.setItem(FirebaseService.storageKey, user.uid);
-        this.setState({uid: user.uid});
+        this.setState({
+          uid: user.uid,
+          email: user.email,
+          photoURL: '',
+          name: user.name,
+          descriptions: ""
+        });
       } else {
         window.localStorage.removeItem(FirebaseService.storageKey);
-        this.setState({uid: null});
+        this.setState({
+          uid: null,
+          email: "",
+          photoURL: '',
+          name: user.name,
+          descriptions: ""
+        });
       }
     });
   }

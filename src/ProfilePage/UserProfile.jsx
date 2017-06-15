@@ -11,10 +11,12 @@ export default class ProfilePage extends Component {
     var user = firebase.auth().currentUser;
     var name = '';
     var photoUrl = '';
+    var description = '';
 
     if (user){
       name = user.displayName;
       photoUrl = user.photoURL;
+      description = user.description;
     }
 
     return (
@@ -29,22 +31,16 @@ export default class ProfilePage extends Component {
         <div className = "container">
           <div className = 'row'>
             <div className = 'col s9'>
-              <h1 className =  'left-align'>
-                {name}
-              </h1>
+              <h3 className = 'flow-text left-align'>
+                {description}
+              </h3>
             </div>
             <div className = 'col s3 center-align'>
               <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
+              <h4 className="center-align">{name}</h4>
             </div>
           </div>
 
-          <h5 className = 'flow-text left-align'>
-            About Me
-          </h5>
-
-          <h5 className = 'flow-text left-align'>
-            A 3rd-year student at S High School. I can teach you how to swim.
-          </h5>
         </div>
       </div>
     );
