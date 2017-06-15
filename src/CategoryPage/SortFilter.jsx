@@ -1,17 +1,26 @@
-import React, { Component }from 'react';
+import React, {Component} from 'react';
 
 export default class SortFilter extends Component {
   render() {
     return (
-      <div className = 'card-panel z-depth-1'>
-        <p className = 'grey-text text-darken-1 center-align'>
+      <div className='card-panel z-depth-1'>
+        <p className='grey-text text-darken-1 center-align'>
           Sort/Filter
         </p>
 
-        <div className = 'center-align'>
-          <div className = 'card-panel row grey lighten-2 black-text'>
-            <div className = 'input-field'>
-              <i className = 'material-icons prefix'>
+        <div className='center-align'>
+
+          <div className='card-panel row black-text'>
+
+            <div className='input-field'>
+              <i className='material-icons prefix'>
+                credit_card
+              </i>
+              <input id="price-hour" type="text" className="validate" placeholder="Price"/>
+            </div>
+
+            <div className='input-field'>
+              <i className='material-icons prefix'>
                 room
               </i>
               <select multiple>
@@ -27,20 +36,12 @@ export default class SortFilter extends Component {
                 <option value="10">Central</option>
               </select>
             </div>
-
-            <div className = 'input-field'>
-              <i className = 'material-icons prefix'>
-                credit_card
-              </i>
-              <input id="price-hour" type="text" className="validate" placeholder="Price/Hour" />
-            </div>
           </div>
-
 
         </div>
 
-        <div className = 'center-align'>
-          <button className = 'btn waves-effect waves-light' type = 'submit' name = 'action'>
+        <div className='center-align'>
+          <button className='btn waves-effect waves-light' type='submit' name='action'>
             Search
           </button>
         </div>
