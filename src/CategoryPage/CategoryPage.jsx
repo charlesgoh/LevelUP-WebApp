@@ -12,12 +12,9 @@ export default class CategoryPage extends Component {
         <header>
 
         </header>
+          {firebase.auth().currentUser ? <ProfileBar /> : ''}
           <Category />
           <SortFilter />
-          {firebase.auth().currentUser ? <ProfileBar /> :
-          <div className = 'center-align'>
-            <Authen />
-          </div>}
       </div>
     );
   }

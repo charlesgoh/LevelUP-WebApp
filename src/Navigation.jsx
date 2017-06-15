@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import firebase from 'firebase';
-
+import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
 
 export default class Navigation extends Component {
@@ -150,6 +150,9 @@ export default class Navigation extends Component {
           <ul className="side-nav fixed" id="slide-out">
             <li>
               {masterAuthButton}
+            </li>
+            <li>
+              <CategoryPage />
             </li>
           </ul>
         </div>
