@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import LogoutButton from './LogoutButton';
 import UserProfile from './UserProfile';
 import Listing from './Listing';
 
