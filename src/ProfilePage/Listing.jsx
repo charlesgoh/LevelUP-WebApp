@@ -1,13 +1,53 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 
 export default class Listing extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      editable: false,
+      description: 'This course aims to teach the basics of AWOL (Absence without official leave), how to identify AWOLees, as well as the basic SOPs when handling AWOLees.',
+      name: 'AW1101: Escapees of Military Custody'
+    };
+
+    this.setEditFlag = this.setEditFlag.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  };
+
+  setEditFlag() {
+    this.setState({
+      editable: !this.state.editable
+    });
+  }
+
+  handleChange(event) {
+    this.setState({description: event.target.value});
+  }
+
+  handleNameChange(event) {
+    this.setState({name: event.target.value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
   render () {
+    var user = firebase.auth().currentUser;
+
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
-          <h6 className = 'flow-text grey-text text-lighten-2 right-align'>
-            edit
-          </h6>
+          {user ?
+            <div className = 'right-align flow-text'>
+             <a className="grey-text" onClick={this.setEditFlag} type="submit">
+               {this.state.editable ? "Update" : "Edit"}
+             </a>
+           </div> : ''}
           <div className = 'row'>
             <div className = 'col s4 left-align'>
               <br />
@@ -25,20 +65,29 @@ export default class Listing extends Component {
             </div>
 
             <div className = 'col s8'>
-
-              <h2 className = 'flow-text red-text text-darken-4'>
-                Listing name
-              </h2>
+              {!this.state.editable ? <h2 className = 'flow-text red-text text-darken-4'>
+                {this.state.name}
+              </h2>:
+              <form onSubmit={this.handleSubmit}>
+                <div className = "input-field">
+                  <input defaultValue= {this.state.name} type="text" className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleNameChange}></input>
+                </div>
+              </form>
+              }
 
               <h6 className = 'flow-text left-align grey-text text-lighten-2'>
                 Location
               </h6>
 
-              <h6 className = 'flow-text grey-text text-lighten-2'>
-                He sat down and contemplated, for what he would do next could possibly alter the fate
-                of humanity forever.
-                In the face of such responsibility, the man ultimately chose the most cowardly path of self-humiliation.
-              </h6>
+              {!this.state.editable ? <h6 className = 'flow-text left-align grey-text text-lighten-2'>
+                {this.state.description}
+              </h6>:
+              <form onSubmit={this.handleSubmit}>
+                <div className = "input-field">
+                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                </div>
+              </form>
+              }
             </div>
 
           </div>
