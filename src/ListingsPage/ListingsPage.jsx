@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// edit is not visible if !current user
 
 export default class ListingsPage extends Component {
   render () {
@@ -7,7 +6,7 @@ export default class ListingsPage extends Component {
       <div className = "card-panel z-depth-1">
         <div className = "container">
           <div className = 'row'>
-            <div className = 'col s8'>
+            <div className = 'col s12'>
               <h4 className = 'left-align flow-text'>
                 Create new listing
               </h4>
@@ -20,10 +19,6 @@ export default class ListingsPage extends Component {
                   Name of listing
                 </label>
               </div>
-            </div>
-
-            <div className = 'col s4 center-align'>
-              <img src = "https://i.imgur.com/2HxCx9i.png" className = 'circle responsive-img' alt=""/>
             </div>
           </div>
 
@@ -45,7 +40,7 @@ export default class ListingsPage extends Component {
           <div class="row">
             <form class="col s12">
               <div class="row">
-                <div class="container input-field col s12">
+                <div class="input-field col s12">
                   <textarea id="listDescript" class="materialize-textarea">
                   </textarea>
                   <label for="listDescript">
