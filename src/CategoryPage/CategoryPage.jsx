@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Category from './Category';
 import ProfileBar from './ProfileBar';
-import Authen from '../Authen.jsx';
 import SortFilter from './SortFilter';
 import firebase from 'firebase';
 
