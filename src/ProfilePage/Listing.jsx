@@ -39,12 +39,16 @@ export default class Listing extends Component {
   render () {
     var user = firebase.auth().currentUser;
 
+    var clickable = {
+      cursor: "pointer"
+    };
+
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
           {user ?
             <div className = 'right-align flow-text'>
-             <a className="grey-text" onClick={this.setEditFlag} type="submit">
+             <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
                {this.state.editable ? "Update" : "Edit"}
              </a>
            </div> : ''}

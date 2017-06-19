@@ -33,6 +33,10 @@ export default class ProfilePage extends Component {
   }
   render () {
 
+    var clickable = {
+      cursor: "pointer"
+    };
+
     var user = firebase.auth().currentUser;
     var name = '';
     var photoUrl = '';
@@ -66,7 +70,7 @@ export default class ProfilePage extends Component {
             <div className = 'col s3 center-align'>
               {user ?
                 <div className = 'center-align flow-text'>
-                 <a className="center-align" onClick={this.setEditFlag} type="submit">
+                 <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
                    {this.state.editable ? "Update" : "Edit"}
                  </a>
                </div> : ''}
