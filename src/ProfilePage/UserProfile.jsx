@@ -10,7 +10,6 @@ export default class ProfilePage extends Component {
 
     this.state = {
       editable: false,
-      initialized: false,
       description: ''
     };
 
