@@ -18,11 +18,6 @@ export default class ProfilePage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   };
 
-  componentWillMount() {
-    var firebaseDB = firebase.database();
-    console.log(firebaseDB);
-  }
-
   setEditFlag() {
     this.setState({
       editable: !this.state.editable
@@ -30,17 +25,7 @@ export default class ProfilePage extends Component {
   }
 
   handleChange(event) {
-    // this.setState({description: event.target.value});
-    var user = firebase.auth().currentUser;
-
-    firebase.database().ref('users/' + user.uid).set({
-      email: user.email,
-      name: user.displayName,
-      photo: user.photoURL,
-      description: event.target.value
-    });
-
-    this.state.description = event.target.value;
+    this.setState({description: event.target.value});
   }
 
   handleSubmit(event) {
@@ -59,15 +44,13 @@ export default class ProfilePage extends Component {
     if (user){
       name = user.displayName;
       photoUrl = user.photoURL;
-      user = user.description;
-
-      if (this.state.description){
-        description = user.description;
-      } else {
-        description = "Enter your profile description here.";
+      if (!this.state.description){
+        description = "Description"
       }
-
-    };
+      else {
+        description = this.state.description;
+      }
+    }
 
     return (
       <div className = "card-panel z-depth-1">
