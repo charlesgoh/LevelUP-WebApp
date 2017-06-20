@@ -78,7 +78,7 @@ export default class Navigation extends Component {
           email: user.email,
           photoURL: '',
           name: user.name,
-          descriptions: ""
+          description: user.description
         });
       } else {
         window.localStorage.removeItem(FirebaseService.storageKey);
@@ -86,8 +86,8 @@ export default class Navigation extends Component {
           uid: null,
           email: "",
           photoURL: '',
-          name: user.name,
-          descriptions: ""
+          name: "",
+          description: ""
         });
       }
     });
