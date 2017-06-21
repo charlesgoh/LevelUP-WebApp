@@ -129,11 +129,6 @@ export default class Navigation extends Component {
                 className="waves-effect waves-light btn-large red">
                 <i className="fa fa-google left"></i>
                 Sign In With Google
-                {/* <img
-                  width="32"
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                  className="left">
-                </img> */}
               </button>
               <br/>
               <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large blue">
