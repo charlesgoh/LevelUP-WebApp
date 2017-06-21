@@ -10,7 +10,9 @@ export default class ProfilePage extends Component {
 
     this.state = {
       editable: false,
-      description: ''
+      description: '',
+      name: '',
+      photoURL: ''
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -22,14 +24,28 @@ export default class ProfilePage extends Component {
     this.setState({
       editable: !this.state.editable
     });
+
+    if(this.state.editable){
+        var user = firebase.auth().currentUser;
+        firebase.database().ref('users/' + user.uid).update({
+          description: this.state.description
+        });
+        console.log("Pushed data into database.");
+    }
   }
 
   handleChange(event) {
-    var user = firebase.auth().currentUser;
     this.setState({description: event.target.value});
+  }
 
-    firebase.database().ref('users/' + user.uid).update({
-      description: event.target.value
+  componentDidMount(){
+    firebase.database().ref().on("value", snapshot => {
+      var thisUser = snapshot.val();
+      var uid = window.localStorage.getItem(FirebaseService.storageKey);
+      this.setState({
+        description: thisUser["users"][uid]["description"],
+        name: thisUser["users"][uid]["name"]
+      });
     });
   }
 
@@ -44,44 +60,26 @@ export default class ProfilePage extends Component {
 
     var user = firebase.auth().currentUser;
     console.log("User is now: " + user);
-    var name = '';
     var photoUrl = '';
     var description = "";
 
-    var uid = window.localStorage.getItem(FirebaseService.storageKey);
-    console.log("storageKey is: " + uid);
-    firebase.database().ref().on("value", function(snapshot) {
-      var thisUser = snapshot.val();
-      console.log(thisUser["users"][uid]["description"]);
-      description = thisUser["users"][uid]["description"];
-    }, function (error) {
-      console.log("Error: " + error.code);
-    });
-
     if (user){
       console.log("User is " + user);
-      this.state.description = user.description;
-      name = user.displayName;
       photoUrl = user.photoURL;
-      if (!this.state.description){
-        description = "Description"
-      }
-      else {
-        description = this.state.description;
-      }
     }
 
+    console.log(this.state.description);
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
           <div className = 'row'>
             <div className = 'col s9'>
               {!this.state.editable ? <h3 className = 'flow-text left-align'>
-                {description}
+                {this.state.description}
               </h3>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <textarea defaultValue= {description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
                 </div>
               </form>
               }
@@ -95,7 +93,7 @@ export default class ProfilePage extends Component {
                </div> : ''}
 
               <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
-              <h4 className="center-align">{name}</h4>
+              <h4 className="center-align">{this.state.name}</h4>
               <button className="center-align btn-large waves-effect waves-light">
                 {user? "Messages" : "Message"}
               </button>
