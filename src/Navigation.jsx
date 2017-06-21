@@ -21,9 +21,10 @@ export default class Navigation extends Component {
       console.log("Google Login Successful!");
       var user = result.user;
       console.log(result);
-      FirebaseService.firebaseDB.ref('users/' + user.uid).set({
+      FirebaseService.firebaseDB.ref('users/' + user.uid).update({
         email: user.email,
-        name: user.displayName
+        name: user.displayName,
+        photoURL: user.photoURL
       });
     });
 
