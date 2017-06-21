@@ -8,8 +8,8 @@ export default class Listing extends Component {
 
     this.state = {
       editable: false,
-      description: 'This course aims to teach the basics of AWOL (Absence without official leave), how to identify AWOLees, as well as the basic SOPs when handling AWOLees.',
-      name: 'AW1101: Escapees of Military Custody'
+      listingDescription: 'Listing Description',
+      name: 'Name of Listing'
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -25,7 +25,7 @@ export default class Listing extends Component {
   }
 
   handleChange(event) {
-    this.setState({description: event.target.value});
+    this.setState({listingDescription: event.target.value});
   }
 
   handleNameChange(event) {
@@ -83,12 +83,12 @@ export default class Listing extends Component {
                 Location
               </h6>
 
-              {!this.state.editable ? <h6 className = 'flow-text left-align grey-text text-lighten-2'>
-                {this.state.description}
+              {!this.state.editable ? <h6 className = 'flow-text text-justify'>
+                {this.state.listingDescription}
               </h6>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  <textarea defaultValue= {this.state.listingDescription} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
                 </div>
               </form>
               }
