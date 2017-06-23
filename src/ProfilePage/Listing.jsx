@@ -10,13 +10,15 @@ export default class Listing extends Component {
     this.state = {
       editable: false,
       summary: "",
-      title: ""
+      title: "",
+      price: "",
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePrice = this.handlePrice.bind(this);
   };
 
   setEditFlag() {
@@ -28,7 +30,8 @@ export default class Listing extends Component {
       var user = firebase.auth().currentUser;
       firebase.database().ref('listings/' + user.uid).update({
         summary: this.state.summary,
-        title: this.state.title
+        title: this.state.title,
+        price: this.state.price
       });
       console.log("Pushed data into database.");
     }
@@ -44,15 +47,22 @@ export default class Listing extends Component {
 
         this.setState({
           summary: "Listing Summary",
-          title: "Title of Listing"
+          title: "Title of Listing",
+          price: "0"
         });
       } else {
         this.setState({
           summary: thisUser["listings"][uid]["summary"],
-          title: thisUser["listings"][uid]["title"]
+          title: thisUser["listings"][uid]["title"],
+          price: thisUser["listings"][uid]["price"]
         });
       }
     });
+  }
+
+  handlePrice(event) {
+    console.log("Price handled");
+    this.setState({price: event.target.value});
   }
 
   handleChange(event) {
@@ -90,9 +100,16 @@ export default class Listing extends Component {
                 PRICE
               </h6>
 
-              <h5 className = 'flow-text yellow-text text-darken-4'>
-                $400
-              </h5>
+              {!this.state.editable ?
+                <h5 className = 'flow-text yellow-text text-darken-4'>
+                  SG${this.state.price}
+                </h5> :
+                <form onSubmit={this.handleSubmit}>
+                  <div className = "input-field">
+                    <input defaultValue={this.state.price} className="materialize-textarea flow-text yellow-text text-darken-4" onChange={this.handlePrice}></input>
+                  </div>
+                </form>
+              }
 
               <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
