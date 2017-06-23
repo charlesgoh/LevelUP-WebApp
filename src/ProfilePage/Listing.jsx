@@ -41,7 +41,7 @@ export default class Listing extends Component {
 
       if (!thisUser["listings"] || !thisUser["listings"][uid]) {
         console.log("No entries. First write to db");
-        
+
         this.setState({
           summary: "Listing Summary",
           title: "Title of Listing"
@@ -86,7 +86,7 @@ export default class Listing extends Component {
           <div className = 'row'>
             <div className = 'col s4 left-align'>
               <br />
-              <h6 className = 'flow-text grey-text text-lighten-2'>
+              <h6 className = 'flow-text grey-text text-lighten'>
                 PRICE
               </h6>
 
@@ -94,7 +94,7 @@ export default class Listing extends Component {
                 $400
               </h5>
 
-              <h6 className = 'flow-text grey-text text-lighten-2'>
+              <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
             </div>
