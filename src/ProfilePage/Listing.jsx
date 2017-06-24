@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import * as FirebaseService from '../FirebaseService.jsx';
 
 export default class Listing extends Component {
 
@@ -8,28 +9,68 @@ export default class Listing extends Component {
 
     this.state = {
       editable: false,
-      description: 'This course aims to teach the basics of AWOL (Absence without official leave), how to identify AWOLees, as well as the basic SOPs when handling AWOLees.',
-      name: 'AW1101: Escapees of Military Custody'
+      summary: "",
+      title: "",
+      price: "",
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePrice = this.handlePrice.bind(this);
   };
 
   setEditFlag() {
     this.setState({
       editable: !this.state.editable
     });
+
+    if(this.state.editable){
+      var user = firebase.auth().currentUser;
+      firebase.database().ref('listings/' + user.uid).update({
+        summary: this.state.summary,
+        title: this.state.title,
+        price: this.state.price
+      });
+      console.log("Pushed data into database.");
+    }
+  }
+
+  componentDidMount() {
+    firebase.database().ref().on("value", snapshot => {
+      var thisUser = snapshot.val();
+      var uid = window.localStorage.getItem(FirebaseService.storageKey);
+
+      if (!thisUser["listings"] || !thisUser["listings"][uid]) {
+        console.log("No entries. First write to db");
+
+        this.setState({
+          summary: "Listing Summary",
+          title: "Title of Listing",
+          price: "0"
+        });
+      } else {
+        this.setState({
+          summary: thisUser["listings"][uid]["summary"],
+          title: thisUser["listings"][uid]["title"],
+          price: thisUser["listings"][uid]["price"]
+        });
+      }
+    });
+  }
+
+  handlePrice(event) {
+    console.log("Price handled");
+    this.setState({price: event.target.value});
   }
 
   handleChange(event) {
-    this.setState({description: event.target.value});
+    this.setState({summary: event.target.value});
   }
 
-  handleNameChange(event) {
-    this.setState({name: event.target.value});
+  handleTitleChange(event) {
+    this.setState({title: event.target.value});
   }
 
   handleSubmit(event) {
@@ -55,26 +96,33 @@ export default class Listing extends Component {
           <div className = 'row'>
             <div className = 'col s4 left-align'>
               <br />
-              <h6 className = 'flow-text grey-text text-lighten-2'>
+              <h6 className = 'flow-text grey-text text-lighten'>
                 PRICE
               </h6>
 
-              <h5 className = 'flow-text yellow-text text-darken-4'>
-                $400
-              </h5>
+              {!this.state.editable ?
+                <h5 className = 'flow-text yellow-text text-darken-4'>
+                  SG${this.state.price}
+                </h5> :
+                <form onSubmit={this.handleSubmit}>
+                  <div className = "input-field">
+                    <input defaultValue={this.state.price} className="materialize-textarea flow-text yellow-text text-darken-4" onChange={this.handlePrice}></input>
+                  </div>
+                </form>
+              }
 
-              <h6 className = 'flow-text grey-text text-lighten-2'>
+              <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
             </div>
 
             <div className = 'col s8'>
               {!this.state.editable ? <h2 className = 'flow-text red-text text-darken-4'>
-                {this.state.name}
+                {this.state.title}
               </h2>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <input defaultValue= {this.state.name} type="text" className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleNameChange}></input>
+                  <input defaultValue= {this.state.title} type="text" className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></input>
                 </div>
               </form>
               }
@@ -83,12 +131,12 @@ export default class Listing extends Component {
                 Location
               </h6>
 
-              {!this.state.editable ? <h6 className = 'flow-text left-align grey-text text-lighten-2'>
-                {this.state.description}
+              {!this.state.editable ? <h6 className = 'flow-text text-justify'>
+                {this.state.summary}
               </h6>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  <textarea defaultValue= {this.state.summary} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
                 </div>
               </form>
               }
