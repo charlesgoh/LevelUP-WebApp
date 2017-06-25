@@ -40,7 +40,7 @@ export default class Listing extends Component {
   componentDidMount() {
     firebase.database().ref().on("value", snapshot => {
       var thisUser = snapshot.val();
-      var uid = window.localStorage.getItem(FirebaseService.storageKey);
+      var uid = this.props.uid;
 
       if (!thisUser["listings"] || !thisUser["listings"][uid]) {
         console.log("No entries. First write to db");
