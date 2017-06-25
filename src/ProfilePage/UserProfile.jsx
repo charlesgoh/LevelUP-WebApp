@@ -41,7 +41,7 @@ export default class ProfilePage extends Component {
   componentDidMount(){
     firebase.database().ref().on("value", snapshot => {
       var thisUser = snapshot.val();
-      var uid = window.localStorage.getItem(FirebaseService.storageKey);
+      var uid = this.props.uid;
       this.setState({
         description: thisUser["users"][uid]["description"],
         name: thisUser["users"][uid]["name"]
