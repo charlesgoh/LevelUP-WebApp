@@ -13,7 +13,7 @@ export default class ProfilePage extends Component {
     return (
       <div>
         <UserProfile uid={uidProp}/>
-        <Listing />
+        <Listing uid={uidProp} />
       </div>
     );
   }
