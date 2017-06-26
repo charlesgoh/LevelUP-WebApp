@@ -1,6 +1,42 @@
 import React, {Component} from 'react';
+import * as FirebaseService from './FirebaseService';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      listings: {}
+    };
+
+    this.updateListings = this.updateListings.bind(this);
+  };
+
+  componentDidMount() {
+    var getListings = this.updateListings();
+    // console.log(getListings);
+    this.setState({
+      listings: getListings
+    });
+    console.log(getListings);
+  }
+
+  updateListings() {
+    var firebaseDB = FirebaseService.firebaseDB;
+    var getListings = firebaseDB.ref('/listings').orderByKey();
+    var savedListings = {};
+
+    getListings.on('value', function(snapshot) {
+      snapshot.forEach(function(child) {
+        // console.log(child.key, child.val());
+        savedListings[child.key] = child.val();
+        // console.log(savedListings);
+      })
+    })
+
+    return savedListings;
+  }
+
   render() {
     var carousel = (
       <div className="carousel carousel-slider center" data-indicators="true">
@@ -26,10 +62,12 @@ export default class App extends Component {
       </div>
     );
 
+    // console.log(this.state.listings);
     return (
       <div>
         {carousel}
         <h1 className="center">This is the Homepage</h1>
+        {}
       </div>
     );
   }
