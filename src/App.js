@@ -1,7 +1,49 @@
 import React, {Component} from 'react';
+import * as FirebaseService from './FirebaseService';
+import ListingInstance from './ListingInstance';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    // this.state = {
+    //   listings: {}
+    // };
+
+    // this.updateListings = this.updateListings.bind(this);
+  };
+
+  // componentDidMount() {
+  //   var getListings = this.updateListings();
+  //   // console.log(getListings);
+  //   this.setState({
+  //     listings: getListings
+  //   });
+  //   console.log(getListings);
+  //   console.log(this.state);
+  // }
+
+  updateListings() {
+    var firebaseDB = FirebaseService.firebaseDB;
+    var getListings = firebaseDB.ref('/listings').orderByKey();
+    var arr = [];
+
+    getListings.on('value', function(snapshot) {
+      console.log(snapshot.val());
+      var data = snapshot.val();
+      Object.keys(data).forEach(function(key) {
+        data[key]["uid"] = key;
+        arr.push(data[key]);
+      });
+    });
+    console.log("This is arr", arr);
+
+    return arr;
+  }
+
   render() {
+    var listingsArray = this.updateListings();
+
     var carousel = (
       <div className="carousel carousel-slider center" data-indicators="true">
         <div className="carousel-fixed-item center">
@@ -29,7 +71,9 @@ export default class App extends Component {
     return (
       <div>
         {carousel}
-        <h1 className="center">This is the Homepage</h1>
+        {
+          <ListingInstance uid={item.key} title={item.title} summary={item.summary} price={item.price}/>)
+        }
       </div>
     );
   }
