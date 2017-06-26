@@ -1,36 +1,39 @@
 import React, {Component} from 'react';
 import * as FirebaseService from './FirebaseService';
+import ListingInstance from './ListingInstance';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      listings: {}
-    };
+    // this.state = {
+    //   listings: {}
+    // };
 
-    this.updateListings = this.updateListings.bind(this);
+    // this.updateListings = this.updateListings.bind(this);
   };
 
-  componentDidMount() {
-    var getListings = this.updateListings();
-    // console.log(getListings);
-    this.setState({
-      listings: getListings
-    });
-    console.log(getListings);
-  }
+  // componentDidMount() {
+  //   var getListings = this.updateListings();
+  //   // console.log(getListings);
+  //   this.setState({
+  //     listings: getListings
+  //   });
+  //   console.log(getListings);
+  //   console.log(this.state);
+  // }
 
   updateListings() {
     var firebaseDB = FirebaseService.firebaseDB;
     var getListings = firebaseDB.ref('/listings').orderByKey();
-    var savedListings = {};
+    var savedListings = [];
 
     getListings.on('value', function(snapshot) {
       snapshot.forEach(function(child) {
-        // console.log(child.key, child.val());
-        savedListings[child.key] = child.val();
-        // console.log(savedListings);
+        savedListings.push({
+          key: child.key,
+          data: child.val()
+        });
       })
     })
 
@@ -38,6 +41,9 @@ export default class App extends Component {
   }
 
   render() {
+    var listings = this.updateListings();
+    console.log(listings);
+
     var carousel = (
       <div className="carousel carousel-slider center" data-indicators="true">
         <div className="carousel-fixed-item center">
@@ -62,12 +68,12 @@ export default class App extends Component {
       </div>
     );
 
-    // console.log(this.state.listings);
     return (
       <div>
         {carousel}
-        <h1 className="center">This is the Homepage</h1>
-        {}
+        {
+          // {JSON.stringify(listings)}
+        }
       </div>
     );
   }
