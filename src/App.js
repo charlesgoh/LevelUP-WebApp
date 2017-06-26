@@ -26,23 +26,23 @@ export default class App extends Component {
   updateListings() {
     var firebaseDB = FirebaseService.firebaseDB;
     var getListings = firebaseDB.ref('/listings').orderByKey();
-    var savedListings = [];
+    var arr = [];
 
     getListings.on('value', function(snapshot) {
-      snapshot.forEach(function(child) {
-        savedListings.push({
-          key: child.key,
-          data: child.val()
-        });
-      })
-    })
+      console.log(snapshot.val());
+      var data = snapshot.val();
+      Object.keys(data).forEach(function(key) {
+        data[key]["uid"] = key;
+        arr.push(data[key]);
+      });
+    });
+    console.log("This is arr", arr);
 
-    return savedListings;
+    return arr;
   }
 
   render() {
-    var listings = this.updateListings();
-    console.log(listings);
+    var listingsArray = this.updateListings();
 
     var carousel = (
       <div className="carousel carousel-slider center" data-indicators="true">
@@ -72,7 +72,9 @@ export default class App extends Component {
       <div>
         {carousel}
         {
-          // {JSON.stringify(listings)}
+          listingsArray.map((element, index) => {
+            <h1>{index}</h1>
+          })
         }
       </div>
     );
