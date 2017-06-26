@@ -42,7 +42,7 @@ export default class Router extends Component {
             <Route exact path="/" component= { App }/>
             <Route path="/categories" component={ CategoryPage }/>
             <Route path="/listing" component={ ListingsPage }/>
-            <Route path="/profile" component={ ProfilePage }/>
+            <Route path="/profile/:value" component={ ProfilePage }/>
             {/* <Route path="users" component={ Users }>
               <Route path="/users/:userID" component={ Users } />
             </Route> */}

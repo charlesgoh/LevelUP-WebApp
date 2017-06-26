@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import * as FirebaseService from '../FirebaseService.jsx';
-
 
 export default class ProfilePage extends Component {
 
