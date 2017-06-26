@@ -6,43 +6,34 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   listings: {}
-    // };
-
-    // this.updateListings = this.updateListings.bind(this);
+    this.state = {
+       listings: 1,
+       item: {
+          key: "",
+          title: "",
+          summary: "",
+          price: ""
+       },
+     };
   };
 
-  // componentDidMount() {
-  //   var getListings = this.updateListings();
-  //   // console.log(getListings);
-  //   this.setState({
-  //     listings: getListings
-  //   });
-  //   console.log(getListings);
-  //   console.log(this.state);
-  // }
-
-  updateListings() {
+  componentDidMount() {
     var firebaseDB = FirebaseService.firebaseDB;
     var getListings = firebaseDB.ref('/listings').orderByKey();
     var arr = [];
 
-    getListings.on('value', function(snapshot) {
+    getListings.on('value', snapshot => {
       console.log(snapshot.val());
       var data = snapshot.val();
       Object.keys(data).forEach(function(key) {
         data[key]["uid"] = key;
         arr.push(data[key]);
       });
+      this.setState({listings: arr});
     });
-    console.log("This is arr", arr);
-
-    return arr;
   }
 
   render() {
-    var listingsArray = this.updateListings();
 
     var carousel = (
       <div className="carousel carousel-slider center" data-indicators="true">
@@ -68,12 +59,20 @@ export default class App extends Component {
       </div>
     );
 
+    if(this.state.listings !== 1){
+      var list = this.state.listings.map(item =>
+        <ListingInstance uid={item.key} title={item.title} summary={item.summary} price={item.price}/>
+      );
+    }
+    else {
+      var item = this.state.item;
+      var list = "Girls do their best now and are preparing. Please wait warmly until it is ready.";
+    }
+
     return (
       <div>
         {carousel}
-        {
-          <ListingInstance uid={item.key} title={item.title} summary={item.summary} price={item.price}/>)
-        }
+        {list}
       </div>
     );
   }
