@@ -72,9 +72,7 @@ export default class App extends Component {
       <div>
         {carousel}
         {
-          listingsArray.map((element, index) => {
-            <h1>{index}</h1>
-          })
+          <ListingInstance uid={item.key} title={item.title} summary={item.summary} price={item.price}/>)
         }
       </div>
     );
