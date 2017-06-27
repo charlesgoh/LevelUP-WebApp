@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class ListingInstance extends Component {
+
   render() {
+    console.log("Key is: " + this.props.uid);
     return (
       <div className = "card-panel z-depth-1 hoverable">
         <div className = "container">
@@ -37,16 +40,21 @@ export default class ListingInstance extends Component {
             </div>
 
             <div className = 'col s3 center-align'>
-              <button className='btn-large waves-effect waves-light'>
-                Profile
-                <i className="material-icons right">send</i>
-              </button>
+              <Link to={"/profile/" + this.props.uid}>
+                <button className='btn-large waves-effect waves-light'>
+                  Profile
+                  <i className="material-icons right">send</i>
+                </button>
+              </Link>
+
               <br/>
               <br/>
+
               <button className='btn-large waves-effect waves-light red darken-4'>
                 Chat
                 <i className="material-icons right">email</i>
               </button>
+
             </div>
 
           </div>
