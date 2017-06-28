@@ -42,7 +42,8 @@ export default class ProfilePage extends Component {
       var uid = this.props.uid;
       this.setState({
         description: thisUser["users"][uid]["description"],
-        name: thisUser["users"][uid]["name"]
+        name: thisUser["users"][uid]["name"],
+        photoUrl: thisUser["users"][uid]["photoURL"]
       });
     });
   }
@@ -60,11 +61,6 @@ export default class ProfilePage extends Component {
     console.log("User is now: " + user);
     var photoUrl = '';
     var description = "";
-
-    if (user){
-      console.log("User is " + user);
-      photoUrl = user.photoURL;
-    }
 
     console.log(this.state.description);
     return (
@@ -90,7 +86,7 @@ export default class ProfilePage extends Component {
                  </a>
                </div> : ''}
 
-              <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
+              <img src = {this.state.photoUrl} className = 'circle responsive-img' alt=""/>
               <h4 className="center-align">{this.state.name}</h4>
               <button className="center-align btn-large waves-effect waves-light">
                 {user? "Messages" : "Message"}
