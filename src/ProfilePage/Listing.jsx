@@ -8,6 +8,7 @@ export default class Listing extends Component {
     super(props);
 
     this.state = {
+      loggedIn: false,
       editable: false,
       summary: "",
       title: "",
@@ -26,7 +27,7 @@ export default class Listing extends Component {
       editable: !this.state.editable
     });
 
-    if(this.state.editable){
+    if (this.state.editable){
       var user = firebase.auth().currentUser;
       firebase.database().ref('listings/' + user.uid).update({
         summary: this.state.summary,
@@ -35,6 +36,14 @@ export default class Listing extends Component {
       });
       console.log("Pushed data into database.");
     }
+  }
+
+  componentWillMount() {
+    let user = firebase.auth().currentUser;
+    if (user) {
+      this.state.loggedIn = true;
+    };
+    console.log(JSON.stringify(this.state));
   }
 
   componentDidMount() {
@@ -92,7 +101,7 @@ export default class Listing extends Component {
              <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
                {this.state.editable ? "Update" : "Edit"}
              </a>
-           </div> : ''}
+           </div> : ""}
           <div className = 'row'>
             <div className = 'col s4 left-align'>
               <br />
