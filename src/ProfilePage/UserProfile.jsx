@@ -36,21 +36,39 @@ export default class ProfilePage extends Component {
     this.setState({description: event.target.value});
   }
 
-  componentDidMount(){
+  componentWillReceiveProps(nextProps){
+    var uid = nextProps.uid;
     firebase.database().ref().on("value", snapshot => {
       var thisUser = snapshot.val();
-      var uid = this.props.uid;
+      console.log(this);
       this.setState({
         description: thisUser["users"][uid]["description"],
         name: thisUser["users"][uid]["name"],
         photoUrl: thisUser["users"][uid]["photoURL"]
       });
     });
+    console.log(this.state);
+  }
+
+  componentDidMount(nextProps){
+    if (this.props.uid){
+      var uid = this.props.uid;
+      firebase.database().ref().on("value", snapshot => {
+        var thisUser = snapshot.val();
+        this.setState({
+          description: thisUser["users"][uid]["description"],
+          name: thisUser["users"][uid]["name"],
+          photoUrl: thisUser["users"][uid]["photoURL"]
+        });
+      });
+    }
+
   }
 
   handleSubmit(event) {
     event.preventDefault();
   }
+
   render () {
     console.log("Entered render part");
     var clickable = {
@@ -59,10 +77,14 @@ export default class ProfilePage extends Component {
 
     var user = firebase.auth().currentUser;
     console.log("User is now: " + user);
-    var photoUrl = '';
-    var description = "";
+    var myUid = "";
+    if (user){
+      myUid = user.uid;
+    }
 
-    console.log(this.state.description);
+    console.log(this);
+    console.log(myUid);
+    console.log(this.props.uid);
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
@@ -79,7 +101,7 @@ export default class ProfilePage extends Component {
               }
             </div>
             <div className = 'col s3 center-align'>
-              {user ?
+              {myUid == this.props.uid ?
                 <div className = 'center-align flow-text'>
                  <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
                    {this.state.editable ? "Update" : "Edit"}
