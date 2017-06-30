@@ -40,7 +40,9 @@ export default class ListingInstance extends Component {
             </div>
 
             <div className = 'col s3 center-align'>
-              <Link to={"/profile/" + this.props.uid}>
+              <Link to={{
+                pathname: "/profile/" + this.props.uid,
+                state: {uid: this.props.uid}}}>
                 <button className='btn-large waves-effect waves-light'>
                   Profile
                   <i className="material-icons right">send</i>
