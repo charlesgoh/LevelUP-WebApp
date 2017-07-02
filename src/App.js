@@ -8,6 +8,7 @@ export default class App extends Component {
 
     this.state = {
        listings: 1,
+       display: 1,
        item: {
           key: "",
           title: "",
@@ -17,6 +18,31 @@ export default class App extends Component {
        sortFlag: ""
      };
   };
+
+  componentWillReceiveProps(nextProps){
+    if (this.state.display != 1){
+      if (nextProps.location.state.sortOrder !== "0"){
+        if (nextProps.location.state.sortOrder === "1"){
+          this.state.display.sort(function(a, b){
+            return parseInt(a.price) - parseInt(b.price);
+          })
+        }
+        else {
+          this.state.display.sort(function(a, b){
+            return parseInt(b.price) - parseInt(a.price);
+          })
+        }
+      }
+      if (nextProps.location.state.category !== "0"){
+        var array = this.state.listings.filter(function(item){
+          return item.category == nextProps.location.state.category;
+        });
+        this.setState({
+          display: array
+        });
+      }
+    }
+  }
 
   componentDidMount() {
     var firebaseDB = FirebaseService.firebaseDB;
@@ -30,27 +56,9 @@ export default class App extends Component {
         data[key]["uid"] = key;
         arr.push(data[key]);
       });
-
-      /*
-      if (this.props.sort === "ascending"){
-        arr.sort(function(a, b){
-          return parseInt(a.price) - parseInt(b.price);
-        })
-      }
-      else {
-        arr.sort(function(a, b){
-          return parseInt(b.price) - parseInt(a.price);
-        })
-      }
-      
-      var category = this.props.category;
-      */
-      var category = 1;
-      arr = arr.filter(function(item){
-        return item.category === category;
-      })
-
-      this.setState({listings: arr});
+      this.setState({
+        listings: arr,
+        display: arr});
     });
   }
 
@@ -80,16 +88,13 @@ export default class App extends Component {
       </div>
     );
 
-    var list;
-    if(this.state.listings !== 1){
-      var list = this.state.listings.map(item =>
+    var list = "Loading listings. Please wait...";
+
+    if(this.state.display !== 1){
+      list = this.state.display.map(item =>
         <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price}/>
       );
     }
-    else {
-      list = "Loading listings. Please wait..."
-    }
-
 
     return (
       <div>

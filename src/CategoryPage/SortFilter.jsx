@@ -1,6 +1,36 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 
 export default class SortFilter extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      sortOrder: "0",
+      category: "0"
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCatChange = this.handleCatChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event){
+    this.setState({
+      sortOrder: event.target.value
+    });
+  }
+
+  handleCatChange(event){
+    this.setState({
+      category: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
   render() {
     return (
       <div className='card-panel z-depth-1'>
@@ -10,40 +40,57 @@ export default class SortFilter extends Component {
 
         <div className='center-align'>
 
-          <div className='card-panel row black-text'>
-
-            <div className='input-field'>
-              <i className='material-icons prefix'>
+          <div className='row black-text'>
+            <div className='col s2'>
+              <i className='material-icons'>
                 credit_card
               </i>
-              <input id="price-hour" type="text" className="validate" placeholder="Price"/>
             </div>
-
-            <div className='input-field'>
-              <i className='material-icons prefix'>
-                room
-              </i>
-              <select multiple>
-                <option value="" disabled selected>Locations</option>
-                <option value="1">North</option>
-                <option value="2">Northeast</option>
-                <option value="4">East</option>
-                <option value="5">Southeast</option>
-                <option value="6">South</option>
-                <option value="7">Southwest</option>
-                <option value="8">West</option>
-                <option value="9">Northwest</option>
-                <option value="10">Central</option>
-              </select>
+            <div className='col s10'>
+              <form onSubmit={this.handleSubmit}>
+                <div className='input-field'>
+                  <select className="browser-default" onChange={this.handleChange}>
+                    <option value="0" disabled selected>Price/Hour</option>
+                    <option value="1">Ascending</option>
+                    <option value="2">Descending</option>
+                  </select>
+                </div>
+              </form>
             </div>
           </div>
-
+          <div className='row black-text'>
+            <div className='col s2'>
+              <i className='material-icons'>
+                room
+              </i>
+            </div>
+            <div className='col s10'>
+              <form onSubmit={this.handleSubmit}>
+                <div className='input-field'>
+                  <div className='input-field'>
+                    <select className="browser-default" onChange={this.handleCatChange}>
+                      <option value="0" disabled selected>Category</option>
+                      <option value="1">Category 1</option>
+                      <option value="2">Category 2</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-
-        <div className='center-align'>
+          <div className='center-align'>
+          <Link to={{
+            pathname: "/",
+            state: {
+              sortOrder: this.state.sortOrder,
+              category: this.state.category
+            }
+          }}>
           <button className='btn waves-effect waves-light' type='submit' name='action'>
             Search
           </button>
+        </Link>
         </div>
       </div>
     );
