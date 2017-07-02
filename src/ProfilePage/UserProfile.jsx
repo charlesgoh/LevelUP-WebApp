@@ -63,12 +63,14 @@ export default class ProfilePage extends Component {
     };
 
     var user = firebase.auth().currentUser;
-    var photoUrl = '';
+    var photoURL = '';
     var description = "";
 
     if (user){
       console.log("User is " + user);
-      photoUrl = user.photoURL;
+      photoURL = user.photoURL;
+    } else {
+      photoURL = this.state.photoURL;
     }
 
     console.log(this.state.description);
@@ -95,10 +97,15 @@ export default class ProfilePage extends Component {
                  </a>
                </div> : ''}
 
-              <img src = {photoUrl} className = 'circle responsive-img' alt=""/>
+              {/* Display User's profile photo */}
+               <img src = {photoURL} className = 'circle responsive-img' alt=""/>
+
+              {/* Display User's Name */}
               <h4 className="center-align">{this.state.name}</h4>
+
+              {/* Chat or Inbox Button => To be implemented later  */}
               <button className="center-align btn-large waves-effect waves-light">
-                {user? "Messages" : "Message"}
+                {user? "INBOX" : "CHAT"}
               </button>
             </div>
           </div>
