@@ -58,13 +58,11 @@ export default class ProfilePage extends Component {
   }
 
   render () {
-    console.log("Entered render part");
     var clickable = {
       cursor: "pointer"
     };
 
     var user = firebase.auth().currentUser;
-    console.log("User is now: " + user);
     var photoUrl = '';
     var description = "";
 
