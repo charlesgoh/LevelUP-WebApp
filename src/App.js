@@ -14,6 +14,7 @@ export default class App extends Component {
           summary: "",
           price: ""
        },
+       sortFlag: ""
      };
   };
 
@@ -29,6 +30,26 @@ export default class App extends Component {
         data[key]["uid"] = key;
         arr.push(data[key]);
       });
+
+      /*
+      if (this.props.sort === "ascending"){
+        arr.sort(function(a, b){
+          return parseInt(a.price) - parseInt(b.price);
+        })
+      }
+      else {
+        arr.sort(function(a, b){
+          return parseInt(b.price) - parseInt(a.price);
+        })
+      }
+      
+      var category = this.props.category;
+      */
+      var category = 1;
+      arr = arr.filter(function(item){
+        return item.category === category;
+      })
+
       this.setState({listings: arr});
     });
   }
@@ -61,13 +82,14 @@ export default class App extends Component {
 
     var list;
     if(this.state.listings !== 1){
-      list = this.state.listings.map(item =>
-        <ListingInstance uid={item.uid} title={item.title} summary={item.summary} price={item.price}/>
+      var list = this.state.listings.map(item =>
+        <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price}/>
       );
     }
     else {
       list = "Loading listings. Please wait..."
     }
+
 
     return (
       <div>

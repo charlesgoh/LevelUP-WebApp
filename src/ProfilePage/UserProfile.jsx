@@ -49,6 +49,22 @@ export default class ProfilePage extends Component {
           photoURL: db["users"][uid]["photoURL"]
         });
     });
+    console.log(this.state);
+  }
+
+  componentDidMount(nextProps){
+    if (this.props.uid){
+      var uid = this.props.uid;
+      firebase.database().ref().on("value", snapshot => {
+        var thisUser = snapshot.val();
+        this.setState({
+          description: thisUser["users"][uid]["description"],
+          name: thisUser["users"][uid]["name"],
+          photoUrl: thisUser["users"][uid]["photoURL"]
+        });
+      });
+    }
+
   }
 
   handleSubmit(event) {
@@ -74,7 +90,6 @@ export default class ProfilePage extends Component {
       description = this.state.description;
       name = this.state.name
     }
-
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
@@ -91,7 +106,7 @@ export default class ProfilePage extends Component {
               }
             </div>
             <div className = 'col s3 center-align'>
-              {user ?
+              {myUid == this.props.uid ?
                 <div className = 'center-align flow-text'>
                  <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
                    {this.state.editable ? "Update" : "Edit"}
