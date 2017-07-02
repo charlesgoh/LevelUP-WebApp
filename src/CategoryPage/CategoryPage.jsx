@@ -12,7 +12,6 @@ export default class CategoryPage extends Component {
 
         </header>
           {firebase.auth().currentUser ? <ProfileBar /> : ''}
-          <Category />
           <SortFilter />
       </div>
     );
