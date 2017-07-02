@@ -49,8 +49,6 @@ export default class ProfilePage extends Component {
           photoURL: db["users"][uid]["photoURL"]
         });
     });
-    // console.log(this.state);
-    // console.log(this.props);
   }
 
   handleSubmit(event) {
@@ -63,28 +61,31 @@ export default class ProfilePage extends Component {
     };
 
     var user = firebase.auth().currentUser;
-    var photoURL = '';
+    var photoURL = "";
     var description = "";
+    var name = "";
 
     if (user){
-      console.log("User is " + user);
       photoURL = user.photoURL;
+      description = user.description;
+      name = user.name;
     } else {
       photoURL = this.state.photoURL;
+      description = this.state.description;
+      name = this.state.name
     }
 
-    console.log(this.state.description);
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
           <div className = 'row'>
             <div className = 'col s9'>
               {!this.state.editable ? <h3 className = 'flow-text left-align'>
-                {this.state.description}
+                {description}
               </h3>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  <textarea defaultValue= {description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
                 </div>
               </form>
               }
@@ -101,7 +102,7 @@ export default class ProfilePage extends Component {
                <img src = {photoURL} className = 'circle responsive-img' alt=""/>
 
               {/* Display User's Name */}
-              <h4 className="center-align">{this.state.name}</h4>
+              <h4 className="center-align">{name}</h4>
 
               {/* Chat or Inbox Button => To be implemented later  */}
               <button className="center-align btn-large waves-effect waves-light">
