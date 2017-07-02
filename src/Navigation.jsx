@@ -77,7 +77,7 @@ export default class Navigation extends Component {
         this.setState({
           uid: user.uid,
           email: user.email,
-          photoURL: '',
+          photoURL: user.photoURL,
           name: user.name,
           description: user.description
         });
@@ -146,8 +146,8 @@ export default class Navigation extends Component {
         </div>
 
         <div className="nav-wrapper red darken-4">
-          <a href="#" className="brand-logo center">LevelUP</a>
-          <a href="#" data-activates="slide-out" className="button-collapse">
+          <a className="brand-logo center">LevelUP</a>
+          <a data-activates="slide-out" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
           {/* <ul className="right hide-on-med-and-down">
