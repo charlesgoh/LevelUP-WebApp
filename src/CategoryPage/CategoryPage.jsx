@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Category from './Category';
 import ProfileBar from './ProfileBar';
 import SortFilter from './SortFilter';
 import firebase from 'firebase';
