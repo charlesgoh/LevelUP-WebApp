@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import * as FirebaseService from '../FirebaseService.jsx';
 
 export default class Listing extends Component {
 
@@ -41,7 +40,7 @@ export default class Listing extends Component {
   componentWillMount() {
     let user = firebase.auth().currentUser;
     if (user) {
-      this.state.loggedIn = true;
+      this.setState({ loggedIn: true })
     };
     console.log(JSON.stringify(this.state));
   }
