@@ -9,6 +9,9 @@ export default class ProfilePage extends Component {
     var uidProp = '';
     if (user){
       uidProp = user.uid;
+    } else {
+      // console.log(this.props.location.state);
+      uidProp = this.props.location.state.uid;
     }
     return (
       <div>

@@ -36,16 +36,18 @@ export default class ProfilePage extends Component {
     this.setState({description: event.target.value});
   }
 
-  componentWillReceiveProps(nextProps){
-    var uid = nextProps.uid;
-    firebase.database().ref().on("value", snapshot => {
-      var thisUser = snapshot.val();
-      console.log(this);
-      this.setState({
-        description: thisUser["users"][uid]["description"],
-        name: thisUser["users"][uid]["name"],
-        photoUrl: thisUser["users"][uid]["photoURL"]
-      });
+  componentDidMount() {
+    let self = this;
+    var firebaseRef = firebase.database().ref();
+    firebaseRef.once('value')
+      .then(function(snapshot) {
+        var uid = self.props.uid;
+        var db = snapshot.val();
+        self.setState({
+          description: db["users"][uid]["description"],
+          name: db["users"][uid]["name"],
+          photoURL: db["users"][uid]["photoURL"]
+        });
     });
     console.log(this.state);
   }
@@ -70,32 +72,35 @@ export default class ProfilePage extends Component {
   }
 
   render () {
-    console.log("Entered render part");
     var clickable = {
       cursor: "pointer"
     };
 
     var user = firebase.auth().currentUser;
-    console.log("User is now: " + user);
-    var myUid = "";
-    if (user){
-      myUid = user.uid;
-    }
+    var photoURL = "";
+    var description = "";
+    var name = "";
 
-    console.log(this);
-    console.log(myUid);
-    console.log(this.props.uid);
+    if (user){
+      photoURL = user.photoURL;
+      description = user.description;
+      name = user.name;
+    } else {
+      photoURL = this.state.photoURL;
+      description = this.state.description;
+      name = this.state.name
+    }
     return (
       <div className = "card-panel z-depth-1">
         <div className = "container">
           <div className = 'row'>
             <div className = 'col s9'>
               {!this.state.editable ? <h3 className = 'flow-text left-align'>
-                {this.state.description}
+                {description}
               </h3>:
               <form onSubmit={this.handleSubmit}>
                 <div className = "input-field">
-                  <textarea defaultValue= {this.state.description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  <textarea defaultValue= {description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
                 </div>
               </form>
               }
@@ -108,10 +113,15 @@ export default class ProfilePage extends Component {
                  </a>
                </div> : ''}
 
-              <img src = {this.state.photoUrl} className = 'circle responsive-img' alt=""/>
-              <h4 className="center-align">{this.state.name}</h4>
+              {/* Display User's profile photo */}
+               <img src = {photoURL} className = 'circle responsive-img' alt=""/>
+
+              {/* Display User's Name */}
+              <h4 className="center-align">{name}</h4>
+
+              {/* Chat or Inbox Button => To be implemented later  */}
               <button className="center-align btn-large waves-effect waves-light">
-                {user? "Messages" : "Message"}
+                {user? "INBOX" : "CHAT"}
               </button>
             </div>
           </div>

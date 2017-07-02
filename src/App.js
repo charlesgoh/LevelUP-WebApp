@@ -80,14 +80,14 @@ export default class App extends Component {
       </div>
     );
 
+    var list;
     if(this.state.listings !== 1){
       var list = this.state.listings.map(item =>
         <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price}/>
       );
     }
     else {
-      var item = this.state.item;
-      var list = "Loading listings. Please wait..."
+      list = "Loading listings. Please wait..."
     }
 
 
