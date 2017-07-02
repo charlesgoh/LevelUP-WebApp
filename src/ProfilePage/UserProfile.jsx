@@ -36,20 +36,27 @@ export default class ProfilePage extends Component {
     this.setState({description: event.target.value});
   }
 
-  componentDidMount(){
-    firebase.database().ref().on("value", snapshot => {
-      var thisUser = snapshot.val();
-      var uid = this.props.uid;
-      this.setState({
-        description: thisUser["users"][uid]["description"],
-        name: thisUser["users"][uid]["name"]
-      });
+  componentDidMount() {
+    let self = this;
+    var firebaseRef = firebase.database().ref();
+    firebaseRef.once('value')
+      .then(function(snapshot) {
+        var uid = self.props.uid;
+        var db = snapshot.val();
+        self.setState({
+          description: db["users"][uid]["description"],
+          name: db["users"][uid]["name"],
+          photoURL: db["users"][uid]["photoURL"]
+        });
     });
+    // console.log(this.state);
+    // console.log(this.props);
   }
 
   handleSubmit(event) {
     event.preventDefault();
   }
+
   render () {
     console.log("Entered render part");
     var clickable = {
