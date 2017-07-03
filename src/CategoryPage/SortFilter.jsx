@@ -49,8 +49,8 @@ export default class SortFilter extends Component {
             <div className='col s10'>
               <form onSubmit={this.handleSubmit}>
                 <div className='input-field'>
-                  <select className="browser-default" onChange={this.handleChange}>
-                    <option value="0" disabled selected>Price/Hour</option>
+                  <select value={this.state.sortOrder} className="browser-default" onChange={this.handleChange}>
+                    <option value="0">Price/Hour</option>
                     <option value="1">Ascending</option>
                     <option value="2">Descending</option>
                   </select>
@@ -68,8 +68,8 @@ export default class SortFilter extends Component {
               <form onSubmit={this.handleSubmit}>
                 <div className='input-field'>
                   <div className='input-field'>
-                    <select className="browser-default" onChange={this.handleCatChange}>
-                      <option value="0" disabled selected>Category</option>
+                    <select value={this.state.category} className="browser-default" onChange={this.handleCatChange}>
+                      <option value="0">Display All</option>
                       <option value="1">Category 1</option>
                       <option value="2">Category 2</option>
                     </select>
