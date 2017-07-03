@@ -147,6 +147,7 @@ export default class Navigation extends Component {
 
         <div className="nav-wrapper red darken-4">
           <Link to="/">
+          {/* <a href="http://localhost:3000" className="brand-logo center">LevelUP</a> */}
             <span className="brand-logo center">LevelUP</span>
           </Link>
           {/* <a className="brand-logo center">LevelUP</a> */}
