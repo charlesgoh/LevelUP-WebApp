@@ -20,22 +20,22 @@ export default class App extends Component {
   };
 
   componentWillReceiveProps(nextProps){
-    if (this.state.display != 1){
+    if (this.state.display !== 1){
       if (nextProps.location.state.sortOrder !== "0"){
         if (nextProps.location.state.sortOrder === "1"){
           this.state.display.sort(function(a, b){
-            return parseInt(a.price) - parseInt(b.price);
+            return parseInt(10, a.price) - parseInt(10, b.price);
           })
         }
         else {
           this.state.display.sort(function(a, b){
-            return parseInt(b.price) - parseInt(a.price);
+            return parseInt(10, b.price) - parseInt(10, a.price);
           })
         }
       }
       if (nextProps.location.state.category !== "0"){
         var array = this.state.listings.filter(function(item){
-          return item.category == nextProps.location.state.category;
+          return item.category === nextProps.location.state.category;
         });
         this.setState({
           display: array

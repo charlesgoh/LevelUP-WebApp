@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
+import { Link } from 'react-router-dom';
 
 export default class Navigation extends Component {
 
@@ -77,7 +78,7 @@ export default class Navigation extends Component {
         this.setState({
           uid: user.uid,
           email: user.email,
-          photoURL: '',
+          photoURL: user.photoURL,
           name: user.name,
           description: user.description
         });
@@ -115,7 +116,6 @@ export default class Navigation extends Component {
 
     return (
       <nav>
-
         {/* This is the login modal */}
         <div id="modal1" className="modal">
           <div className="center modal-content red darken-4">
@@ -146,15 +146,14 @@ export default class Navigation extends Component {
         </div>
 
         <div className="nav-wrapper red darken-4">
-          <a href="#" className="brand-logo center">LevelUP</a>
-          <a href="#" data-activates="slide-out" className="button-collapse">
+          <Link to="/">
+          {/* <a href="http://localhost:3000" className="brand-logo center">LevelUP</a> */}
+            <span className="brand-logo center">LevelUP</span>
+          </Link>
+          {/* <a className="brand-logo center">LevelUP</a> */}
+          <a data-activates="slide-out" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
-          {/* <ul className="right hide-on-med-and-down">
-            <li>
-              {masterAuthButton}
-            </li>
-          </ul> */}
           <ul className="side-nav fixed" id="slide-out">
             <li>
               {masterAuthButton}
