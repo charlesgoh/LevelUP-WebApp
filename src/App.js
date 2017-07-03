@@ -21,24 +21,33 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps){
     if (this.state.display !== 1){
+      if (!nextProps.location.state){
+        return;
+      }
       if (nextProps.location.state.sortOrder !== "0"){
         if (nextProps.location.state.sortOrder === "1"){
-          this.state.display.sort(function(a, b){
-            return parseInt(10, a.price) - parseInt(10, b.price);
+          this.state.listings.sort(function(a, b){
+            return parseInt(a.price, 10) - parseInt(b.price, 10);
           })
         }
         else {
-          this.state.display.sort(function(a, b){
-            return parseInt(10, b.price) - parseInt(10, a.price);
+          this.state.listings.sort(function(a, b){
+            return parseInt(b.price, 10) - parseInt(a.price, 10);
           })
         }
       }
+
       if (nextProps.location.state.category !== "0"){
         var array = this.state.listings.filter(function(item){
-          return item.category === nextProps.location.state.category;
+          return item.category.toString() === nextProps.location.state.category;
         });
         this.setState({
           display: array
+        });
+      }
+      else {
+        this.setState({
+          display: this.state.listings
         });
       }
     }
