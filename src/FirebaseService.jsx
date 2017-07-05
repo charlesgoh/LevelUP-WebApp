@@ -1,7 +1,3 @@
-// export const firebaseApp = firebase.initializeApp(config);
-//
-// export const db = firebaseApp.database();
-// export const auth = firebaseApp.auth();
 import firebase from 'firebase';
 
 let config = {
@@ -12,10 +8,14 @@ let config = {
   storageBucket: "levelup-30839.appspot.com",
   messagingSenderId: "109258915713"
 }
+
 export const firebaseApp = firebase.initializeApp(config);
+
+export const firebaseDB = firebaseApp.database();
+export const firebaseAuth = firebaseApp.auth();
 
 export const storageKey = 'KEY_FOR_LOCAL_STORAGE';
 
 export const isAuthenticated = () => {
-  return !!firebaseApp.currentUser || !!localStorage.getItem(storageKey);
+  return !!firebaseAuth.currentUser || !!localStorage.getItem(storageKey);
 }

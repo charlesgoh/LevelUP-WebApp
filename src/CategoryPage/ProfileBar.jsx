@@ -1,38 +1,31 @@
 import React, { Component }from 'react';
+import firebase from 'firebase';
+import { Link } from 'react-router-dom';
 
 export default class ProfileBar extends Component {
+
   render() {
+    var user = firebase.auth().currentUser;
     return (
-      <div className = 'card-panel z-depth-1'>
-        <div className = 'container center-align grey lighten-2'>
-          <div className = 'row valign-wrapper'>
-            <div className = 'col s2'>
-              <i className = 'small material-icons'>
-                info_outline
-              </i>
+      <div className="col s12 m8 offset-m2 l6 offset-l3">
+        <div className = 'card-panel z-depth-1'>
+          <div className = 'center-align'>
+            <div className = 'row valign-wrapper'>
+              <div className = 'col s4'>
+                <img alt="" className="circle responsive-img" src={user.photoURL} />
+              </div>
+
+              <div className = 'col s8 left-align'>
+                <Link to={{
+                  pathname: "/profile/id?=" + user.uid,
+                  state: {
+                    uid: user.uid
+                  }}
+                }>
+                  <strong className="flow-text black-text">{user.displayName}</strong>
+                </Link>
+              </div>
             </div>
-
-            <div className = 'col s7 left-align'>
-              <p className = 'flow-text grey-text'>
-                Name
-              </p>
-
-              <p className = 'flow-text'>
-                <a href = '#' className = 'red-text text-darken-4'>
-                  Profile
-                </a>
-              </p>
-            </div>
-
-            <div className = 'col s3 grey-text center-align'>
-              <img src = "./images/Logout.png" className = 'responsive-image' />
-              <p>
-                <a href ='#' className = 'flow-text grey-text'>
-                  LOG OUT
-                </a>
-              </p>
-            </div>
-
           </div>
         </div>
       </div>

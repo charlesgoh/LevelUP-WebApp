@@ -25,12 +25,30 @@
   <!-- Font Awesome CDN via script -->
   <script src="https://use.fontawesome.com/e1381df119.js"></script>
 
+  <style>
+    /* Settings to offset content by width of side menu*/
+    header,
+    main,
+    footer {
+      padding-left: 300px;
+    }
+
+    @media only screen and (max-width: 992px) {
+      header,
+      main,
+      footer {
+        padding-left: 0;
+      }
+    }
+  </style>
+
   <script>
     $(document).ready(function() {
       $(".button-collapse").sideNav();
       $('.carousel.carousel-slider').carousel({
         fullWidth: true
       });
+      $('select').material_select();
       $('.modal').modal({
         dismissible: true, // Modal can be dismissed by clicking outside of the modal
         opacity: .5, // Opacity of modal background
@@ -52,8 +70,8 @@
   <title>LevelUP</title>
 </head>
 
-<body>
+<main>
   <div id="root"></div>
-</body>
+</main>
 
 </html>
