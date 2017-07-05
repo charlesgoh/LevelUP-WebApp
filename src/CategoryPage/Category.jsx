@@ -5,7 +5,7 @@ export default class Category extends Component {
     return (
       <div className = 'card-panel z-depth-1'>
 
-        <p className = 'grey-text text-lighten-1 center-align'>
+        <p className = 'grey-text text-darken-2 center-align'>
           Coaches/Tutors
         </p>
 

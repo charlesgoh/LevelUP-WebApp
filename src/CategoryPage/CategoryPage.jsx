@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Category from './Category';
 import ProfileBar from './ProfileBar';
-import LoginBar from './LoginBar';
 import SortFilter from './SortFilter';
+import firebase from 'firebase';
 
 export default class CategoryPage extends Component {
   render() {
@@ -11,10 +10,8 @@ export default class CategoryPage extends Component {
         <header>
 
         </header>
-          <Category />
+          {firebase.auth().currentUser ? <ProfileBar /> : ''}
           <SortFilter />
-          <ProfileBar />
-          <LoginBar />
       </div>
     );
   }
