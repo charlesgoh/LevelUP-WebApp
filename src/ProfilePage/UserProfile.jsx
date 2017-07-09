@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import { Link } from 'react-router-dom';
 
 export default class ProfilePage extends Component {
 
@@ -114,9 +115,27 @@ export default class ProfilePage extends Component {
               <h4 className="center-align">{name}</h4>
 
               {/* Chat or Inbox Button => To be implemented later  */}
-              <button className="center-align btn-large waves-effect waves-light">
-                {user? "INBOX" : "CHAT"}
-              </button>
+              {user ?
+                <Link to={{
+                  pathname: "/inbox/?id=" + user.uid,
+                  state: {
+                    uid: user.uid
+                  }}}>
+                  <button className="center-align btn-large waves-effect waves-light">
+                    INBOX
+                  </button>
+                </Link>:
+                <Link to={{
+                  pathname: "/message/?id=" + this.props.uid,
+                  state: {
+                    uid: this.props.uid
+                  }}}>
+                  <button className="center-align btn-large waves-effect waves-light">
+                    CHAT
+                  </button>
+                </Link>
+              }
+
             </div>
           </div>
 
