@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import Autocomplete from 'react-google-autocomplete';
 
 export default class Listing extends Component {
 
@@ -82,8 +83,8 @@ export default class Listing extends Component {
     this.setState({summary: event.target.value});
   }
 
-  handleLocation(event) {
-    this.setState({location: event.target.value});
+  handleLocation(newLocation) {
+    this.setState({location: newLocation});
   }
 
   handleTitleChange(event) {
@@ -147,11 +148,14 @@ export default class Listing extends Component {
               {!this.state.editable? <h6 className = 'flow-text left-align grey-text text-lighten-2'>
                 {this.state.location}
               </h6> :
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <textarea defaultValue= {this.state.location} type="text" className="validate" onChange={this.handleLocation}></textarea>
-                </div>
-              </form>
+                <Autocomplete
+                  onPlaceSelected={(place) => {
+                    // console.log(place.formatted_address);
+                    this.handleLocation(place.formatted_address);
+                  }}
+                  types={['address']}
+                  componentRestrictions={{'country': 'SG'}}
+                />
               }
 
               {!this.state.editable ? <h6 className = 'flow-text text-justify'>
