@@ -145,17 +145,19 @@ export default class Listing extends Component {
               </form>
               }
 
-              {!this.state.editable? <h6 className = 'flow-text left-align grey-text text-lighten-2'>
+              {!this.state.editable? <h6 className = 'flow-text left-align grey-text'>
                 {this.state.location}
               </h6> :
+              <div>
                 <Autocomplete
                   onPlaceSelected={(place) => {
                     // console.log(place.formatted_address);
                     this.handleLocation(place.formatted_address);
                   }}
                   types={['address']}
-                  componentRestrictions={{'country': 'SG'}}
-                />
+                  componentRestrictions={{'country': 'SG'}}>
+                </Autocomplete>
+              </div>
               }
 
               {!this.state.editable ? <h6 className = 'flow-text text-justify'>
