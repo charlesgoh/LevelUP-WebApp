@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import firebase from "firebase";
 
 export default class ListingInstance extends Component {
 
+
+
   render() {
+    var user = firebase.auth().currentUser;
+    var uid = (user ? user.uid : "");
     console.log("Key is: " + this.props.uid);
     return (
       <div className = "card-panel z-depth-1 hoverable">
@@ -55,11 +60,19 @@ export default class ListingInstance extends Component {
               <br/>
               <br/>
 
+              {uid === this.props.uid ? "" :
+              <Link to={{
+                pathname: "/message/id?=" + this.props.uid,
+                state: {
+                  uid: this.props.uid
+                }
+              }}>
               <button className='btn-large waves-effect waves-light red darken-4'>
                 Chat
                 <i className="material-icons right">email</i>
               </button>
-
+              </Link>
+              }
             </div>
 
           </div>
