@@ -117,7 +117,7 @@ export default class ProfilePage extends Component {
               {/* Chat or Inbox Button => To be implemented later  */}
               {user ?
                 <Link to={{
-                  pathname: "/inbox/?id=" + user.uid,
+                  pathname: "/inbox/id?=" + user.uid,
                   state: {
                     uid: user.uid
                   }}}>
@@ -126,7 +126,7 @@ export default class ProfilePage extends Component {
                   </button>
                 </Link>:
                 <Link to={{
-                  pathname: "/message/?id=" + this.props.uid,
+                  pathname: "/message/id?=" + this.props.uid,
                   state: {
                     uid: this.props.uid
                   }}}>
