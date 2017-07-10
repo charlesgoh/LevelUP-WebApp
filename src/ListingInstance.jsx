@@ -36,7 +36,7 @@ export default class ListingInstance extends Component {
               </h2>
 
               <h6 className = 'flow-text left-align grey-text text-lighten-2'>
-                Location
+                {this.props.location}
               </h6>
 
               <h6 className = 'flow-text text-justify'>
