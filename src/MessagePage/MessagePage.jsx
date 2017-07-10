@@ -104,7 +104,8 @@ export default class MessagePage extends Component {
         {inbox}
         <form onSubmit={this.handleMessageSubmit}>
           <div className = "container input-field">
-            <textarea defaultValue= {this.state.currentMessage} type="text" className="materialize-textarea" onChange={this.handleMessageChange}></textarea>
+            <input value={this.state.currentMessage} ref={'messagebox'} type="text" className="materialize-textarea" onChange={this.handleMessageChange}>
+            </input>
             <button type="submit">Send</button>
           </div>
         </form>
