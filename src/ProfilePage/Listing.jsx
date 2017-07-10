@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import Autocomplete from 'react-google-autocomplete';
 
 export default class Listing extends Component {
 
@@ -12,6 +13,7 @@ export default class Listing extends Component {
       summary: "",
       title: "",
       price: "",
+      location: "",
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -19,6 +21,7 @@ export default class Listing extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
+    this.handleLocation = this.handleLocation.bind(this);
   };
 
   setEditFlag() {
@@ -31,7 +34,8 @@ export default class Listing extends Component {
       firebase.database().ref('listings/' + user.uid).update({
         summary: this.state.summary,
         title: this.state.title,
-        price: this.state.price
+        price: this.state.price,
+        location: this.state.location
       });
       console.log("Pushed data into database.");
     }
@@ -56,13 +60,15 @@ export default class Listing extends Component {
         this.setState({
           summary: "Listing Summary",
           title: "Title of Listing",
-          price: "0"
+          price: "0",
+          location: "Your preferred location"
         });
       } else {
         this.setState({
           summary: thisUser["listings"][uid]["summary"],
           title: thisUser["listings"][uid]["title"],
-          price: thisUser["listings"][uid]["price"]
+          price: thisUser["listings"][uid]["price"],
+          location: thisUser["listings"][uid]["location"]
         });
       }
     });
@@ -75,6 +81,10 @@ export default class Listing extends Component {
 
   handleChange(event) {
     this.setState({summary: event.target.value});
+  }
+
+  handleLocation(newLocation) {
+    this.setState({location: newLocation});
   }
 
   handleTitleChange(event) {
@@ -135,9 +145,20 @@ export default class Listing extends Component {
               </form>
               }
 
-              <h6 className = 'flow-text left-align grey-text text-lighten-2'>
-                Location
-              </h6>
+              {!this.state.editable? <h6 className = 'flow-text left-align grey-text'>
+                {this.state.location}
+              </h6> :
+              <div>
+                <Autocomplete
+                  onPlaceSelected={(place) => {
+                    // console.log(place.formatted_address);
+                    this.handleLocation(place.formatted_address);
+                  }}
+                  types={['address']}
+                  componentRestrictions={{'country': 'SG'}}>
+                </Autocomplete>
+              </div>
+              }
 
               {!this.state.editable ? <h6 className = 'flow-text text-justify'>
                 {this.state.summary}
