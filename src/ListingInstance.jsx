@@ -46,11 +46,8 @@ export default class ListingInstance extends Component {
 
             <div className = 'col s3 center-align'>
               <Link to={{
-                pathname: "/profile/id?=" + this.props.uid,
-                state: {
-                  uid: this.props.uid
-                }}
-              }>
+                pathname: "/profile/id?=" + this.props.uid
+              }}>
                 <button className='btn-large waves-effect waves-light'>
                   Profile
                   <i className="material-icons right">send</i>
@@ -62,10 +59,7 @@ export default class ListingInstance extends Component {
 
               {uid === this.props.uid ? "" :
               <Link to={{
-                pathname: "/message/id?=" + this.props.uid,
-                state: {
-                  uid: this.props.uid
-                }
+                pathname: "/message/id?=" + this.props.uid
               }}>
               <button className='btn-large waves-effect waves-light red darken-4'>
                 Chat

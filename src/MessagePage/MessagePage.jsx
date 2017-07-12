@@ -29,7 +29,7 @@ export default class MessagePage extends Component {
     if (this.state.currentMessage){
       firebase.database().ref('messages/').push({
         owner: user.uid,
-        recipient: this.props.location.state.uid,
+        recipient: window.location.search.slice(2),
         message: this.state.currentMessage
       });
       this.setState({currentMessage: ""});
@@ -39,13 +39,13 @@ export default class MessagePage extends Component {
   componentDidMount(){
     var messagesRef = firebase.database().ref('/messages');
     var userRef = firebase.database().ref('/users');
-    let self = this;
 
 
     messagesRef.on('child_added', snapshot => {
       var data = snapshot.val();
+      var otherUserUid = window.location.search.slice(2);
       var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
-      if ((data["owner"] === uid && data["recipient"] === self.props.location.state.uid) || (data["owner"] === self.props.location.state.uid && data["recipient"] === uid)){
+      if ((data["owner"] === uid && data["recipient"] === otherUserUid) || (data["owner"] === otherUserUid && data["recipient"] === uid)){
         var allMsg = this.state.messages;
         allMsg.push(data);
         this.setState({messages: allMsg});
@@ -53,8 +53,9 @@ export default class MessagePage extends Component {
     });
 
     userRef.once('value', snapshot => {
+      var otherUserUid = window.location.search.slice(2);
       var data = snapshot.val();
-      var user = data[self.props.location.state.uid];
+      var user = data[otherUserUid];
       this.setState({
         name: user.name,
         photoUrl: user.photoURL
@@ -68,7 +69,7 @@ export default class MessagePage extends Component {
 
     if (this.state.messages){
       inbox = this.state.messages.map(message =>
-        message.owner === this.props.location.state.uid ?
+        message.owner === window.location.search.slice(2) ?
           <div className="container left-align blue-text">
             {message.message}
           </div>

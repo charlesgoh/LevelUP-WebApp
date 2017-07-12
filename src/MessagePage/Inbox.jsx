@@ -62,10 +62,7 @@ export default class Inbox extends Component {
             </div>
             <div className="col s9">
               <Link to={{
-                pathname: "/message/id?=" + item.key,
-                state: {
-                  uid: item.key
-                }}}>
+                pathname: "/message/id?=" + item.key}}>
                 <h4>{item.name}</h4>
               </Link>
               <h5>
