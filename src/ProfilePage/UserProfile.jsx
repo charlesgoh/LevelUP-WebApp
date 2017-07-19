@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import { Modal, Button } from 'react-materialize';
+import ReviewObject from './ReviewObject.jsx';
+
 
 export default class ProfilePage extends Component {
 
@@ -11,7 +14,10 @@ export default class ProfilePage extends Component {
       editable: false,
       description: '',
       name: '',
-      photoURL: ''
+      photoURL: '',
+      reviews: '',
+      score: '',
+      list: 'No reviews added yet!'
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -40,6 +46,8 @@ export default class ProfilePage extends Component {
   componentDidMount() {
     let self = this;
     var firebaseRef = firebase.database().ref();
+    var getReviews = firebase.database().ref('/reviews').orderByKey();
+    var arr = [];
     firebaseRef.once('value')
       .then(function(snapshot) {
         var uid = self.props.uid;
@@ -50,7 +58,40 @@ export default class ProfilePage extends Component {
           photoURL: db["users"][uid]["photoURL"]
         });
     });
-    console.log(this.state);
+
+    getReviews.on('value', snapshot => {
+      try{
+        var uid = self.props.uid;
+        var data = snapshot.val()[uid];
+        Object.keys(data).forEach(function(key) {
+          data[key]["uid"] = key;
+          arr.push(data[key]);
+        });
+
+        var list = arr.map(item =>
+          <ReviewObject key={item.uid} name={item.name} score={item.score} title={item.title} feedback={item.feedback} photoURL={item.photoURL}/>
+        );
+
+        var score = arr.reduce(function(sum, value){
+          return sum + parseInt(value.score, 10);
+        }, 0);
+
+        score /= arr.length;
+        score = score.toPrecision(3);
+        this.setState({
+          reviews: arr,
+          score: score,
+          list: list
+          });
+      }
+
+      catch(err){
+        this.setState({
+          reviews: ''
+        });
+      }
+
+    });
   }
 
   handleSubmit(event) {
@@ -80,10 +121,6 @@ export default class ProfilePage extends Component {
       description = this.state.description;
       name = this.state.name
     }
-
-    // console.log(photoURL);
-    // console.log(description);
-    // console.log(name);
 
     return (
       <div className = "card-panel z-depth-1">
@@ -132,11 +169,27 @@ export default class ProfilePage extends Component {
                 </Link>
               }
 
+              <Modal
+              	header={'Reviews for ' + name}
+              	trigger={
+              		<Button waves='light'>Reviews</Button>
+              	}>
+                <div>
+                  <div className="center-align">
+                    {this.state.score}
+                  </div>
+                  <div className="container center-align">
+                    {this.state.list}
+                  </div>
+                </div>
+              </Modal>
+
+
             </div>
           </div>
-
         </div>
       </div>
+
     );
   }
 };
