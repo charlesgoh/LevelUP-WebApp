@@ -17,11 +17,19 @@ export default class ProfilePage extends Component {
       photoURL: '',
       reviews: '',
       score: '',
-      list: 'No reviews added yet!'
+      list: 'No reviews added yet!',
+      allowReview: false,
+      editReviewFlag: false,
+      myReview: '',
+      myTitle: '',
+      myScore: ''
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
+    this.setReviewFlag = this.setReviewFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleReviewChange = this.handleReviewChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   };
 
@@ -39,14 +47,41 @@ export default class ProfilePage extends Component {
     }
   }
 
+  setReviewFlag() {
+    this.setState({
+      editReviewFlag: !this.state.editReviewFlag
+    });
+
+    if(this.state.editReviewFlag){
+        var user = firebase.auth().currentUser;
+        firebase.database().ref('reviews/' + this.props.uid + '/' + user.uid).update({
+          feedback: this.state.myReview,
+          title: this.state.myTitle,
+          score: 5,
+          photoURL: user.photoURL
+        });
+        console.log("Pushed review into database.");
+    }
+  }
+
   handleChange(event) {
     this.setState({description: event.target.value});
+  }
+
+  handleReviewChange(event) {
+    this.setState({myReview: event.target.value});
+  }
+
+  handleTitleChange(event) {
+    this.setState({myTitle: event.target.value});
   }
 
   componentDidMount() {
     let self = this;
     var firebaseRef = firebase.database().ref();
     var getReviews = firebase.database().ref('/reviews').orderByKey();
+    var offerRef = firebase.database().ref('/offers');
+
     var arr = [];
     firebaseRef.once('value')
       .then(function(snapshot) {
@@ -59,18 +94,48 @@ export default class ProfilePage extends Component {
         });
     });
 
+    offerRef.on('value', snapshot => {
+      var otherUserUid = window.location.search.slice(2);
+      var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
+      var data = snapshot.val();
+      if (data[uid]){
+        if (data[uid][otherUserUid]){
+          this.setState({
+            allowReview: data[uid][otherUserUid]["confirmed"]
+          });
+        }
+      }
+
+      if (data[otherUserUid]){
+        if (data[otherUserUid][uid]){
+          this.setState({
+            allowReview: this.state.allowReview || data[otherUserUid][uid]["confirmed"]
+          });
+        }
+      }
+    });
+
     getReviews.on('value', snapshot => {
       try{
         var uid = self.props.uid;
         var data = snapshot.val()[uid];
+        var selfUid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
+        if (data[selfUid]){
+          this.setState({
+            myReview: data[selfUid]["feedback"],
+            myTitle: data[selfUid]["title"],
+            myScore: data[selfUid]["score"]
+          });
+        }
+
         Object.keys(data).forEach(function(key) {
           data[key]["uid"] = key;
           arr.push(data[key]);
         });
 
-        var list = arr.map(item =>
-          <ReviewObject key={item.uid} name={item.name} score={item.score} title={item.title} feedback={item.feedback} photoURL={item.photoURL}/>
-        );
+        var list = arr.map(function(item){
+          return <ReviewObject key={item.uid} name={item.name} score= {item.score} title={item.title} feedback={item.feedback} photoURL={item.photoURL}/>
+        });
 
         var score = arr.reduce(function(sum, value){
           return sum + parseInt(value.score, 10);
@@ -174,6 +239,22 @@ export default class ProfilePage extends Component {
               	trigger={
               		<Button waves='light'>Reviews</Button>
               	}>
+                {this.state.allowReview ?
+                   <a className="center-align" onClick={this.setReviewFlag} type="submit" style={clickable}>
+                     {this.state.editReviewFlag ? "Update" : "Add/Edit Review"}
+                   </a>
+                : ""}
+                {this.state.editReviewFlag ?
+                  <form onSubmit={this.handleSubmit}>
+                    <div className = "input-field">
+                      <p> Title </p>
+                      <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
+                    </div>
+                    <div className = "input-field">
+                      <textarea defaultValue= {this.state.myReview} type="text" className="materialize-textarea" onChange={this.handleReviewChange}></textarea>
+                    </div>
+                  </form>
+                :
                 <div>
                   <div className="center-align">
                     {this.state.score}
@@ -181,7 +262,8 @@ export default class ProfilePage extends Component {
                   <div className="container center-align">
                     {this.state.list}
                   </div>
-                </div>
+                </div>}
+
               </Modal>
 
 
