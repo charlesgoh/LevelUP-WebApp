@@ -10,11 +10,16 @@ export default class MessagePage extends Component {
       currentMessage: "",
       messages: [],
       photoUrl: "",
-      name: ""
+      name: "",
+      offerStatus: false,
+      hasOffer: false,
+      confirmed: false
     };
 
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+    this.handleOfferChange = this.handleOfferChange.bind(this);
+    this.handleOfferSubmit = this.handleOfferSubmit.bind(this);
   }
 
   handleMessageChange(event){
@@ -36,10 +41,49 @@ export default class MessagePage extends Component {
     }
   }
 
+  handleOfferChange(){
+    var user = firebase.auth().currentUser;
+    var otherUserUid = window.location.search.slice(2);
+    firebase.database().ref('offers/' + user.uid + '/' + otherUserUid).update({
+      offerMade: !this.state.offerStatus,
+      confirmed: false
+    });
+
+    var offerMessage = this.state.offerStatus ? "Withdrew offer" : "Made new offer";
+    firebase.database().ref('messages/').push({
+      owner: user.uid,
+      recipient: otherUserUid,
+      message: offerMessage
+    });
+
+    this.setState({
+      offerStatus: !this.state.offerStatus
+    });
+  }
+
+  handleOfferSubmit(){
+    var user = firebase.auth().currentUser;
+    var otherUserUid = window.location.search.slice(2);
+    firebase.database().ref('offers/' + otherUserUid + '/' + user.uid).update({
+      confirmed: true
+    });
+
+    var offerMessage = "Trade Accepted!";
+    firebase.database().ref('messages/').push({
+      owner: user.uid,
+      recipient: otherUserUid,
+      message: offerMessage
+    });
+
+    this.setState({
+      confirmedOthUser: true
+    });
+  }
+
   componentDidMount(){
     var messagesRef = firebase.database().ref('/messages');
     var userRef = firebase.database().ref('/users');
-
+    var offerRef = firebase.database().ref('/offers');
 
     messagesRef.on('child_added', snapshot => {
       var data = snapshot.val();
@@ -60,6 +104,43 @@ export default class MessagePage extends Component {
         name: user.name,
         photoUrl: user.photoURL
       });
+    });
+
+    /* Database structure:
+      > UserA
+        > UserB
+          > OfferMade: boolean
+          > Confirmed: false
+
+      UserA: the user who makes the offer
+      UserB: the user who receives the offer
+      OfferMade: the status of the offer from UserA to UserB
+      Confiemed: set to true, once OfferMade is true and UserB accepts.
+
+      For clarity's sake:
+        offerStatus: status of the offer from me to you
+        hasOffer: status of the offer from you to me
+    */
+    offerRef.on('value', snapshot => {
+      var otherUserUid = window.location.search.slice(2);
+      var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
+      var data = snapshot.val();
+      if (data[uid]){
+        if (data[uid][otherUserUid]){
+          this.setState({
+            offerStatus: data[uid][otherUserUid]["offerMade"],
+            confirmed: data[uid][otherUserUid]["confirmed"]
+          });
+        }
+      }
+      if (data[otherUserUid]){
+        if (data[otherUserUid][uid]){
+          this.setState({
+            hasOffer: !data[otherUserUid][uid]["confirmed"],
+            confirmedOthUser: data[otherUserUid][uid]["confirmed"]
+          });
+        }
+      }
     });
   }
 
@@ -100,6 +181,33 @@ export default class MessagePage extends Component {
           <h3 className="white-text">
             {this.state.name}
           </h3>
+        </div>
+
+
+        <div className="row">
+          <div className="col s6 center-align">
+            {this.state.confirmed ?
+              <button className="disabled">
+                Trade confirmed!
+              </button> :
+              <button onClick={this.handleOfferChange}>
+                {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
+              </button>}
+          </div>
+          <div className="col s6 center-align">
+            {this.state.confirmedOthUser ?
+              <button className="disabled">
+                Trade confirmed!
+              </button> :
+              (this.state.hasOffer ?
+                <button onClick={this.handleOfferSubmit}>
+                  Accept offer
+                </button> :
+                <p>
+                  No offers right now
+                </p>)
+              }
+          </div>
         </div>
 
         {inbox}
