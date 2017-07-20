@@ -10,11 +10,16 @@ export default class MessagePage extends Component {
       currentMessage: "",
       messages: [],
       photoUrl: "",
-      name: ""
+      name: "",
+      offerStatus: false,
+      hasOffer: false,
+      confirmed: false
     };
 
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+    this.handleOfferChange = this.handleOfferChange.bind(this);
+    this.handleOfferSubmit = this.handleOfferSubmit.bind(this);
   }
 
   handleMessageChange(event){
@@ -29,23 +34,62 @@ export default class MessagePage extends Component {
     if (this.state.currentMessage){
       firebase.database().ref('messages/').push({
         owner: user.uid,
-        recipient: this.props.location.state.uid,
+        recipient: window.location.search.slice(2),
         message: this.state.currentMessage
       });
       this.setState({currentMessage: ""});
     }
   }
 
+  handleOfferChange(){
+    var user = firebase.auth().currentUser;
+    var otherUserUid = window.location.search.slice(2);
+    firebase.database().ref('offers/' + user.uid + '/' + otherUserUid).update({
+      offerMade: !this.state.offerStatus,
+      confirmed: false
+    });
+
+    var offerMessage = this.state.offerStatus ? "Withdrew offer" : "Made new offer";
+    firebase.database().ref('messages/').push({
+      owner: user.uid,
+      recipient: otherUserUid,
+      message: offerMessage
+    });
+
+    this.setState({
+      offerStatus: !this.state.offerStatus
+    });
+  }
+
+  handleOfferSubmit(){
+    var user = firebase.auth().currentUser;
+    var otherUserUid = window.location.search.slice(2);
+    firebase.database().ref('offers/' + otherUserUid + '/' + user.uid).update({
+      confirmed: true
+    });
+
+    var offerMessage = "Trade Accepted!";
+    firebase.database().ref('messages/').push({
+      owner: user.uid,
+      recipient: otherUserUid,
+      message: offerMessage
+    });
+
+    this.setState({
+      confirmedOthUser: true
+    });
+  }
+
   componentDidMount(){
     var messagesRef = firebase.database().ref('/messages');
     var userRef = firebase.database().ref('/users');
-    let self = this;
-
+    var offerRef = firebase.database().ref('/offers');
 
     messagesRef.on('child_added', snapshot => {
       var data = snapshot.val();
+      var otherUserUid = window.location.search.slice(2);
       var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
-      if ((data["owner"] === uid && data["recipient"] === self.props.location.state.uid) || (data["owner"] === self.props.location.state.uid && data["recipient"] === uid)){
+      if ((data["owner"] === uid && data["recipient"] === otherUserUid) || (data["owner"] === otherUserUid && data["recipient"] === uid)){
         var allMsg = this.state.messages;
         allMsg.push(data);
         this.setState({messages: allMsg});
@@ -53,12 +97,50 @@ export default class MessagePage extends Component {
     });
 
     userRef.once('value', snapshot => {
+      var otherUserUid = window.location.search.slice(2);
       var data = snapshot.val();
-      var user = data[self.props.location.state.uid];
+      var user = data[otherUserUid];
       this.setState({
         name: user.name,
         photoUrl: user.photoURL
       });
+    });
+
+    /* Database structure:
+      > UserA
+        > UserB
+          > OfferMade: boolean
+          > Confirmed: false
+
+      UserA: the user who makes the offer
+      UserB: the user who receives the offer
+      OfferMade: the status of the offer from UserA to UserB
+      Confiemed: set to true, once OfferMade is true and UserB accepts.
+
+      For clarity's sake:
+        offerStatus: status of the offer from me to you
+        hasOffer: status of the offer from you to me
+    */
+    offerRef.on('value', snapshot => {
+      var otherUserUid = window.location.search.slice(2);
+      var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
+      var data = snapshot.val();
+      if (data[uid]){
+        if (data[uid][otherUserUid]){
+          this.setState({
+            offerStatus: data[uid][otherUserUid]["offerMade"],
+            confirmed: data[uid][otherUserUid]["confirmed"]
+          });
+        }
+      }
+      if (data[otherUserUid]){
+        if (data[otherUserUid][uid]){
+          this.setState({
+            hasOffer: !data[otherUserUid][uid]["confirmed"],
+            confirmedOthUser: data[otherUserUid][uid]["confirmed"]
+          });
+        }
+      }
     });
   }
 
@@ -68,7 +150,7 @@ export default class MessagePage extends Component {
 
     if (this.state.messages){
       inbox = this.state.messages.map(message =>
-        message.owner === this.props.location.state.uid ?
+        message.owner === window.location.search.slice(2) ?
           <div className="container left-align blue-text">
             {message.message}
           </div>
@@ -101,10 +183,38 @@ export default class MessagePage extends Component {
           </h3>
         </div>
 
+
+        <div className="row">
+          <div className="col s6 center-align">
+            {this.state.confirmed ?
+              <button className="disabled">
+                Trade confirmed!
+              </button> :
+              <button onClick={this.handleOfferChange}>
+                {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
+              </button>}
+          </div>
+          <div className="col s6 center-align">
+            {this.state.confirmedOthUser ?
+              <button className="disabled">
+                Trade confirmed!
+              </button> :
+              (this.state.hasOffer ?
+                <button onClick={this.handleOfferSubmit}>
+                  Accept offer
+                </button> :
+                <p>
+                  No offers right now
+                </p>)
+              }
+          </div>
+        </div>
+
         {inbox}
         <form onSubmit={this.handleMessageSubmit}>
           <div className = "container input-field">
-            <textarea defaultValue= {this.state.currentMessage} type="text" className="materialize-textarea" onChange={this.handleMessageChange}></textarea>
+            <input value={this.state.currentMessage} ref={'messagebox'} type="text" className="materialize-textarea" onChange={this.handleMessageChange}>
+            </input>
             <button type="submit">Send</button>
           </div>
         </form>

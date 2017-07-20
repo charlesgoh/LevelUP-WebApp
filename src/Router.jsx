@@ -40,9 +40,9 @@ export default class Router extends Component {
           <Navigation/>
           <Switch>
             <Route exact path="/" component= { App }/>
-            <Route path="/profile/:value" component={ ProfilePage }/>
-            <Route path="/inbox/:value" component={ Inbox } />
-            <Route path="/message/:value" component={ MessagePage } />
+            <Route path="/profile/:value" component= { ProfilePage }/>
+            <Route path="/inbox" component= { Inbox } />
+            <Route path="/message/:value" component= { MessagePage } />
             <Route path="/*" component={ NotFound } />
           </Switch>
         </div>
