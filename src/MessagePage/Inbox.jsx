@@ -6,7 +6,8 @@ export default class Inbox extends Component {
   constructor(props){
     super(props);
     this.state = {
-      clients: []
+      clients: [],
+      clientDic: {}
     };
   }
 
@@ -18,29 +19,34 @@ export default class Inbox extends Component {
       var data = snapshot.val();
       var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
       if ((data["owner"] === uid  ||  data["recipient"] === uid)){
-        var allClient = this.state.clients;
-        console.log(allClient);
+        var clientDic = this.state.clientDic;
         var otherUserUid = (data["owner"] === uid ? data["recipient"] : data["owner"]);
-        if (!allClient[otherUserUid]){
-          allClient.push({otherUserUid});
+        if (!clientDic[otherUserUid]){
+          clientDic[otherUserUid] = {key: otherUserUid};
         }
+        clientDic[otherUserUid].message = data["message"];
       }
-      this.setState({clients: allClient});
+      this.setState({clientDic: clientDic});
     });
 
     userRef.once('value', snapshot => {
       var data = snapshot.val();
+      var clientDic = this.state.clientDic;
       var allClient = this.state.clients;
 
-      Object.keys(allClient).forEach(function(key) {
-        var userKey = allClient[key].otherUserUid;
+      for (var key in clientDic) {
+        var userKey = clientDic[key].key;
         var otherUser = data[userKey];
-        allClient[key].name = otherUser["name"];
-        allClient[key].photoUrl = otherUser["photoURL"];
-      });
+        var newUserInboxMessage = {
+          name: otherUser["name"],
+          photoUrl: otherUser["photoURL"],
+          latestMessage: clientDic[key].message,
+          key: userKey
+        }
+        allClient.push(newUserInboxMessage);
+      };
 
       this.setState({clients: allClient});
-      console.log(this.state.clients);
     });
   }
 
@@ -56,18 +62,18 @@ export default class Inbox extends Component {
             </div>
             <div className="col s9">
               <Link to={{
-                pathname: "/message/?id=" + item.otherUserUid,
-                state: {
-                  uid: item.otherUserUid
-                }}}>
+                pathname: "/message/id?=" + item.key}}>
                 <h4>{item.name}</h4>
               </Link>
+              <h5>
+                {item.latestMessage}
+              </h5>
             </div>
           </div>
         </div>
       );
     }
-    console.log(messageClients);
+
     return (
       <div>
         {messageClients}

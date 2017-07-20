@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import Autocomplete from 'react-google-autocomplete';
+import { Modal, Button } from 'react-materialize';
 
 export default class Listing extends Component {
 
@@ -18,6 +19,7 @@ export default class Listing extends Component {
 
     this.setEditFlag = this.setEditFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleListingRemoval = this.handleListingRemoval.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
@@ -39,6 +41,16 @@ export default class Listing extends Component {
       });
       console.log("Pushed data into database.");
     }
+  }
+
+  handleListingRemoval() {
+    this.setState({
+      editable: false
+    });
+
+    var user = firebase.auth().currentUser;
+    firebase.database().ref('listings/' + user.uid).remove();
+    console.log("Deleted listing from database.");
   }
 
   componentWillMount() {
@@ -110,6 +122,19 @@ export default class Listing extends Component {
              <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
                {this.state.editable ? "Update" : "Edit"}
              </a>
+             <br />
+             {this.state.editable ?
+               <Modal
+                 header={"Delete listing?"}
+                 trigger={<a>Delete</a>}
+                 actions={
+                   <div>
+                    <Button modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
+                    <Button modal="close" waves='light'>Close</Button>
+                  </div>
+                 }>
+                 <p> Do you really wish to delete this listing? This action is irreversible!</p>
+               </Modal> : ""}
            </div> : ""}
           <div className = 'row'>
             <div className = 'col s4 left-align'>
