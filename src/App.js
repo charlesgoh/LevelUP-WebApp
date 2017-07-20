@@ -101,7 +101,7 @@ export default class App extends Component {
 
     if(this.state.display !== 1){
       list = this.state.display.map(item =>
-        <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price}/>
+        <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price} location={item.location}/>
       );
     }
 

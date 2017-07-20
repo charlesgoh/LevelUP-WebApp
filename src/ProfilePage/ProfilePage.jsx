@@ -4,7 +4,7 @@ import Listing from './Listing';
 
 export default class ProfilePage extends Component {
   render (){
-    let uidProp = this.props.location.state.uid;
+    let uidProp = window.location.search.slice(2);
     return (
       <div>
         <UserProfile uid={uidProp}/>
