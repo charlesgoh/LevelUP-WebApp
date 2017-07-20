@@ -151,13 +151,26 @@ export default class MessagePage extends Component {
     if (this.state.messages){
       inbox = this.state.messages.map(message =>
         message.owner === window.location.search.slice(2) ?
-          <div className="container left-align blue-text">
-            {message.message}
+          <div className="row">
+            <div className="card-panel hoverable grey col s12 m6 lighten-5 left-align">
+              <span className="blue-text">
+                {message.message}
+              </span>
+            </div>
+            <div className="col m6"></div>
           </div>
+
         :
-          <div className="container right-align red-text">
-            {message.message}
+
+          <div className="row">
+            <div className="col m6"></div>
+            <div className="card-panel hoverable grey col s12 m6 lighten-5 right-align">
+              <span className="red-text">
+                {message.message}
+              </span>
+            </div>
           </div>
+
       );
     }
 
@@ -210,12 +223,17 @@ export default class MessagePage extends Component {
           </div>
         </div>
 
-        {inbox}
+        <div className="container">
+          {inbox}
+        </div>
+
         <form onSubmit={this.handleMessageSubmit}>
           <div className = "container input-field">
             <input value={this.state.currentMessage} ref={'messagebox'} type="text" className="materialize-textarea" onChange={this.handleMessageChange}>
             </input>
-            <button type="submit">Send</button>
+            <button className="btn waves-effect waves-light" type="submit" type="submit">
+              Send<i className="material-icons right">send</i>
+            </button>
           </div>
         </form>
       </div>
