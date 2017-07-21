@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
-import { Modal, Button } from 'react-materialize';
+import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
 import ReviewObject from './ReviewObject.jsx';
 
 
@@ -22,7 +22,8 @@ export default class ProfilePage extends Component {
       editReviewFlag: false,
       myReview: '',
       myTitle: '',
-      myScore: ''
+      myScore: 5,
+      warning: ''
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -48,6 +49,20 @@ export default class ProfilePage extends Component {
   }
 
   setReviewFlag() {
+    if(this.state.editReviewFlag){
+      if(!this.state.myReview || !this.state.myTitle || !this.state.myScore){
+        this.setState({
+          warning: "Please fill in all required fields."
+        });
+        return;
+      }
+      if(isNaN(this.state.myScore) || !isFinite(this.state.myScore)){
+        this.setState({
+          warning: "Please leave a numerical score."
+        });
+        return;
+      }
+    }
     this.setState({
       editReviewFlag: !this.state.editReviewFlag
     });
@@ -169,6 +184,7 @@ export default class ProfilePage extends Component {
     };
 
     var user = firebase.auth().currentUser;
+    var uid = (user ? user.uid : "");
     var photoURL = "";
     var description = "";
     var name = "";
@@ -188,27 +204,32 @@ export default class ProfilePage extends Component {
     }
 
     return (
-      <div className = "card-panel z-depth-1">
+      <CardPanel className="z-depth-1">
         <div className = "container">
-          <div className = 'row'>
-            <div className = 'col s9'>
-              {!this.state.editable ? <h3 className = 'flow-text left-align'>
-                {description}
-              </h3>:
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <textarea defaultValue= {description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
-                </div>
-              </form>
+          <Row className = 'row'>
+            <Col s={9}>
+              {!this.state.editable ?
+                <h3 className = 'flow-text left-align'>
+                  {description}
+                </h3>
+                :
+                <form onSubmit={this.handleSubmit}>
+                  <div className = "input-field">
+                    <textarea defaultValue= {description} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
+                  </div>
+                </form>
               }
-            </div>
-            <div className = 'col s3 center-align'>
+            </Col>
+            <Col s={3} className='center-align'>
               {user !== null && user.uid === this.props.uid ?
                 <div className = 'center-align flow-text'>
                  <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
                    {this.state.editable ? "Update" : "Edit"}
                  </a>
-               </div> : ''}
+               </div>
+               :
+               ''
+             }
 
               {/* Display User's profile photo */}
                <img src = {photoURL} className = 'circle responsive-img' alt=""/>
@@ -217,27 +238,31 @@ export default class ProfilePage extends Component {
               <h4 className="center-align">{name}</h4>
 
               {/* Chat or Inbox Button => To be implemented later  */}
-              {user ?
+              {uid === this.props.uid ?
                 <Link to={{
                   pathname: "/inbox"
                 }}>
-                  <button className="center-align btn-large waves-effect waves-light">
+                  <Button waves='light'>
                     INBOX
-                  </button>
-                </Link>:
+                  </Button>
+                </Link>
+                :
                 <Link to={{
                   pathname: "/message/id?=" + this.props.uid
                 }}>
-                  <button className="center-align btn-large waves-effect waves-light">
+                  <Button waves='light'>
                     CHAT
-                  </button>
+                  </Button>
                 </Link>
               }
 
               <Modal
               	header={'Reviews for ' + name}
               	trigger={
-              		<Button waves='light'>Reviews</Button>
+                  <div>
+                		<br/>
+                    <Button waves='light'>Reviews</Button>
+                  </div>
               	}>
                 {this.state.allowReview ?
                    <a className="center-align" onClick={this.setReviewFlag} type="submit" style={clickable}>
@@ -245,32 +270,37 @@ export default class ProfilePage extends Component {
                    </a>
                 : ""}
                 {this.state.editReviewFlag ?
-                  <form onSubmit={this.handleSubmit}>
-                    <div className = "input-field">
-                      <p> Title </p>
-                      <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
-                    </div>
-                    <div className = "input-field">
-                      <textarea defaultValue= {this.state.myReview} type="text" className="materialize-textarea" onChange={this.handleReviewChange}></textarea>
-                    </div>
-                  </form>
+                  <div>
+                    <form onSubmit={this.handleSubmit}>
+                      <div className = "input-field">
+                        <p> Title </p>
+                        <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
+                      </div>
+                      <div className = "input-field">
+                        <textarea defaultValue= {this.state.myReview} type="text" className="materialize-textarea" onChange={this.handleReviewChange}></textarea>
+                      </div>
+                    </form>
+                    <p className='red-text text-darken-1'>
+                      {this.state.warning}
+                    </p>
+                  </div>
                 :
                 <div>
                   <div className="center-align">
-                    {this.state.score}
+                    <h3>
+                      Overall Score: {this.state.score}
+                    </h3>
                   </div>
                   <div className="container center-align">
                     {this.state.list}
                   </div>
                 </div>}
-
               </Modal>
 
-
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
-      </div>
+      </CardPanel>
 
     );
   }

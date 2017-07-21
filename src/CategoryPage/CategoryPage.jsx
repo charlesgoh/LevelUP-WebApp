@@ -7,11 +7,8 @@ export default class CategoryPage extends Component {
   render() {
     return (
       <div>
-        <header>
-
-        </header>
-          {firebase.auth().currentUser ? <ProfileBar /> : ''}
-          <SortFilter />
+        {firebase.auth().currentUser ? <ProfileBar /> : ''}
+        <SortFilter />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-// import * as FirebaseService from '../FirebaseService.jsx';
+import { Link } from 'react-router-dom';
+import { Row, Col, Button, Input, CardPanel } from 'react-materialize';
 
 export default class MessagePage extends Component {
 
@@ -13,7 +14,8 @@ export default class MessagePage extends Component {
       name: "",
       offerStatus: false,
       hasOffer: false,
-      confirmed: false
+      confirmed: false,
+      confirmedOthUser: false
     };
 
     this.handleMessageChange = this.handleMessageChange.bind(this);
@@ -31,6 +33,7 @@ export default class MessagePage extends Component {
   handleMessageSubmit(event){
     event.preventDefault();
     var user = firebase.auth().currentUser;
+
     if (this.state.currentMessage){
       firebase.database().ref('messages/').push({
         owner: user.uid,
@@ -147,94 +150,102 @@ export default class MessagePage extends Component {
   render(){
 
     var inbox = "And now time flows again.";
-
-    if (this.state.messages){
-      inbox = this.state.messages.map(message =>
-        message.owner === window.location.search.slice(2) ?
-          <div className="row">
-            <div className="card-panel hoverable grey col s12 m6 lighten-5 left-align">
-              <span className="blue-text">
-                {message.message}
-              </span>
-            </div>
-            <div className="col m6"></div>
-          </div>
-
-        :
-
-          <div className="row">
-            <div className="col m6"></div>
-            <div className="card-panel hoverable grey col s12 m6 lighten-5 right-align">
-              <span className="red-text">
-                {message.message}
-              </span>
-            </div>
-          </div>
-
-      );
-    }
-
+    var ownerUid = window.location.search.slice(2);
     var user = firebase.auth().currentUser;
     var uid = (user ? user.uid : "");
 
+    if (this.state.messages){
+      inbox = this.state.messages.map(message =>
+        message.owner === ownerUid ?
+          <Row>
+            <Col s={10} m={9}>
+              <CardPanel className="z-depth-1 grey lighten-5 left-align">
+                <p className="blue-text">
+                  {message.message}
+                </p>
+              </CardPanel>
+            </Col>
+            <Col s={2} m={3}>
+            </Col>
+          </Row>
+        :
+          <Row>
+            <Col s={2} m={3}>
+            </Col>
+            <Col s={10} m={9}>
+              <CardPanel className="z-depth-1 grey lighten-5 right-align">
+                <p className="red-text">
+                  {message.message}
+                </p>
+              </CardPanel>
+            </Col>
+          </Row>
+      );
+    }
+
     if (!uid){
       return (
-        <div className="card-panel center-align red darken-4">
+        <CardPanel className="center-align red darken-4">
           <h3 className="white-text">
             You are not logged in. Please log in before trying again.
           </h3>
-        </div>
+        </CardPanel>
       );
     }
 
     return (
       <div>
-        <div className="card-panel center-align red darken-4">
-          {/*<img src={this.state.photoUrl} alt="" className="circle responsive-img" /> */}
-          <h3 className="white-text">
-            {this.state.name}
-          </h3>
-        </div>
+        <CardPanel className="center-align red darken-4">
+          <Row>
+            <Col s={12} className="center-align">
+              <img src={this.state.photoUrl} height="80" width="80" alt="" className="circle responsive-img" />
+              <Link to={{pathname: "/profile/id?=" + ownerUid}}>
+                <h3 className="white-text">
+                  {this.state.name}
+                </h3>
+              </Link>
+            </Col>
+          </Row>
+        </CardPanel>
 
-
-        <div className="row">
-          <div className="col s6 center-align">
+        <Row>
+          <Col s={6} className="center-align">
             {this.state.confirmed ?
-              <button className="disabled">
+              <Button waves='light' className="disabled">
                 Trade confirmed!
-              </button> :
-              <button onClick={this.handleOfferChange}>
+              </Button> :
+              <Button waves='light' onClick={this.handleOfferChange}>
                 {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
-              </button>}
-          </div>
-          <div className="col s6 center-align">
+              </Button>}
+          </Col>
+          <Col s={6} className="center-align">
             {this.state.confirmedOthUser ?
-              <button className="disabled">
+              <Button waves='light' className="disabled">
                 Trade confirmed!
-              </button> :
+              </Button>
+              :
               (this.state.hasOffer ?
-                <button onClick={this.handleOfferSubmit}>
+                <Button waves='light' onClick={this.handleOfferSubmit}>
                   Accept offer
-                </button> :
+                </Button>
+                :
                 <p>
                   No offers right now
                 </p>)
               }
-          </div>
-        </div>
+          </Col>
+        </Row>
 
         <div className="container">
           {inbox}
         </div>
 
         <form onSubmit={this.handleMessageSubmit}>
-          <div className = "container input-field">
-            <input value={this.state.currentMessage} ref={'messagebox'} type="text" className="materialize-textarea" onChange={this.handleMessageChange}>
-            </input>
-            <button className="btn waves-effect waves-light" type="submit" type="submit">
-              Send<i className="material-icons right">send</i>
-            </button>
-          </div>
+          <Input className="container" value={this.state.currentMessage} onChange={this.handleMessageChange} />
+
+          <Button waves='light' type="submit">
+            Send
+          </Button>
         </form>
       </div>
     );

@@ -3,6 +3,7 @@ import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
 import { Link } from 'react-router-dom';
+import { Modal, Button, CardPanel, Icon } from 'react-materialize';
 
 export default class Navigation extends Component {
 
@@ -136,10 +137,6 @@ export default class Navigation extends Component {
                 Sign In With Facebook
               </button>
               <br/>
-              <button className="waves-effect waves-light btn-large black">
-                <i className="fa fa-github left"></i>
-                Sign In With Github
-              </button>
             </div>
             <br/>
           </div>

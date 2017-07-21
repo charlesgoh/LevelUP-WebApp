@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import { Row, Col, CardPanel } from 'react-materialize';
 
 export default class Inbox extends Component {
   constructor(props){
@@ -52,25 +53,27 @@ export default class Inbox extends Component {
 
   render(){
 
-    var messageClients = "Time stops!";
+    var messageClients = "";
+
     if (this.state.clients){
       messageClients = this.state.clients.map(item =>
-        <div className="card-panel">
-          <div className="row">
-            <div className="col s3">
+        <CardPanel>
+          <Row>
+            <Col s={3}>
               <img src={item.photoUrl} alt="" className="circle responsive-img" />
-            </div>
-            <div className="col s9">
-              <Link to={{
-                pathname: "/message/id?=" + item.key}}>
-                <h4>{item.name}</h4>
+            </Col>
+            <Col s={9}>
+              <Link to={{pathname: "/message/id?=" + item.key}}>
+                <h4 className="black-text">
+                  {item.name}
+                </h4>
               </Link>
               <h5>
                 {item.latestMessage}
               </h5>
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </CardPanel>
       );
     }
 
