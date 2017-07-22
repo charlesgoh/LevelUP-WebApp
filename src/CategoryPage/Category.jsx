@@ -1,9 +1,10 @@
 import React, { Component }from 'react';
+import { CardPanel } from 'react-materialize';
 
 export default class Category extends Component {
   render() {
     return (
-      <div className = 'card-panel z-depth-1'>
+      <CardPanel className='z-depth-1'>
 
         <p className = 'grey-text text-darken-2 center-align'>
           Coaches/Tutors
@@ -19,7 +20,7 @@ export default class Category extends Component {
             Sports
           </a>
         </h4>
-      </div>
+      </CardPanel>
     );
   }
 };

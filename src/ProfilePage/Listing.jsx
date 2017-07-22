@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import Autocomplete from 'react-google-autocomplete';
-import { Modal, Button } from 'react-materialize';
+import { Modal, Button, CardPanel, Row, Col, Input } from 'react-materialize';
 
 export default class Listing extends Component {
 
@@ -15,6 +15,7 @@ export default class Listing extends Component {
       title: "",
       price: "",
       location: "",
+      warning: ""
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
@@ -27,8 +28,20 @@ export default class Listing extends Component {
   };
 
   setEditFlag() {
+    if(this.state.editable){
+      if(isNaN(this.state.price) || !isFinite(this.state.price)){
+        this.setState({warning: "Please fill in numbers only for prices!"});
+        return;
+      }
+      if(!this.state.summary || !this.state.title || !this.state.price){
+        this.setState({warning: "Please fill in all fields."});
+        return;
+      }
+    }
+
     this.setState({
-      editable: !this.state.editable
+      editable: !this.state.editable,
+      warning: ""
     });
 
     if (this.state.editable){
@@ -39,7 +52,6 @@ export default class Listing extends Component {
         price: this.state.price,
         location: this.state.location
       });
-      console.log("Pushed data into database.");
     }
   }
 
@@ -50,7 +62,6 @@ export default class Listing extends Component {
 
     var user = firebase.auth().currentUser;
     firebase.database().ref('listings/' + user.uid).remove();
-    console.log("Deleted listing from database.");
   }
 
   componentWillMount() {
@@ -58,7 +69,6 @@ export default class Listing extends Component {
     if (user) {
       this.setState({ loggedIn: true })
     };
-    console.log(JSON.stringify(this.state));
   }
 
   componentDidMount() {
@@ -75,7 +85,8 @@ export default class Listing extends Component {
           price: "0",
           location: "Your preferred location"
         });
-      } else {
+      }
+      else {
         this.setState({
           summary: thisUser["listings"][uid]["summary"],
           title: thisUser["listings"][uid]["title"],
@@ -108,16 +119,16 @@ export default class Listing extends Component {
   }
 
   render () {
-    var user = firebase.auth().currentUser;
+    var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : "");
 
     var clickable = {
       cursor: "pointer"
     };
 
     return (
-      <div className = "card-panel z-depth-1">
+      <CardPanel className="z-depth-1">
         <div className = "container">
-          {user ?
+          {uid === this.props.uid ?
             <div className = 'right-align flow-text'>
              <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
                {this.state.editable ? "Update" : "Edit"}
@@ -126,7 +137,7 @@ export default class Listing extends Component {
              {this.state.editable ?
                <Modal
                  header={"Delete listing?"}
-                 trigger={<a>Delete</a>}
+                 trigger={<a className="grey-text" style={clickable}>Delete</a>}
                  actions={
                    <div>
                     <Button modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
@@ -134,10 +145,12 @@ export default class Listing extends Component {
                   </div>
                  }>
                  <p> Do you really wish to delete this listing? This action is irreversible!</p>
-               </Modal> : ""}
-           </div> : ""}
-          <div className = 'row'>
-            <div className = 'col s4 left-align'>
+               </Modal>
+               :
+               ""}
+            </div> : ""}
+          <Row>
+            <Col s={4} className ='left-align'>
               <br />
               <h6 className = 'flow-text grey-text text-lighten'>
                 PRICE
@@ -148,57 +161,67 @@ export default class Listing extends Component {
                   SG${this.state.price}
                 </h5> :
                 <form onSubmit={this.handleSubmit}>
-                  <div className = "input-field">
-                    <input defaultValue={this.state.price} className="materialize-textarea flow-text yellow-text text-darken-4" onChange={this.handlePrice}></input>
-                  </div>
+                  <Input defaultValue={this.state.price} className="flow-text yellow-text text-darken-4" onChange={this.handlePrice} />
                 </form>
               }
 
               <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
-            </div>
+            </Col>
 
-            <div className = 'col s8'>
-              {!this.state.editable ? <h2 className = 'flow-text red-text text-darken-4'>
+            <Col s={8}>
+              {!this.state.editable ?
+                <h2 className = 'flow-text red-text text-darken-4'>
                 {this.state.title}
-              </h2>:
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <input defaultValue= {this.state.title} type="text" className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></input>
+                </h2>
+                :
+                <form onSubmit={this.handleSubmit}>
+                  <div class="input-field">
+                    <textarea defaultValue={this.state.title} className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></textarea>
+                  </div>
+                </form>
+              }
+
+              {!this.state.editable?
+                <h6 className = 'flow-text left-align grey-text'>
+                  {this.state.location}
+                </h6>
+                :
+                <div>
+                  <Autocomplete
+                    onPlaceSelected={(place) => {
+                      // console.log(place.formatted_address);
+                      this.handleLocation(place.formatted_address);
+                    }}
+                    types={['address']}
+                    componentRestrictions={{'country': 'SG'}}>
+                  </Autocomplete>
                 </div>
-              </form>
               }
 
-              {!this.state.editable? <h6 className = 'flow-text left-align grey-text'>
-                {this.state.location}
-              </h6> :
-              <div>
-                <Autocomplete
-                  onPlaceSelected={(place) => {
-                    // console.log(place.formatted_address);
-                    this.handleLocation(place.formatted_address);
-                  }}
-                  types={['address']}
-                  componentRestrictions={{'country': 'SG'}}>
-                </Autocomplete>
-              </div>
+              {!this.state.editable ?
+                <h4 className = 'flow-text text-justify'>
+                  {this.state.summary}
+                </h4>
+                :
+                <form onSubmit={this.handleSubmit}>
+                  <div class="input-field">
+                    <textarea defaultValue= {this.state.summary} className="materialize-textarea flow-text black-text" onChange={this.handleChange}></textarea>
+                  </div>
+                </form>
               }
-
-              {!this.state.editable ? <h6 className = 'flow-text text-justify'>
-                {this.state.summary}
-              </h6>:
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <textarea defaultValue= {this.state.summary} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
-                </div>
-              </form>
-              }
-            </div>
-
-          </div>
+            </Col>
+          </Row>
+          {this.state.editable ?
+            <p className="red-text text-darken-1 right-align">
+              {this.state.warning}
+            </p>
+            :
+            ""
+          }
         </div>
-      </div>
+      </CardPanel>
     );
   }
 };
