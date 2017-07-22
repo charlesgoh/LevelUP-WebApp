@@ -65,9 +65,46 @@ export default class App extends Component {
         data[key]["uid"] = key;
         arr.push(data[key]);
       });
-      this.setState({
-        listings: arr,
-        display: arr});
+
+      console.log(this);
+      if(this.props.location.state){
+        if (this.props.location.state.sortOrder !== "0"){
+          if (this.props.location.state.sortOrder === "1"){
+            arr.sort(function(a, b){
+              return parseInt(a.price, 10) - parseInt(b.price, 10);
+            })
+          }
+          else {
+            arr.sort(function(a, b){
+              return parseInt(b.price, 10) - parseInt(a.price, 10);
+            })
+          }
+        }
+
+        if (this.props.location.state.category !== "0"){
+          var filterOrder = this.props.location.state.category
+          var array = arr.filter(function(item){
+            console.log(item);
+            return item.category.toString() === filterOrder;
+          });
+          this.setState({
+            display: array,
+            listings: arr
+          });
+        }
+        else {
+          this.setState({
+            display: arr,
+            listings: arr
+          });
+        }
+      }
+
+      else {
+        this.setState({
+          listings: arr,
+          display: arr});
+        }
     });
   }
 
