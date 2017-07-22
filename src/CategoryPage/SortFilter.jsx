@@ -65,8 +65,8 @@ export default class SortFilter extends Component {
               <form onSubmit={this.handleSubmit}>
                 <Input type='select' value={this.state.category} onChange={this.handleCatChange}>
                   <option value="0">Display All</option>
-                  <option value="1">Category 1</option>
-                  <option value="2">Category 2</option>
+                  <option value="1">Fitness</option>
+                  <option value="2">Sports</option>
                 </Input>
               </form>
             </Col>
