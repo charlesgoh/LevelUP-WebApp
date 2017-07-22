@@ -15,13 +15,16 @@ export default class Listing extends Component {
       title: "",
       price: "",
       location: "",
-      warning: ""
+      warning: "",
+      category: "1"
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleListingRemoval = this.handleListingRemoval.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleCategoryFit = this.handleCategoryFit.bind(this);
+    this.handleCategorySport = this.handleCategorySport.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
@@ -50,7 +53,8 @@ export default class Listing extends Component {
         summary: this.state.summary,
         title: this.state.title,
         price: this.state.price,
-        location: this.state.location
+        location: this.state.location,
+        category: this.state.category
       });
     }
   }
@@ -114,6 +118,14 @@ export default class Listing extends Component {
     this.setState({title: event.target.value});
   }
 
+  handleCategoryFit(event) {
+    this.setState({category: "1"});
+  }
+
+  handleCategorySport(event) {
+    this.setState({category: "2"});
+  }
+
   handleSubmit(event) {
     event.preventDefault();
   }
@@ -168,6 +180,15 @@ export default class Listing extends Component {
               <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
+
+              {this.state.editable ?
+                <div>
+                  <form onSubmit={this.handleSubmit}>
+                		<Input name='group1' className='with-gap' type='radio' value='1' label='Fitness' onClick={this.handleCategoryFit}/>
+                		<Input name='group1' className='with-gap' type='radio' value='2' label='Sports' onClick={this.handleCategorySport}/>
+                  </form>
+                </div> :
+              ""}
             </Col>
 
             <Col s={8}>
