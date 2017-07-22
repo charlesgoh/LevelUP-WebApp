@@ -15,14 +15,9 @@ export default class ProfileBar extends Component {
           </Col>
 
           <Col s={8} className='center-align'>
-            <Link to={{
-              pathname: "/profile/id?=" + user.uid,
-              state: {
-                uid: user.uid
-              }}
-            }>
+            <a href={"/profile/id?=" + user.uid}>
               <strong className="flow-text black-text ">{user.displayName}</strong>
-            </Link>
+            </a>
           </Col>
         </Row>
       </CardPanel>
