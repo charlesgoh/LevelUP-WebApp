@@ -58,7 +58,7 @@ export default class SortFilter extends Component {
           <Row className='row black-text'>
             <Col s={2}>
               <Icon>
-                room
+                accessibility
               </Icon>
             </Col>
             <Col s={10}>
