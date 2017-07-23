@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import { Row, Col, CardPanel } from 'react-materialize';
+import styles from '../GlobalStyles.css';
 
 export default class Inbox extends Component {
   constructor(props){
@@ -64,11 +65,11 @@ export default class Inbox extends Component {
             </Col>
             <Col s={9}>
               <Link to={{pathname: "/message/id?=" + item.key}}>
-                <h4 className="black-text">
+                <h4 className="black-text overflow-control">
                   {item.name}
                 </h4>
               </Link>
-              <h5>
+              <h5 className="overflow-control">
                 {item.latestMessage}
               </h5>
             </Col>
