@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
 import ReviewObject from './ReviewObject.jsx';
-
+import styles from '../GlobalStyles.css';
 
 export default class ProfilePage extends Component {
 
@@ -209,7 +209,7 @@ export default class ProfilePage extends Component {
           <Row className = 'row'>
             <Col s={9}>
               {!this.state.editable ?
-                <h3 className = 'flow-text left-align'>
+                <h3 className = 'flow-text left-align overflow-control'>
                   {description}
                 </h3>
                 :
@@ -235,9 +235,9 @@ export default class ProfilePage extends Component {
                <img src = {photoURL} className = 'circle responsive-img' alt=""/>
 
               {/* Display User's Name */}
-              <h4 className="center-align">{name}</h4>
+              <h4 className="center-align overflow-control">{name}</h4>
 
-              {/* Chat or Inbox Button => To be implemented later  */}
+              {/* Chat or Inbox Button */}
               {uid === this.props.uid ?
                 <Link to={{
                   pathname: "/inbox"
@@ -257,6 +257,7 @@ export default class ProfilePage extends Component {
               }
 
               <Modal
+                className='overflow-control'
               	header={'Reviews for ' + name}
               	trigger={
                   <div>

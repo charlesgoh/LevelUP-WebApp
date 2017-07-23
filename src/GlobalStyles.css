@@ -1,0 +1,14 @@
+
+.overflow-control {
+  word-wrap: break-word;
+}
+
+.message-limiter {
+  float:"left";
+  clear: "both"
+}
+
+.image-limiter {
+  max-width: 100px;
+  max-height: 100px;
+}

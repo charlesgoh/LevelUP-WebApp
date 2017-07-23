@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import Autocomplete from 'react-google-autocomplete';
 import { Modal, Button, CardPanel, Row, Col, Input } from 'react-materialize';
+import styles from '../GlobalStyles.css';
 
 export default class Listing extends Component {
 
@@ -38,6 +39,10 @@ export default class Listing extends Component {
       }
       if(!this.state.summary || !this.state.title || !this.state.price){
         this.setState({warning: "Please fill in all fields."});
+        return;
+      }
+      if(parseInt(this.state.price, 10) <= 0){
+        this.setState({warning: "Please input positive numbers only."});
         return;
       }
     }
@@ -169,7 +174,7 @@ export default class Listing extends Component {
               </h6>
 
               {!this.state.editable ?
-                <h5 className = 'flow-text yellow-text text-darken-4'>
+                <h5 className = 'flow-text yellow-text text-darken-4 overflow-control'>
                   SG${this.state.price}
                 </h5> :
                 <form onSubmit={this.handleSubmit}>
@@ -205,7 +210,7 @@ export default class Listing extends Component {
               }
 
               {!this.state.editable?
-                <h6 className = 'flow-text left-align grey-text'>
+                <h6 className = 'flow-text left-align grey-text overflow-control'>
                   {this.state.location}
                 </h6>
                 :
@@ -222,7 +227,7 @@ export default class Listing extends Component {
               }
 
               {!this.state.editable ?
-                <h4 className = 'flow-text text-justify'>
+                <h4 className = 'flow-text text-justify overflow-control'>
                   {this.state.summary}
                 </h4>
                 :
