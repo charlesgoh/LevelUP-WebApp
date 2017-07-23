@@ -214,10 +214,10 @@ export default class MessagePage extends Component {
 
     return (
       <div>
-        <CardPanel className="center-align red darken-4">
+        <CardPanel className="center-align red darken-4 message-header">
           <Row>
             <Col s={2} className="center-align">
-              <img src={this.state.photoUrl} alt="" className="circle responsive-img" />
+              <img src={this.state.photoUrl} alt="" className="circle responsive-img image-limiter" />
             </Col>
             <Col s={4} className='center-align'>
               <Link to={{pathname: "/profile/id?=" + ownerUid}}>
@@ -254,21 +254,20 @@ export default class MessagePage extends Component {
           </Row>
         </CardPanel>
 
-        <div className="container message-body">
+        <div className="message-body">
           {inbox}
+          <div ref={(el) => { this.messagesEnd = el; }}>
+            {""}
+          </div>
         </div>
 
         <form onSubmit={this.handleMessageSubmit}>
-          <Input className="container overflow-control" value={this.state.currentMessage} onChange={this.handleMessageChange} />
+          <Input className="container overflow-control message-input" value={this.state.currentMessage} onChange={this.handleMessageChange} />
 
           <Button waves='light' type="submit">
             Send
           </Button>
         </form>
-
-        <div ref={(el) => { this.messagesEnd = el; }}>
-          {""}
-        </div>
       </div>
 
 
