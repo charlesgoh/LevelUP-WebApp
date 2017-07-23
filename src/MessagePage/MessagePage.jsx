@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 import { Row, Col, Button, Input, CardPanel } from 'react-materialize';
+import styles from '../GlobalStyles.css';
 
 export default class MessagePage extends Component {
 
@@ -18,10 +20,16 @@ export default class MessagePage extends Component {
       confirmedOthUser: false
     };
 
+    this.autoScroll = this.autoScroll.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
     this.handleOfferChange = this.handleOfferChange.bind(this);
     this.handleOfferSubmit = this.handleOfferSubmit.bind(this);
+  }
+
+  autoScroll = () => {
+    const node = ReactDOM.findDOMNode(this.messagesEnd);
+    node.scrollIntoView({ behavior: "smooth" });
   }
 
   handleMessageChange(event){
@@ -145,11 +153,17 @@ export default class MessagePage extends Component {
         }
       }
     });
+
+    this.autoScroll();
+  }
+
+  componentDidUpdate(){
+    this.autoScroll();
   }
 
   render(){
 
-    var inbox = "And now time flows again.";
+    var inbox = " ";
     var ownerUid = window.location.search.slice(2);
     var user = firebase.auth().currentUser;
     var uid = (user ? user.uid : "");
@@ -160,7 +174,7 @@ export default class MessagePage extends Component {
           <Row>
             <Col s={10} m={9}>
               <CardPanel className="z-depth-1 grey lighten-5 left-align">
-                <p className="blue-text">
+                <p className="blue-text overflow-control">
                   {message.message}
                 </p>
               </CardPanel>
@@ -174,7 +188,7 @@ export default class MessagePage extends Component {
             </Col>
             <Col s={10} m={9}>
               <CardPanel className="z-depth-1 grey lighten-5 right-align">
-                <p className="red-text">
+                <p className="red-text overflow-control">
                   {message.message}
                 </p>
               </CardPanel>
@@ -185,11 +199,16 @@ export default class MessagePage extends Component {
 
     if (!uid){
       return (
-        <CardPanel className="center-align red darken-4">
-          <h3 className="white-text">
-            You are not logged in. Please log in before trying again.
-          </h3>
-        </CardPanel>
+        <div>
+          <CardPanel className="center-align red darken-4">
+            <h3 className="white-text">
+              You are not logged in. Please log in before trying again.
+            </h3>
+          </CardPanel>
+          <div ref={(el) => { this.messagesEnd = el; }}>
+            {""}
+          </div>
+        </div>
       );
     }
 
@@ -197,57 +216,62 @@ export default class MessagePage extends Component {
       <div>
         <CardPanel className="center-align red darken-4">
           <Row>
-            <Col s={12} className="center-align">
-              <img src={this.state.photoUrl} height="80" width="80" alt="" className="circle responsive-img" />
+            <Col s={2} className="center-align">
+              <img src={this.state.photoUrl} alt="" className="circle responsive-img" />
+            </Col>
+            <Col s={4} className='center-align'>
               <Link to={{pathname: "/profile/id?=" + ownerUid}}>
                 <h3 className="white-text">
                   {this.state.name}
                 </h3>
               </Link>
             </Col>
+            <Col s={6} className="center-align">
+              {this.state.confirmed ?
+                <Button waves='light' className="large disabled">
+                  Trade confirmed!
+                </Button> :
+                <Button waves='light' onClick={this.handleOfferChange} className='large'>
+                  {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
+                </Button>}
+              <br />
+              <br />
+              {this.state.confirmedOthUser ?
+                <Button waves='light' className="large disabled">
+                  Trade confirmed!
+                </Button>
+                :
+                (this.state.hasOffer ?
+                  <Button waves='light' onClick={this.handleOfferSubmit} className='large'>
+                    Accept offer
+                  </Button>
+                  :
+                  <p>
+                    No offers right now
+                  </p>)
+                }
+            </Col>
           </Row>
         </CardPanel>
 
-        <Row>
-          <Col s={6} className="center-align">
-            {this.state.confirmed ?
-              <Button waves='light' className="disabled">
-                Trade confirmed!
-              </Button> :
-              <Button waves='light' onClick={this.handleOfferChange}>
-                {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
-              </Button>}
-          </Col>
-          <Col s={6} className="center-align">
-            {this.state.confirmedOthUser ?
-              <Button waves='light' className="disabled">
-                Trade confirmed!
-              </Button>
-              :
-              (this.state.hasOffer ?
-                <Button waves='light' onClick={this.handleOfferSubmit}>
-                  Accept offer
-                </Button>
-                :
-                <p>
-                  No offers right now
-                </p>)
-              }
-          </Col>
-        </Row>
-
-        <div className="container">
+        <div className="container message-body">
           {inbox}
         </div>
 
         <form onSubmit={this.handleMessageSubmit}>
-          <Input className="container" value={this.state.currentMessage} onChange={this.handleMessageChange} />
+          <Input className="container overflow-control" value={this.state.currentMessage} onChange={this.handleMessageChange} />
 
           <Button waves='light' type="submit">
             Send
           </Button>
         </form>
+
+        <div ref={(el) => { this.messagesEnd = el; }}>
+          {""}
+        </div>
       </div>
+
+
     );
   }
 
