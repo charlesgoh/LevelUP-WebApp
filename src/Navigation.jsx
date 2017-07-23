@@ -47,13 +47,13 @@ export default class Navigation extends Component {
 
     firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      // var token = result.credential.accessToken;
+      var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
       // console.log(user);
 
       // Set Firebase DB variables for user
-      FirebaseService.firebaseDB.ref('users/' + user.id).update({
+      FirebaseService.firebaseDB.ref('users/' + token).update({
         email: user.email,
         name: user.name,
         photoURL: user.picture
