@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
 import { Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Icon } from 'react-materialize';
+// import { Modal, Button, CardPanel, Icon } from 'react-materialize';
 
 export default class Navigation extends Component {
 
@@ -43,19 +43,35 @@ export default class Navigation extends Component {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
-    provider.addScope("user_about_me");
-    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
+    // var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
 
-    //Handle Successful Login
-    promise.then(result => {
-      console.log("Facebook Login Successful!")
-      console.log(result);
-    });
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      // var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // console.log(user);
 
-    // Handle Exceptions and Errors
-    promise.catch(error => {
-      var msg = error.message;
-      console.log(msg);
+      // Set Firebase DB variables for user
+      FirebaseService.firebaseDB.ref('users/' + user.id).update({
+        email: user.email,
+        name: user.name,
+        photoURL: user.picture
+      });
+      console.log("Facebook user saved into databse");
+
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      console.log(errorCode);
+      console.log(errorMessage);
+      console.log(email);
+      console.log(credential);
     });
   }
 
