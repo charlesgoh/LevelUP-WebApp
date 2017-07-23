@@ -242,7 +242,7 @@ export default class ProfilePage extends Component {
                 <Link to={{
                   pathname: "/inbox"
                 }}>
-                  <Button waves='light'>
+                  <Button waves='light' className="red darken-4">
                     INBOX
                   </Button>
                 </Link>
@@ -250,7 +250,7 @@ export default class ProfilePage extends Component {
                 <Link to={{
                   pathname: "/message/id?=" + this.props.uid
                 }}>
-                  <Button waves='light'>
+                  <Button waves='light' className="red darken-4">
                     CHAT
                   </Button>
                 </Link>
