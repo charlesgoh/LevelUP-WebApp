@@ -1,11 +1,22 @@
+.message-page {
+  position: relative;
+}
+
+.message-header {
+  max-height: 20vh;
+}
+
+.message-body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.message-input {
+  max-height: 20vh;
+}
 
 .overflow-control {
   word-wrap: break-word;
-}
-
-.message-limiter {
-  float:"left";
-  clear: "both"
 }
 
 .image-limiter {
