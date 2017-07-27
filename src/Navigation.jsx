@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
-import { Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Icon } from 'react-materialize';
+import { Redirect, Link } from 'react-router-dom';
+import { Modal, Button, CardPanel, Icon, SideNav, SideNavItem, Navbar, NavItem } from 'react-materialize';
 
 export default class Navigation extends Component {
 
@@ -23,10 +23,24 @@ export default class Navigation extends Component {
       console.log("Google Login Successful!");
       var user = result.user;
       console.log(result);
+
       FirebaseService.firebaseDB.ref('users/' + user.uid).update({
         email: user.email,
         name: user.displayName,
         photoURL: user.photoURL
+      });
+
+      var userRef = FirebaseService.firebaseDB.ref('/users');
+      userRef.once('value', snapshot => {
+        var data = snapshot.val();
+        console.log(data);
+        if (!data[user.uid]["initialized"]){
+          console.log("New user detected.");
+          FirebaseService.firebaseDB.ref('users/' + user.uid).update({
+            initialized: true
+          });
+          this.setState({newUser: true});
+        }
       });
     });
 
@@ -64,7 +78,8 @@ export default class Navigation extends Component {
 
     this.state = {
       uid: null,
-      err: ""
+      err: "",
+      newUser: false
     };
 
     this.logoutUser = this.logoutUser.bind(this);
@@ -97,27 +112,51 @@ export default class Navigation extends Component {
   }
 
   render() {
-    let masterAuthButton;
-
-    if (!this.state.uid) {
-      console.log("Rendering Sign In Button");
-      masterAuthButton = (
-        <a className="waves-effect waves-light btn" href="#modal1">
-          <i className="material-icons left">perm_identity</i>SIGN IN
-        </a>
-      );
-    } else {
-      console.log("Rendering Sign Out Button");
-      masterAuthButton = (
-        <a onClick={this.logoutUser} className="waves-effect waves-light btn">
-          <i className="material-icons left">exit_to_app</i>SIGN OUT
-        </a>
-      );
+    if (this.state.newUser){
+      return (
+        <Redirect to={"/profile/id?=" + this.state.uid} />
+      )
     }
+
+    var logIn = (
+      <a className="waves-effect waves-light btn" href="#modal1">
+        <i className="material-icons left">perm_identity</i>SIGN IN
+      </a>
+    );
+    var logOut = (
+      <a onClick={this.logoutUser} className="waves-effect waves-light btn">
+        <i className="material-icons left">exit_to_app</i>SIGN OUT
+      </a>
+    );
+
+    /*return (
+      <Navbar className="red darken-4 center" brand='LevelUP'>
+        <NavItem>
+          <SideNav
+            trigger={
+              <Button className='button-collapse'>
+                <Icon center>menu</Icon>
+              </Button>
+            }
+            options={{ closeOnClick: true }}
+            >
+            {this.state.uid ? <SideNavItem className='center-align'>
+              {masterAuthButton}
+            </SideNavItem> : ""}
+            {!this.state.uid ? <SideNavItem  onClick={this.googleSignIn} className="red">
+              Sign In With Google
+            </SideNavItem> : ""}
+            {!this.state.uid ? <SideNavItem  onClick={this.FacebookSignIn} className="blue">
+              Sign In With Facebook
+            </SideNavItem> : ""}
+            <CategoryPage />
+          </SideNav>
+        </NavItem>
+      </Navbar>
+    );*/
 
     return (
       <nav>
-        {/* This is the login modal */}
         <div id="modal1" className="modal">
           <div className="center modal-content red darken-4">
             <h1>LevelUP</h1>
@@ -144,16 +183,17 @@ export default class Navigation extends Component {
 
         <div className="nav-wrapper red darken-4">
           <Link to="/">
-          {/* <a href="http://localhost:3000" className="brand-logo center">LevelUP</a> */}
             <span className="brand-logo center">LevelUP</span>
           </Link>
-          {/* <a className="brand-logo center">LevelUP</a> */}
           <a data-activates="slide-out" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
           <ul className="side-nav fixed" id="slide-out">
             <li>
-              {masterAuthButton}
+              {this.state.uid ? logOut : ""}
+            </li>
+            <li>
+              {this.state.uid ? "" : logIn}
             </li>
             <li>
               <CategoryPage />
