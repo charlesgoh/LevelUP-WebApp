@@ -61,9 +61,14 @@ export default class App extends Component {
     getListings.on('value', snapshot => {
       console.log(snapshot.val());
       var data = snapshot.val();
+
       Object.keys(data).forEach(function(key) {
-        data[key]["uid"] = key;
-        arr.push(data[key]);
+        Object.keys(data[key]).forEach(function(item) {
+          data[key][item]["uid"] = key;
+          data[key][item]["id"] = item;
+          console.log(data[key][item]);
+          arr.push(data[key][item]);
+        });
       });
 
       console.log(this);
@@ -138,7 +143,7 @@ export default class App extends Component {
 
     if(this.state.display !== 1){
       list = this.state.display.map(item =>
-        <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price} location={item.location}/>
+        <ListingInstance key={item.id} uid={item.uid} title={item.title} summary={item.summary} price={item.price} location={item.location}/>
       );
     }
 
