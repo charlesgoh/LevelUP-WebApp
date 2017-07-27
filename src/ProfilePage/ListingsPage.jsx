@@ -31,6 +31,7 @@ export default class ListingsPage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
+    this.callUpdate = this.callUpdate.bind(this);
   };
 
   submitNewListing() {
@@ -85,18 +86,50 @@ export default class ListingsPage extends Component {
       console.log(data);
       var uid = this.props.uid;
 
-      Object.keys(data).forEach(function(key) {
-        data[key]["id"] = key;
-        arr.push(data[key]);
-      });
+      if(data){
+        Object.keys(data).forEach(function(key) {
+          data[key]["id"] = key;
+          arr.push(data[key]);
+        });
 
-      this.setState({
-        listingNumber: arr.length,
-        listings: arr
-      })
+        this.setState({
+          listingNumber: arr.length,
+          listings: arr
+        })
+      }
     });
   }
 
+  callUpdate(id){
+    console.log(id);
+    var user = firebase.auth().currentUser;
+    firebase.database().ref('listings/' + user.uid + '/' + id).remove();
+    var listingsRef = firebase.database().ref('/listings');
+    var newArr = [];
+
+    listingsRef.on("value", snapshot => {
+      var data = snapshot.val()[this.props.uid];
+      var uid = this.props.uid;
+
+      if(data){
+        Object.keys(data).forEach(function(key) {
+          data[key]["id"] = key;
+          newArr.push(data[key]);
+        });
+
+        this.setState({
+          listingNumber: newArr.length,
+          listings: newArr
+        })
+      }
+      else {
+        this.setState({
+          listingNumber: 0,
+          listings: []
+        })
+      }
+    });
+  }
 
   handlePrice(event) {
     this.setState({price: event.target.value});
@@ -135,7 +168,7 @@ export default class ListingsPage extends Component {
 
     if(this.state.listings){
       userListings = this.state.listings.map(item =>
-        <Listing key={item.id} id={item.id} uid={this.props.uid} title={item.title} summary={item.summary} category={item.category} price={item.price} location={item.location}/>
+        <Listing key={item.id} id={item.id} uid={this.props.uid} title={item.title} summary={item.summary} category={item.category} price={item.price} location={item.location} callback={this.callUpdate}/>
       );
     }
 

@@ -68,12 +68,10 @@ export default class Listing extends Component {
   }
 
   handleListingRemoval() {
-    var user = firebase.auth().currentUser;
-    firebase.database().ref('listings/' + user.uid + '/' + this.state.id).remove();
-
     this.setState({
       editable: false
     });
+    this.props.callback(this.state.id);
   }
 
   componentWillMount() {
