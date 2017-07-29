@@ -20,7 +20,8 @@ export default class ListingsPage extends Component {
       warning: "",
       category: "1",
       listingNumber: 1,
-      listings: []
+      listings: [],
+      validListing: false
     };
 
     this.submitNewListing = this.submitNewListing.bind(this);
@@ -32,6 +33,7 @@ export default class ListingsPage extends Component {
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
     this.callUpdate = this.callUpdate.bind(this);
+    this.resetListing = this.resetListing.bind(this);
   };
 
   submitNewListing() {
@@ -49,7 +51,8 @@ export default class ListingsPage extends Component {
     }
 
     this.setState({
-      warning: ""
+      warning: "",
+      validListing: true
     });
 
     var user = firebase.auth().currentUser;
@@ -60,16 +63,20 @@ export default class ListingsPage extends Component {
       location: this.state.location,
       category: this.state.category
     });
-
-    this.setState({
-      summary: "",
-      title: "",
-      price: "",
-      location: "",
-      category: "1"
-    })
   }
 
+  resetListing(){
+    if (this.state.validListing){
+      this.setState({
+        summary: "",
+        title: "",
+        price: "",
+        location: "",
+        category: "1",
+        validListing: false
+      })
+    }
+  }
   componentWillMount() {
     let user = firebase.auth().currentUser;
     if (user) {
@@ -79,11 +86,11 @@ export default class ListingsPage extends Component {
 
   componentDidMount() {
     var listingsRef = firebase.database().ref('/listings');
-    var arr = [];
+
 
     listingsRef.on("value", snapshot => {
       var data = snapshot.val()[this.props.uid];
-      console.log(data);
+      var arr = [];
       var uid = this.props.uid;
 
       if(data){
@@ -105,11 +112,12 @@ export default class ListingsPage extends Component {
     var user = firebase.auth().currentUser;
     firebase.database().ref('listings/' + user.uid + '/' + id).remove();
     var listingsRef = firebase.database().ref('/listings');
-    var newArr = [];
+
 
     listingsRef.on("value", snapshot => {
       var data = snapshot.val()[this.props.uid];
       var uid = this.props.uid;
+      var newArr = [];
 
       if(data){
         Object.keys(data).forEach(function(key) {
@@ -162,6 +170,9 @@ export default class ListingsPage extends Component {
   render () {
     var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : "");
     var userListings = '';
+    var isValidListing = this.state.validListing;
+    var numListings = this.state.listingNumber;
+
     var clickable = {
       cursor: "pointer"
     };
@@ -175,7 +186,7 @@ export default class ListingsPage extends Component {
     return (
       <div>
         <br />
-        {this.state.listingNumber <= 3 && uid === this.props.uid ?
+        {uid !== this.props.uid ? "" :
           <Modal
             header='Add New Listing'
             trigger={
@@ -185,55 +196,63 @@ export default class ListingsPage extends Component {
             }
             actions={
               <div>
-               <Button modal="close" waves='light'>Cancel</Button>
-               <Button modal="close" waves='light' type='submit' onClick={this.submitNewListing}>Submit</Button>
+               <Button modal="close" waves='light' onClick={this.resetListing}>Cancel</Button>
+               {isValidListing || numListings >= 3 ? "" : <Button waves='light' type='submit' onClick={this.submitNewListing}>Submit</Button>}
+               <p className='red-text'>
+                 {this.state.warning}
+               </p>
              </div>
             }>
-            <form onSubmit={this.handleSubmit}>
-              <p>
-                Title
-              </p>
-              <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleTitleChange} />
+            {numListings < 3 ?
+              (isValidListing ?
+                <p> Listing was successfully submitted! </p>
+                  :
+                  <div>
+                    <form onSubmit={this.handleSubmit}>
+                      <p>
+                        Title
+                      </p>
+                      <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleTitleChange} />
 
-              <p>
-                Summary
-              </p>
-              <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleChange} />
-            </form>
+                      <p>
+                        Summary
+                      </p>
+                      <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleChange} />
+                    </form>
 
-              <p>
-                Location
-              </p>
-              <div>
-                <Autocomplete
-                  onPlaceSelected={(place) => {
-                    // console.log(place.formatted_address);
-                    this.handleLocation(place.formatted_address);
-                  }}
-                  types={['address']}
-                  componentRestrictions={{'country': 'SG'}}>
-                </Autocomplete>
-              </div>
-            <form onSubmit={this.handleSubmit}>
-              <Row>
-                <Col s={6}>
-                  <p>
-                    Price/Hour
-                  </p>
-                  <Input defaultValue={this.state.price} className="flow-text" onChange={this.handlePrice} />
-                </Col>
-                <Col s={6}>
-                  <Input name='group1' className='with-gap' type='radio' value='1' label='Fitness' onClick={this.handleCategoryFit}/>
-                  <Input name='group1' className='with-gap' type='radio' value='2' label='Sports' onClick={this.handleCategorySport}/>
-                </Col>
-              </Row>
-            </form>
-            <p className='red-text'>
-              {this.state.warning}
-            </p>
-          </Modal>
-          :
-            ""}
+                      <p>
+                        Location
+                      </p>
+                      <div>
+                        <Autocomplete
+                          onPlaceSelected={(place) => {
+                            // console.log(place.formatted_address);
+                            this.handleLocation(place.formatted_address);
+                          }}
+                          types={['address']}
+                          componentRestrictions={{'country': 'SG'}}>
+                        </Autocomplete>
+                      </div>
+                    <form onSubmit={this.handleSubmit}>
+                      <Row>
+                        <Col s={6}>
+                          <p>
+                            Price/Hour
+                          </p>
+                          <Input defaultValue={this.state.price} className="flow-text" onChange={this.handlePrice} />
+                        </Col>
+                        <Col s={6}>
+                          <Input name='group1' className='with-gap' type='radio' value='1' label='Fitness' onClick={this.handleCategoryFit} defaultValue='selected' />
+                          <Input name='group1' className='with-gap' type='radio' value='2' label='Sports' onClick={this.handleCategorySport}/>
+                        </Col>
+                      </Row>
+                    </form>
+                  </div>)
+                :
+                <p>
+                  You have reached the maximum number of listings.
+                </p>}
+            </Modal>}
         {userListings}
       </div>
     );
