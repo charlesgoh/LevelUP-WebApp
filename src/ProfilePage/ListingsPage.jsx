@@ -108,7 +108,6 @@ export default class ListingsPage extends Component {
   }
 
   callUpdate(id){
-    console.log(id);
     var user = firebase.auth().currentUser;
     firebase.database().ref('listings/' + user.uid + '/' + id).remove();
     var listingsRef = firebase.database().ref('/listings');

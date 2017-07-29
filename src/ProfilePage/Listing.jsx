@@ -93,7 +93,6 @@ export default class Listing extends Component {
   }
 
   handlePrice(event) {
-    console.log("Price handled");
     this.setState({price: event.target.value});
   }
 

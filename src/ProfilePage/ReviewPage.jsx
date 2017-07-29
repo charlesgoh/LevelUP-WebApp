@@ -58,7 +58,6 @@ export default class ReviewPage extends Component {
           score: 5,
           photoURL: user.photoURL
         });
-        console.log("Pushed review into database.");
     }
   }
 

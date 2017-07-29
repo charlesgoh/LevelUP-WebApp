@@ -32,7 +32,6 @@ export default class ProfilePage extends Component {
         firebase.database().ref('users/' + user.uid).update({
           description: this.state.description
         });
-        console.log("Pushed data into database.");
     }
   }
 

@@ -59,19 +59,16 @@ export default class App extends Component {
     var arr = [];
 
     getListings.on('value', snapshot => {
-      console.log(snapshot.val());
       var data = snapshot.val();
 
       Object.keys(data).forEach(function(key) {
         Object.keys(data[key]).forEach(function(item) {
           data[key][item]["uid"] = key;
           data[key][item]["id"] = item;
-          console.log(data[key][item]);
           arr.push(data[key][item]);
         });
       });
 
-      console.log(this);
       if(this.props.location.state){
         if (this.props.location.state.sortOrder !== "0"){
           if (this.props.location.state.sortOrder === "1"){
@@ -89,7 +86,6 @@ export default class App extends Component {
         if (this.props.location.state.category !== "0"){
           var filterOrder = this.props.location.state.category
           var array = arr.filter(function(item){
-            console.log(item);
             return item.category.toString() === filterOrder;
           });
           this.setState({

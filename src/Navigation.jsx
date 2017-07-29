@@ -8,21 +8,17 @@ import { Modal, Button, CardPanel, Icon, SideNav, SideNavItem, Navbar, NavItem }
 export default class Navigation extends Component {
 
   logoutUser(event) {
-    console.log("Logging Out Now...");
     FirebaseService.firebaseAuth.signOut();
   }
 
   googleSignIn() {
-    console.log("Attempting to log in using Google");
 
     var provider = new firebase.auth.GoogleAuthProvider();
     var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
 
     // Handle Successful Login
     promise.then(result => {
-      console.log("Google Login Successful!");
       var user = result.user;
-      console.log(result);
 
       FirebaseService.firebaseDB.ref('users/' + user.uid).update({
         email: user.email,
@@ -33,9 +29,7 @@ export default class Navigation extends Component {
       var userRef = FirebaseService.firebaseDB.ref('/users');
       userRef.once('value', snapshot => {
         var data = snapshot.val();
-        console.log(data);
         if (!data[user.uid]["initialized"]){
-          console.log("New user detected.");
           FirebaseService.firebaseDB.ref('users/' + user.uid).update({
             initialized: true
           });
@@ -63,7 +57,6 @@ export default class Navigation extends Component {
     //Handle Successful Login
     promise.then(result => {
       console.log("Facebook Login Successful!")
-      console.log(result);
     });
 
     // Handle Exceptions and Errors
