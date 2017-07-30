@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "elasticsearch": "^13.2.0",
     "firebase": "^4.1.3",
     "firebaseui": "^2.2.1",
     "prop-types": "^15.5.10",

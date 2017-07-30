@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
-import ReviewObject from './ReviewObject.jsx';
 import styles from '../GlobalStyles.css';
 
 export default class ProfilePage extends Component {
@@ -15,22 +14,11 @@ export default class ProfilePage extends Component {
       description: '',
       name: '',
       photoURL: '',
-      reviews: '',
-      score: '',
-      list: 'No reviews added yet!',
-      allowReview: false,
-      editReviewFlag: false,
-      myReview: '',
-      myTitle: '',
-      myScore: 5,
       warning: ''
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
-    this.setReviewFlag = this.setReviewFlag.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleReviewChange = this.handleReviewChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   };
 
@@ -44,51 +32,11 @@ export default class ProfilePage extends Component {
         firebase.database().ref('users/' + user.uid).update({
           description: this.state.description
         });
-        console.log("Pushed data into database.");
-    }
-  }
-
-  setReviewFlag() {
-    if(this.state.editReviewFlag){
-      if(!this.state.myReview || !this.state.myTitle || !this.state.myScore){
-        this.setState({
-          warning: "Please fill in all required fields."
-        });
-        return;
-      }
-      if(isNaN(this.state.myScore) || !isFinite(this.state.myScore)){
-        this.setState({
-          warning: "Please leave a numerical score."
-        });
-        return;
-      }
-    }
-    this.setState({
-      editReviewFlag: !this.state.editReviewFlag
-    });
-
-    if(this.state.editReviewFlag){
-        var user = firebase.auth().currentUser;
-        firebase.database().ref('reviews/' + this.props.uid + '/' + user.uid).update({
-          feedback: this.state.myReview,
-          title: this.state.myTitle,
-          score: 5,
-          photoURL: user.photoURL
-        });
-        console.log("Pushed review into database.");
     }
   }
 
   handleChange(event) {
     this.setState({description: event.target.value});
-  }
-
-  handleReviewChange(event) {
-    this.setState({myReview: event.target.value});
-  }
-
-  handleTitleChange(event) {
-    this.setState({myTitle: event.target.value});
   }
 
   componentDidMount() {
@@ -107,70 +55,6 @@ export default class ProfilePage extends Component {
           name: db["users"][uid]["name"],
           photoURL: db["users"][uid]["photoURL"]
         });
-    });
-
-    offerRef.on('value', snapshot => {
-      var otherUserUid = window.location.search.slice(2);
-      var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
-      var data = snapshot.val();
-      if (data[uid]){
-        if (data[uid][otherUserUid]){
-          this.setState({
-            allowReview: data[uid][otherUserUid]["confirmed"]
-          });
-        }
-      }
-
-      if (data[otherUserUid]){
-        if (data[otherUserUid][uid]){
-          this.setState({
-            allowReview: this.state.allowReview || data[otherUserUid][uid]["confirmed"]
-          });
-        }
-      }
-    });
-
-    getReviews.on('value', snapshot => {
-      try{
-        var uid = self.props.uid;
-        var data = snapshot.val()[uid];
-        var selfUid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
-        if (data[selfUid]){
-          this.setState({
-            myReview: data[selfUid]["feedback"],
-            myTitle: data[selfUid]["title"],
-            myScore: data[selfUid]["score"]
-          });
-        }
-
-        Object.keys(data).forEach(function(key) {
-          data[key]["uid"] = key;
-          arr.push(data[key]);
-        });
-
-        var list = arr.map(function(item){
-          return <ReviewObject key={item.uid} name={item.name} score= {item.score} title={item.title} feedback={item.feedback} photoURL={item.photoURL}/>
-        });
-
-        var score = arr.reduce(function(sum, value){
-          return sum + parseInt(value.score, 10);
-        }, 0);
-
-        score /= arr.length;
-        score = score.toPrecision(3);
-        this.setState({
-          reviews: arr,
-          score: score,
-          list: list
-          });
-      }
-
-      catch(err){
-        this.setState({
-          reviews: ''
-        });
-      }
-
     });
   }
 
@@ -255,49 +139,6 @@ export default class ProfilePage extends Component {
                   </Button>
                 </Link>
               }
-
-              <Modal
-                className='overflow-control'
-              	header={'Reviews for ' + name}
-              	trigger={
-                  <div>
-                		<br/>
-                    <Button waves='light'>Reviews</Button>
-                  </div>
-              	}>
-                {this.state.allowReview ?
-                   <a className="center-align" onClick={this.setReviewFlag} type="submit" style={clickable}>
-                     {this.state.editReviewFlag ? "Update" : "Add/Edit Review"}
-                   </a>
-                : ""}
-                {this.state.editReviewFlag ?
-                  <div>
-                    <form onSubmit={this.handleSubmit}>
-                      <div className = "input-field">
-                        <p> Title </p>
-                        <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
-                      </div>
-                      <div className = "input-field">
-                        <textarea defaultValue= {this.state.myReview} type="text" className="materialize-textarea" onChange={this.handleReviewChange}></textarea>
-                      </div>
-                    </form>
-                    <p className='red-text text-darken-1'>
-                      {this.state.warning}
-                    </p>
-                  </div>
-                :
-                <div>
-                  <div className="center-align">
-                    <h3>
-                      Overall Score: {this.state.score}
-                    </h3>
-                  </div>
-                  <div className="container center-align">
-                    {this.state.list}
-                  </div>
-                </div>}
-              </Modal>
-
             </Col>
           </Row>
         </div>

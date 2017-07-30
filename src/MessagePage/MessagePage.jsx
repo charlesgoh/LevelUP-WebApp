@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { Row, Col, Button, Input, CardPanel } from 'react-materialize';
 import styles from '../GlobalStyles.css';
@@ -167,6 +167,14 @@ export default class MessagePage extends Component {
     var ownerUid = window.location.search.slice(2);
     var user = firebase.auth().currentUser;
     var uid = (user ? user.uid : "");
+
+    if (uid === ownerUid){
+      return (
+        <div ref={(el) => { this.messagesEnd = el; }}>
+          <Redirect to={"/profile/id?=" + uid} />
+        </div>
+      );
+    }
 
     if (this.state.messages){
       inbox = this.state.messages.map(message =>

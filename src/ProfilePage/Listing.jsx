@@ -17,18 +17,21 @@ export default class Listing extends Component {
       price: "",
       location: "",
       warning: "",
-      category: "1"
+      category: "1",
+      id: "1"
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleListingRemoval = this.handleListingRemoval.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleSummaryChange = this.handleSummaryChange.bind(this);
+    this.handlePrice = this.handlePrice.bind(this);
+    this.handleLocation = this.handleLocation.bind(this);
+    this.handleListingRemoval = this.handleListingRemoval.bind(this);
+
     this.handleCategoryFit = this.handleCategoryFit.bind(this);
     this.handleCategorySport = this.handleCategorySport.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePrice = this.handlePrice.bind(this);
-    this.handleLocation = this.handleLocation.bind(this);
+
   };
 
   setEditFlag() {
@@ -54,7 +57,7 @@ export default class Listing extends Component {
 
     if (this.state.editable){
       var user = firebase.auth().currentUser;
-      firebase.database().ref('listings/' + user.uid).update({
+      firebase.database().ref('listings/' + user.uid + '/' + this.state.id).update({
         summary: this.state.summary,
         title: this.state.title,
         price: this.state.price,
@@ -68,9 +71,7 @@ export default class Listing extends Component {
     this.setState({
       editable: false
     });
-
-    var user = firebase.auth().currentUser;
-    firebase.database().ref('listings/' + user.uid).remove();
+    this.props.callback(this.state.id);
   }
 
   componentWillMount() {
@@ -81,37 +82,21 @@ export default class Listing extends Component {
   }
 
   componentDidMount() {
-    firebase.database().ref().on("value", snapshot => {
-      var thisUser = snapshot.val();
-      var uid = this.props.uid;
-
-      if (!thisUser["listings"] || !thisUser["listings"][uid]) {
-        console.log("No entries. First write to db");
-
-        this.setState({
-          summary: "Listing Summary",
-          title: "Title of Listing",
-          price: "0",
-          location: "Your preferred location"
-        });
-      }
-      else {
-        this.setState({
-          summary: thisUser["listings"][uid]["summary"],
-          title: thisUser["listings"][uid]["title"],
-          price: thisUser["listings"][uid]["price"],
-          location: thisUser["listings"][uid]["location"]
-        });
-      }
+    this.setState({
+      summary: this.props.summary,
+      title: this.props.title,
+      price: this.props.price,
+      location: this.props.location,
+      id: this.props.id,
+      category: this.props.category
     });
   }
 
   handlePrice(event) {
-    console.log("Price handled");
     this.setState({price: event.target.value});
   }
 
-  handleChange(event) {
+  handleSummaryChange(event) {
     this.setState({summary: event.target.value});
   }
 
@@ -203,7 +188,7 @@ export default class Listing extends Component {
                 </h2>
                 :
                 <form onSubmit={this.handleSubmit}>
-                  <div class="input-field">
+                  <div className="input-field">
                     <textarea defaultValue={this.state.title} className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></textarea>
                   </div>
                 </form>
@@ -232,8 +217,8 @@ export default class Listing extends Component {
                 </h4>
                 :
                 <form onSubmit={this.handleSubmit}>
-                  <div class="input-field">
-                    <textarea defaultValue= {this.state.summary} className="materialize-textarea flow-text black-text" onChange={this.handleChange}></textarea>
+                  <div className="input-field">
+                    <textarea defaultValue= {this.state.summary} className="materialize-textarea flow-text black-text" onChange={this.handleSummaryChange}></textarea>
                   </div>
                 </form>
               }
