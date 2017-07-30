@@ -202,9 +202,11 @@ export default class ListingsPage extends Component {
                </p>
              </div>
             }>
-            {numListings < 3 ?
-              (isValidListing ?
-                <p> Listing was successfully submitted! </p>
+            {!isValidListing ?
+              (numListings >= 3 ?
+                <p>
+                  You have reached the maximum number of listings.
+                </p>
                   :
                   <div>
                     <form onSubmit={this.handleSubmit}>
@@ -248,9 +250,7 @@ export default class ListingsPage extends Component {
                     </form>
                   </div>)
                 :
-                <p>
-                  You have reached the maximum number of listings.
-                </p>}
+                <p> Listing was successfully submitted! </p>}
             </Modal>}
         {userListings}
       </div>
