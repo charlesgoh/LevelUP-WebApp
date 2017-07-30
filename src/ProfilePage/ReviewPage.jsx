@@ -184,7 +184,7 @@ export default class ReviewPage extends Component {
         {this.state.editReviewFlag ?
           <div>
             <form onSubmit={this.handleSubmit}>
-              <Rating image="./star.png" fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }}/>
+              <Rating image={"./star2.png"} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }}/>
               <div className = "input-field">
                 <p> Title </p>
                 <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
