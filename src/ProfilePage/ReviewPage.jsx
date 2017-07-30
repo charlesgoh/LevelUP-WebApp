@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
 import ReviewObject from './ReviewObject.jsx';
 import styles from '../GlobalStyles.css';
+import Rating from 'react-rating-system';
 
 export default class ReviewPage extends Component {
 
@@ -171,6 +172,8 @@ export default class ReviewPage extends Component {
       });
     }
 
+
+
     return (
       <div>
         {this.state.allowReview ?
@@ -181,6 +184,7 @@ export default class ReviewPage extends Component {
         {this.state.editReviewFlag ?
           <div>
             <form onSubmit={this.handleSubmit}>
+              <Rating image="./star.png" fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }}/>
               <div className = "input-field">
                 <p> Title </p>
                 <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
