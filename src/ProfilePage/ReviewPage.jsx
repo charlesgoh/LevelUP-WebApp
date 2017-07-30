@@ -29,6 +29,7 @@ export default class ReviewPage extends Component {
     this.setReviewFlag = this.setReviewFlag.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleReviewChange = this.handleReviewChange.bind(this);
+    this.handleRating = this.handleRating.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   };
 
@@ -56,7 +57,7 @@ export default class ReviewPage extends Component {
         firebase.database().ref('reviews/' + this.props.uid + '/' + user.uid).update({
           feedback: this.state.myReview,
           title: this.state.myTitle,
-          score: 5,
+          score: this.state.myScore,
           photoURL: user.photoURL
         });
     }
@@ -68,6 +69,11 @@ export default class ReviewPage extends Component {
 
   handleTitleChange(event) {
     this.setState({myTitle: event.target.value});
+  }
+
+  handleRating(event){
+    console.log(event);
+    this.setState({myScore: event});
   }
 
   componentDidMount() {
@@ -184,7 +190,7 @@ export default class ReviewPage extends Component {
         {this.state.editReviewFlag ?
           <div>
             <form onSubmit={this.handleSubmit}>
-              <Rating image={"./star2.png"} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }}/>
+              <Rating image={require('./star2.png')} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }} callback={this.handleRating}/>
               <div className = "input-field">
                 <p> Title </p>
                 <textarea defaultValue= {this.state.myTitle} type="text" className="materialize-textarea" onChange={this.handleTitleChange}></textarea>
