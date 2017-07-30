@@ -1,6 +1,6 @@
 {
   "name": "levelup-today",
-  "homepage" : "https://levelup.today/",
+  "homepage": "https://levelup.today/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,6 +12,7 @@
     "react-dom": "^15.6.1",
     "react-google-autocomplete": "^1.0.13",
     "react-materialize": "^1.0.5",
+    "react-rating-system": "^1.0.7",
     "react-router-dom": "^4.1.1",
     "react-transition-group": "^1.2.0",
     "uuid": "^3.1.0"
