@@ -51,18 +51,33 @@ export default class Navigation extends Component {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
-    provider.addScope("user_about_me");
-    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
+    // var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
 
     //Handle Successful Login
     promise.then(result => {
       console.log("Facebook Login Successful!")
     });
 
-    // Handle Exceptions and Errors
-    promise.catch(error => {
-      var msg = error.message;
-      console.log(msg);
+      // Set Firebase DB variables for user
+      FirebaseService.firebaseDB.ref('users/' + user.id).update({
+        email: user.email,
+        name: user.name,
+        photoURL: user.picture
+      });
+      console.log("Facebook user saved into databse");
+
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      console.log(errorCode);
+      console.log(errorMessage);
+      console.log(email);
+      console.log(credential);
     });
   }
 
