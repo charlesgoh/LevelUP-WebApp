@@ -75,7 +75,7 @@ export default class ReviewPage extends Component {
     var getReviews = firebase.database().ref('/reviews').orderByKey();
     var offerRef = firebase.database().ref('/offers');
 
-    var arr = [];
+
     firebaseRef.once('value')
       .then(function(snapshot) {
         var uid = self.props.uid;
@@ -113,6 +113,7 @@ export default class ReviewPage extends Component {
         var myReview = '';
         var myTitle = '';
         var myScore = '';
+        var arr = [];
         var uid = self.props.uid;
         var data = snapshot.val()[uid];
         var selfUid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : '');
