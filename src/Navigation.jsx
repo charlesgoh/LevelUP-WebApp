@@ -179,7 +179,7 @@ export default class Navigation extends Component {
                 Sign In With Google
               </button>
               <br/>
-              <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large disabled">
+              <button className="waves-effect waves-light btn-large disabled">
                 <i className="fa fa-facebook left"></i>
                 Sign In With Facebook
               </button>
