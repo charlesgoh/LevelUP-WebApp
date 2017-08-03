@@ -129,9 +129,9 @@ export default class ProfilePage extends Component {
                 <Link to={{
                   pathname: "/inbox"
                 }}>
-                  <Button large waves='light' className="red darken-4">
-                    <Icon>email</Icon>
-                  </Button>
+                  <a className="waves-effect waves-light btn red darken-4">
+                    <i className="material-icons left">email</i>INBOX
+                  </a>
                 </Link>
                 :
                 <Link to={{
