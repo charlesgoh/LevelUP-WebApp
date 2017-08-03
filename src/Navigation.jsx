@@ -122,7 +122,7 @@ export default class Navigation extends Component {
   render() {
     if (this.state.newUser){
       return (
-        <Redirect to={"/profile/id?=" + this.state.uid} />
+        <Redirect to={"/welcome"} />
       )
     }
 
