@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import Listing from './Listing.jsx';
 import Autocomplete from 'react-google-autocomplete';
-import { Modal, Button, CardPanel, Row, Col, Input } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import { Modal, Button, Row, Col, Input } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class ListingsPage extends Component {
 
@@ -91,7 +91,6 @@ export default class ListingsPage extends Component {
     listingsRef.on("value", snapshot => {
       var data = snapshot.val()[this.props.uid];
       var arr = [];
-      var uid = this.props.uid;
 
       if(data){
         Object.keys(data).forEach(function(key) {
@@ -115,7 +114,6 @@ export default class ListingsPage extends Component {
 
     listingsRef.on("value", snapshot => {
       var data = snapshot.val()[this.props.uid];
-      var uid = this.props.uid;
       var newArr = [];
 
       if(data){
@@ -171,10 +169,6 @@ export default class ListingsPage extends Component {
     var userListings = '';
     var isValidListing = this.state.validListing;
     var numListings = this.state.listingNumber;
-
-    var clickable = {
-      cursor: "pointer"
-    };
 
     if(this.state.listings){
       userListings = this.state.listings.map(item =>

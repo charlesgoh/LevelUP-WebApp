@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import UserProfile from './UserProfile';
 import ListingsPage from './ListingsPage.jsx';
 import ReviewPage from './ReviewPage';
-import { Modal, Button, CardPanel, Row, Col, Tabs, Tab } from 'react-materialize';
+import { Tabs, Tab } from 'react-materialize';
 
 export default class ProfilePage extends Component {
   render (){

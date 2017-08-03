@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import * as FirebaseService from './FirebaseService';
-import ListingInstance from './ListingInstance';
 import { Carousel, Button } from 'react-materialize';
 
 export default class WelcomePage extends Component {
