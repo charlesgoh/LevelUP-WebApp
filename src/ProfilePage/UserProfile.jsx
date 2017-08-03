@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
+import { Modal, Button, CardPanel, Row, Col, Icon } from 'react-materialize';
 import styles from '../GlobalStyles.css';
 
 export default class ProfilePage extends Component {
@@ -108,15 +108,18 @@ export default class ProfilePage extends Component {
               {user !== null && user.uid === this.props.uid ?
                 <div className = 'center-align flow-text'>
                  <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
-                   {this.state.editable ? "Update" : "Edit"}
+                   {this.state.editable ?
+                     <Button waves='light'>UPDATE</Button> :
+                     <Button floating large waves='light' icon='edit' />
+                   }
                  </a>
                </div>
                :
                ''
              }
-
+              <br/>
               {/* Display User's profile photo */}
-               <img src = {photoURL} className = 'circle responsive-img' alt=""/>
+              <img src = {photoURL} className = 'circle responsive-img' alt=""/>
 
               {/* Display User's Name */}
               <h4 className="center-align overflow-control">{name}</h4>
@@ -126,9 +129,9 @@ export default class ProfilePage extends Component {
                 <Link to={{
                   pathname: "/inbox"
                 }}>
-                  <Button waves='light' className="red darken-4">
-                    INBOX
-                  </Button>
+                  <a className="waves-effect waves-light btn red darken-4">
+                    <i className="material-icons left">email</i>INBOX
+                  </a>
                 </Link>
                 :
                 <Link to={{

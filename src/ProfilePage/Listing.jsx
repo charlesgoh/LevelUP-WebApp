@@ -133,7 +133,10 @@ export default class Listing extends Component {
           {uid === this.props.uid ?
             <div className = 'right-align flow-text'>
              <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
-               {this.state.editable ? "Update" : "Edit"}
+               {this.state.editable ?
+                 <Button waves='light'>UPDATE</Button> :
+                 <Button floating large waves='light' icon='edit' />
+               }
              </a>
              <br />
              {this.state.editable ?
