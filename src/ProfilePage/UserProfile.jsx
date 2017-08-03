@@ -108,15 +108,18 @@ export default class ProfilePage extends Component {
               {user !== null && user.uid === this.props.uid ?
                 <div className = 'center-align flow-text'>
                  <a className="center-align" onClick={this.setEditFlag} type="submit" style={clickable}>
-                   {this.state.editable ? "Update" : "Edit"}
+                   {this.state.editable ?
+                     <Button waves='light'>UPDATE</Button> :
+                     <Button waves='light'>EDIT</Button>
+                   }
                  </a>
                </div>
                :
                ''
              }
-
+              <br/>
               {/* Display User's profile photo */}
-               <img src = {photoURL} className = 'circle responsive-img' alt=""/>
+              <img src = {photoURL} className = 'circle responsive-img' alt=""/>
 
               {/* Display User's Name */}
               <h4 className="center-align overflow-control">{name}</h4>
