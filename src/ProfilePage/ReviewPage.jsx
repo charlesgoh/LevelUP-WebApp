@@ -182,9 +182,12 @@ export default class ReviewPage extends Component {
 
     return (
       <div>
+        <br/>
         {this.state.allowReview ?
            <a className="center-align" onClick={this.setReviewFlag} type="submit" style={clickable}>
-             {this.state.editReviewFlag ? "Update" : "Add/Edit Review"}
+             {this.state.editReviewFlag ?
+               <Button waves='light'>Update</Button> :
+               <Button waves='light'>Add/Edit Review</Button>}
            </a>
         : ""}
         {this.state.editReviewFlag ?
