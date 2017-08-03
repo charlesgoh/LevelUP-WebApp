@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CardPanel, Row, Col } from 'react-materialize';
 import styles from '../GlobalStyles.css';
+import Rating from 'react-rating-system';
 
 export default class ReviewObject extends Component {
 
@@ -14,10 +15,8 @@ export default class ReviewObject extends Component {
               {this.props.name}
             </h4>
 
-            {/* replace with star rating */}
-            <h5 className="flow-text center-align">
-              {this.props.score}
-            </h5>
+            <Rating image={require('./star2.png')} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }} editable={false} lockRating= "true" initialValue={this.props.score}/>
+
           </Col>
           <Col s={9} className='center-align'>
             <h3 className="flow-text left-align overflow-control">
