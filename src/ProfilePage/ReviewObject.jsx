@@ -15,7 +15,7 @@ export default class ReviewObject extends Component {
               {this.props.name}
             </h4>
 
-            <Rating image={require('./star2.png')} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }} editable={false} lockRating= "true" initialValue={this.props.score}/>
+            <Rating image={require('./star2.png')} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }} editable={false} lockRating={true} initialValue={this.props.score}/>
 
           </Col>
           <Col s={9} className='center-align'>
