@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
 import { Redirect, Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Icon, SideNav, SideNavItem, Navbar, NavItem } from 'react-materialize';
+// import { Modal, Button, CardPanel, Icon, SideNav, SideNavItem, Navbar, NavItem } from 'react-materialize';
 
 export default class Navigation extends Component {
 
@@ -122,7 +122,7 @@ export default class Navigation extends Component {
   render() {
     if (this.state.newUser){
       return (
-        <Redirect to={"/profile/id?=" + this.state.uid} />
+        <Redirect to={"/welcome"} />
       )
     }
 

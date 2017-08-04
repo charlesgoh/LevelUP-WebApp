@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { CardPanel, Row, Col } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import '../GlobalStyles.css';
 import Rating from 'react-rating-system';
 
 export default class ReviewObject extends Component {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import Autocomplete from 'react-google-autocomplete';
 import { Modal, Button, CardPanel, Row, Col, Input } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import '../GlobalStyles.css';
 
 export default class Listing extends Component {
 

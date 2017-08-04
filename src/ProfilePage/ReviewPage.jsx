@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Row, Col } from 'react-materialize';
+import { Button } from 'react-materialize';
 import ReviewObject from './ReviewObject.jsx';
-import styles from '../GlobalStyles.css';
+import '../GlobalStyles.css';
 import Rating from 'react-rating-system';
 
 export default class ReviewPage extends Component {
@@ -135,9 +134,9 @@ export default class ReviewPage extends Component {
         }, 0);
 
         if (data[selfUid]){
-          myReview = data[selfUid]["feedback"],
-          myTitle = data[selfUid]["title"],
-          myScore = data[selfUid]["score"]
+          myReview = data[selfUid]["feedback"];
+          myTitle = data[selfUid]["title"];
+          myScore = data[selfUid]["score"];
         }
 
         score /= arr.length;
@@ -169,16 +168,12 @@ export default class ReviewPage extends Component {
     };
 
     var list = "";
-    var user = firebase.auth().currentUser;
-    var uid = (user ? user.uid : "");
 
     if(this.state.reviews){
       list = this.state.reviews.map(function(item){
         return <ReviewObject key={item.uid} name={item.name} score= {item.score} title={item.title} feedback={item.feedback} photoURL={item.photoURL}/>
       });
     }
-
-
 
     return (
       <div>

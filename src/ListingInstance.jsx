@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import firebase from "firebase";
-import styles from './GlobalStyles.css';
-import { CardPanel, Row, Col, Button, Icon } from 'react-materialize';
+import './GlobalStyles.css';
+import { Row, Col, Button, Icon } from 'react-materialize';
 
 export default class ListingInstance extends Component {
   render() {

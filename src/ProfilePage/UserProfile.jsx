@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
-import { Modal, Button, CardPanel, Row, Col, Icon } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import { Button, CardPanel, Row, Col } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class ProfilePage extends Component {
 
@@ -42,10 +42,7 @@ export default class ProfilePage extends Component {
   componentDidMount() {
     let self = this;
     var firebaseRef = firebase.database().ref();
-    var getReviews = firebase.database().ref('/reviews').orderByKey();
-    var offerRef = firebase.database().ref('/offers');
 
-    var arr = [];
     firebaseRef.once('value')
       .then(function(snapshot) {
         var uid = self.props.uid;

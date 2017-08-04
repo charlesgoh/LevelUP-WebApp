@@ -9,6 +9,7 @@ import Navigation from './Navigation';
 import ProfilePage from './ProfilePage/ProfilePage.jsx';
 import MessagePage from './MessagePage/MessagePage.jsx';
 import Inbox from './MessagePage/Inbox.jsx';
+import WelcomePage from './WelcomePage.jsx'
 
 export default class Router extends Component {
 
@@ -40,6 +41,7 @@ export default class Router extends Component {
           <Navigation/>
           <Switch>
             <Route exact path="/" component= { App }/>
+            <Route exact path="/welcome" component= { WelcomePage }/>
             <Route path="/profile/:value" component= { ProfilePage }/>
             <Route path="/inbox" component= { Inbox } />
             <Route path="/message/:value" component= { MessagePage } />

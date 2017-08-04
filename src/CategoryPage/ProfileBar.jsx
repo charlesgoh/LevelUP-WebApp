@@ -2,7 +2,7 @@ import React, { Component }from 'react';
 import firebase from 'firebase';
 // import { Link } from 'react-router-dom';
 import { Row, Col, CardPanel } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import '../GlobalStyles.css';
 
 export default class ProfileBar extends Component {
 

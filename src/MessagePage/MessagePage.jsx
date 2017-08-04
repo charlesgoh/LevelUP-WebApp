@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { Link, Redirect } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { Row, Col, Button, Input, CardPanel } from 'react-materialize';
-import styles from '../GlobalStyles.css';
+import '../GlobalStyles.css';
 
 export default class MessagePage extends Component {
 
