@@ -140,17 +140,21 @@ export default class Listing extends Component {
              </a>
              <br />
              {this.state.editable ?
-               <Modal
-                 header={"Delete listing?"}
-                 trigger={<a className="grey-text" style={clickable}>Delete</a>}
-                 actions={
-                   <div>
-                    <Button modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
-                    <Button modal="close" waves='light'>Close</Button>
-                  </div>
-                 }>
-                 <p> Do you really wish to delete this listing? This action is irreversible!</p>
-               </Modal>
+               <div>
+                 <br/>
+                 <Modal
+                   header={"Delete listing?"}
+                   trigger={<Button className='red darken-4' floating large waves='light' icon='delete' />}
+                   actions={
+                     <div>
+                      <Button className='red darken-4' modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
+                      <Button modal="close" waves='light'>Close</Button>
+                    </div>
+                   }>
+                   <p> Do you really wish to delete this listing? This action is irreversible!</p>
+                 </Modal>
+
+               </div>
                :
                ""}
             </div> : ""}
