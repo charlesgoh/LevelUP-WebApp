@@ -111,26 +111,23 @@ export default class App extends Component {
   }
 
   render() {
-
     var carousel = (
-      <Carousel options={{ fullWidth: true }}>
-      	<div className='red'>
-      		<h2>First Panel</h2>
-      		<p className='white-text'>This is your first panel</p>
-      	</div>
-      	<div className='amber'>
-      		<h2>Second Panel</h2>
-      		<p className='white-text'>This is your second panel</p>
-      	</div>
-      	<div className='green'>
-      		<h2>Third Panel</h2>
-      		<p className='white-text'>This is your third panel</p>
-      	</div>
-      	<div className='blue'>
-      		<h2>Fourth Panel</h2>
-      		<p className='white-text'>This is your fourth panel</p>
-      	</div>
-      </Carousel>
+      <Carousel
+      	fixedItem={
+          <div>
+            <h2 className="white-text">Get active today!</h2>
+            {/* <button className='btn-large red darken-4 waves-light waves-effect'>SIGNUP NOW!</button> */}
+          </div>
+        }
+      	options={{ fullWidth: true }}
+      	images={[
+      		'https://lorempixel.com/800/400/sports/1',
+      		'https://lorempixel.com/800/400/sports/2',
+      		'https://lorempixel.com/800/400/sports/3',
+      		'https://lorempixel.com/800/400/sports/6',
+          'https://lorempixel.com/800/400/sports/8'
+      	]}
+      />
     );
 
     var list = "Loading listings. Please wait...";
