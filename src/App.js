@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as FirebaseService from './FirebaseService';
 import ListingInstance from './ListingInstance';
-import { Carousel } from 'react-materialize';
+import { Carousel, Preloader } from 'react-materialize';
 
 export default class App extends Component {
   constructor(props) {
@@ -130,7 +130,14 @@ export default class App extends Component {
       />
     );
 
-    var list = "Loading listings. Please wait...";
+    var list = (
+      <div className = "center">
+        <br/>
+        <br/>
+        <br/>
+        <Preloader size="big" flashing/>
+      </div>
+    );
 
     if(this.state.display !== 1){
       list = this.state.display.map(item =>
