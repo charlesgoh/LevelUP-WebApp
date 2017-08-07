@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import * as FirebaseService from './FirebaseService';
 import ListingInstance from './ListingInstance';
-import { Carousel, Preloader } from 'react-materialize';
+import { Slider, Slide, Preloader } from 'react-materialize';
 
 export default class App extends Component {
   constructor(props) {
@@ -112,22 +112,23 @@ export default class App extends Component {
 
   render() {
     var carousel = (
-      <Carousel
-      	fixedItem={
-          <div>
-            <h2 className="white-text">Get active today!</h2>
-            {/* <button className='btn-large red darken-4 waves-light waves-effect'>SIGNUP NOW!</button> */}
-          </div>
-        }
-      	options={{ fullWidth: true }}
-      	images={[
-      		'https://lorempixel.com/800/400/sports/1',
-      		'https://lorempixel.com/800/400/sports/2',
-      		'https://lorempixel.com/800/400/sports/3',
-      		'https://lorempixel.com/800/400/sports/6',
-          'https://lorempixel.com/800/400/sports/8'
-      	]}
-      />
+      <Slider>
+        <Slide src="https://lorempixel.com/800/400/sports/1" title="Tagline">
+          Slogan for slide 1
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/2" title="Tagline" placement="left">
+          Slogan for slide 2
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/3" title="Tagline" placement="right">
+          Slogan for slide 3
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/6" title="Tagline" placement="left">
+          Slogan for slide 4
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/8" title="Tagline" placement="right">
+          Slogan for slide 5
+        </Slide>
+      </Slider>
     );
 
     var list = (
