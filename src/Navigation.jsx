@@ -120,11 +120,12 @@ export default class Navigation extends Component {
   }
 
   render() {
+  /*
     if (this.state.newUser){
       return (
         <Redirect to={"/welcome"} />
       )
-    }
+    }*/
 
     var logIn = (
       <a className="waves-effect waves-light btn" href="#modal1">
