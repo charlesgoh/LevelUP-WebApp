@@ -111,7 +111,7 @@ export default class App extends Component {
   }
 
   render() {
-    var carousel = (
+    var slider = (
       <Slider>
         <Slide src="https://lorempixel.com/800/400/sports/1" title="Tagline">
           Slogan for slide 1
@@ -148,7 +148,7 @@ export default class App extends Component {
 
     return (
       <div>
-        {carousel}
+        {slider}
         {list}
       </div>
     );
