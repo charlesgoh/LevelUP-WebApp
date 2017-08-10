@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase';
 import Listing from './Listing.jsx';
 import Autocomplete from 'react-google-autocomplete';
-import { Modal, Button, Row, Col, Input } from 'react-materialize';
+import { Button, Row, Col, Input, CardPanel } from 'react-materialize';
 import '../GlobalStyles.css';
 
 export default class ListingsPage extends Component {
@@ -21,19 +21,19 @@ export default class ListingsPage extends Component {
       category: "1",
       listingNumber: 1,
       listings: [],
-      validListing: false
+      validListing: false,
+      addingNewListing: false
     };
 
     this.submitNewListing = this.submitNewListing.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleCategoryFit = this.handleCategoryFit.bind(this);
-    this.handleCategorySport = this.handleCategorySport.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
     this.callUpdate = this.callUpdate.bind(this);
-    this.resetListing = this.resetListing.bind(this);
+    this.setAddFlag = this.setAddFlag.bind(this);
   };
 
   submitNewListing() {
@@ -52,7 +52,7 @@ export default class ListingsPage extends Component {
 
     this.setState({
       warning: "",
-      validListing: true
+      addingNewListing: false
     });
 
     var user = firebase.auth().currentUser;
@@ -65,17 +65,10 @@ export default class ListingsPage extends Component {
     });
   }
 
-  resetListing(){
-    if (this.state.validListing){
-      this.setState({
-        summary: "",
-        title: "",
-        price: "",
-        location: "",
-        category: "1",
-        validListing: false
-      })
-    }
+  setAddFlag(){
+    this.setState({
+      addingNewListing: !this.state.addingNewListing
+    });
   }
   componentWillMount() {
     let user = firebase.auth().currentUser;
@@ -152,12 +145,8 @@ export default class ListingsPage extends Component {
     this.setState({title: event.target.value});
   }
 
-  handleCategoryFit(event) {
-    this.setState({category: "1"});
-  }
-
-  handleCategorySport(event) {
-    this.setState({category: "2"});
+  handleCategoryChange(event) {
+    this.setState({category: event.target.value});
   }
 
   handleSubmit(event) {
@@ -167,8 +156,6 @@ export default class ListingsPage extends Component {
   render () {
     var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : "");
     var userListings = '';
-    var isValidListing = this.state.validListing;
-    var numListings = this.state.listingNumber;
 
     if(this.state.listings){
       userListings = this.state.listings.map(item =>
@@ -179,73 +166,68 @@ export default class ListingsPage extends Component {
     return (
       <div>
         <br />
-        {uid !== this.props.uid ? "" :
-          <Modal
-            header='Add New Listing'
-            trigger={
-              <Button waves='light'>
-                Add
-              </Button>
-            }
-            actions={
-              <div>
-               <Button modal="close" waves='light' onClick={this.resetListing}>Cancel</Button>
-               {isValidListing || numListings >= 3 ? "" : <Button waves='light' type='submit' onClick={this.submitNewListing}>Submit</Button>}
-               <p className='red-text'>
-                 {this.state.warning}
-               </p>
-             </div>
-            }>
-            {!isValidListing ?
-              (numListings >= 3 ?
-                <p>
-                  You have reached the maximum number of listings.
-                </p>
-                  :
-                  <div>
-                    <form onSubmit={this.handleSubmit}>
-                      <p>
-                        Title
-                      </p>
-                      <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleTitleChange} />
+        {this.state.addingNewListing ?
+        <div>
+        <CardPanel>
+          <Button waves='light' onClick={this.submitNewListing}>
+            Submit
+          </Button>
+          <div>
+            <form onSubmit={this.handleSubmit}>
+              <div className="input-field">
+                <textarea id='title' defaultValue={this.state.title} className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></textarea>
+                <label for='title'> Title </label>
+              </div>
+            </form>
 
-                      <p>
-                        Summary
-                      </p>
-                      <Input defaultValue={this.state.price} className="flow-text" onChange={this.handleChange} />
-                    </form>
+            <p> Location </p>
 
-                      <p>
-                        Location
-                      </p>
-                      <div>
-                        <Autocomplete
-                          onPlaceSelected={(place) => {
-                            // console.log(place.formatted_address);
-                            this.handleLocation(place.formatted_address);
-                          }}
-                          types={['address']}
-                          componentRestrictions={{'country': 'SG'}}>
-                        </Autocomplete>
-                      </div>
-                    <form onSubmit={this.handleSubmit}>
-                      <Row>
-                        <Col s={6}>
-                          <p>
-                            Price/Hour
-                          </p>
-                          <Input defaultValue={this.state.price} className="flow-text" onChange={this.handlePrice} />
-                        </Col>
-                        <Col s={6}>
-                          <Input name='group1' className='with-gap' type='radio' value='1' label='Fitness' onClick={this.handleCategoryFit} defaultValue='selected' />
-                          <Input name='group1' className='with-gap' type='radio' value='2' label='Sports' onClick={this.handleCategorySport}/>
-                        </Col>
-                      </Row>
-                    </form>
-                  </div>)
-                :
-                <p> Listing was successfully submitted! </p>}
-            </Modal>}
+            <Autocomplete
+              onPlaceSelected={(place) => {
+                this.handleLocation(place.formatted_address);
+              }}
+              types={['address']}
+              componentRestrictions={{'country': 'SG'}}>
+            </Autocomplete>
+
+            <form onSubmit={this.handleSubmit}>
+              <div className="input-field">
+                <textarea id='summary' defaultValue={this.state.summary} className="materialize-textarea flow-text black-text" onChange={this.handleChange}></textarea>
+                <label for='summary'> Summary </label>
+              </div>
+            </form>
+
+            <Row>
+              <Col s={6}>
+                <Input  type='select' label="Category" defaultValue='1' onChange={this.handleCategoryChange}>
+              		<option value='1'>Fitness</option>
+              		<option value='2'>Sports</option>
+              	</Input>
+              </Col>
+              <Col s={6}>
+                <form onSubmit={this.handleSubmit}>
+                  <Input label='Price per Hour' defaultValue={this.state.price} className="flow-text yellow-text text-darken-4" onChange={this.handlePrice} />
+                </form>
+              </Col>
+            </Row>
+          </div>
+            <p className='red-text'>
+              {this.state.warning}
+            </p>
+        </CardPanel>
+        </div>  :
+        (this.props.uid === uid ?
+          (this.state.listingNumber < 3 ?
+            <Button waves='light' onClick={this.setAddFlag}>
+              Add New Listing
+            </Button>
+            :
+            <Button waves='light' disabled>
+              Maximum Listings Reached!
+            </Button>
+          )
+        :
+        "")}
         {userListings}
       </div>
     );
