@@ -27,9 +27,7 @@ export default class Listing extends Component {
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
     this.handleListingRemoval = this.handleListingRemoval.bind(this);
-
-    this.handleCategoryFit = this.handleCategoryFit.bind(this);
-    this.handleCategorySport = this.handleCategorySport.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
   };
@@ -108,12 +106,8 @@ export default class Listing extends Component {
     this.setState({title: event.target.value});
   }
 
-  handleCategoryFit(event) {
-    this.setState({category: "1"});
-  }
-
-  handleCategorySport(event) {
-    this.setState({category: "2"});
+  handleCategoryChange(event) {
+    this.setState({category: event.target.value});
   }
 
   handleSubmit(event) {
@@ -181,8 +175,17 @@ export default class Listing extends Component {
               {this.state.editable ?
                 <div>
                   <form onSubmit={this.handleSubmit}>
-                		<Input name='group1' className='with-gap' type='radio' value='1' label='Fitness' onClick={this.handleCategoryFit}/>
-                		<Input name='group1' className='with-gap' type='radio' value='2' label='Sports' onClick={this.handleCategorySport}/>
+                    <Input  type='select' label="Category" defaultValue={this.state.category} onChange={this.handleCategoryChange}>
+                      <option disabled='disabled'>Fitness</option>
+                      <option value="1">Gym Training</option>
+                      <option value="2">Fitness</option>
+                      <option value="2">Fitness</option>
+                      <option disabled='disabled'>Sports</option>
+                      <option value="2">Ball Sports</option>
+                      <option value="2">Sports</option>
+                      <option value="2">Sports</option>
+                      <option value="2">Sports</option>
+                  	</Input>
                   </form>
                 </div> :
               ""}

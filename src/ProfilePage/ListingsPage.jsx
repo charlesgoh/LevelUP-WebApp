@@ -200,8 +200,15 @@ export default class ListingsPage extends Component {
             <Row>
               <Col s={6}>
                 <Input  type='select' label="Category" defaultValue='1' onChange={this.handleCategoryChange}>
-              		<option value='1'>Fitness</option>
-              		<option value='2'>Sports</option>
+                  <option disabled='disabled'>Fitness</option>
+                  <option value="1">Gym Training</option>
+                  <option value="2">Fitness</option>
+                  <option value="2">Fitness</option>
+                  <option disabled='disabled'>Sports</option>
+                  <option value="2">Ball Sports</option>
+                  <option value="2">Sports</option>
+                  <option value="2">Sports</option>
+                  <option value="2">Sports</option>
               	</Input>
               </Col>
               <Col s={6}>
