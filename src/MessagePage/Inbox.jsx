@@ -39,6 +39,9 @@ export default class Inbox extends Component {
       for (var key in clientDic) {
         var userKey = clientDic[key].key;
         var otherUser = data[userKey];
+        if (!otherUser){
+          continue
+        }
         var newUserInboxMessage = {
           name: otherUser["name"],
           photoUrl: otherUser["photoURL"],
