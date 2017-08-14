@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default class Navigation extends Component {
 
