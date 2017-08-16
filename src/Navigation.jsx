@@ -11,9 +11,8 @@ export default class Navigation extends Component {
   }
 
   googleSignIn() {
-
     var provider = new firebase.auth.GoogleAuthProvider();
-    var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
+    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
 
     // Handle Successful Login
     promise.then(result => {
