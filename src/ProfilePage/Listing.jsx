@@ -177,14 +177,15 @@ export default class Listing extends Component {
                   <form onSubmit={this.handleSubmit}>
                     <Input  type='select' label="Category" defaultValue={this.state.category} onChange={this.handleCategoryChange}>
                       <option disabled='disabled'>Fitness</option>
-                      <option value="1">Gym Training</option>
-                      <option value="2">Fitness</option>
-                      <option value="2">Fitness</option>
                       <option disabled='disabled'>Sports</option>
-                      <option value="2">Ball Sports</option>
-                      <option value="2">Sports</option>
-                      <option value="2">Sports</option>
-                      <option value="2">Sports</option>
+                      <option value="0">Gym Training</option>
+                      <option value="1">Fitness/Weight Loss</option>
+                      <option value="2">Swimming</option>
+                      <option value="3">Tabletennis</option>
+                      <option value="4">Badminton</option>
+                      <option value="5">Tennis</option>
+                      <option value="6">Yoga</option>
+                      <option value="7">Other</option>
                   	</Input>
                   </form>
                 </div> :
