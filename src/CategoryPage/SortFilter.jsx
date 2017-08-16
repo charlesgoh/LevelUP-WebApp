@@ -64,16 +64,17 @@ export default class SortFilter extends Component {
             <Col s={10}>
               <form onSubmit={this.handleSubmit}>
                 <Input type='select' value={this.state.category} onChange={this.handleCatChange}>
-                  <option value="0">Display All</option>
                   <option disabled='disabled'>Fitness</option>
-                  <option value="2">Gym Training</option>
-                  <option value="2">Fitness</option>
-                  <option value="2">Fitness</option>
                   <option disabled='disabled'>Sports</option>
-                  <option value="2">Ball Sports</option>
-                  <option value="2">Sports</option>
-                  <option value="2">Sports</option>
-                  <option value="2">Sports</option>
+                  <option value="0">Display All</option>
+                  <option value="1">Gym Training</option>
+                  <option value="2">Fitness/Weight Loss</option>
+                  <option value="3">Swimming</option>
+                  <option value="4">Tabletennis</option>
+                  <option value="5">Badminton</option>
+                  <option value="6">Tennis</option>
+                  <option value="7">Yoga</option>
+                  <option value="8">Other</option>
                 </Input>
               </form>
             </Col>
