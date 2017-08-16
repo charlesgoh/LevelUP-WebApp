@@ -178,6 +178,7 @@ export default class Listing extends Component {
                     <Input  type='select' label="Category" defaultValue={this.state.category} onChange={this.handleCategoryChange}>
                       <option disabled='disabled'>Fitness</option>
                       <option disabled='disabled'>Sports</option>
+                      <option value="0">Display All</option>
                       <option value="1">Gym Training</option>
                       <option value="2">Fitness/Weight Loss</option>
                       <option value="3">Swimming</option>
