@@ -199,17 +199,18 @@ export default class ListingsPage extends Component {
 
             <Row>
               <Col s={6}>
-                <Input  type='select' label="Category" defaultValue='1' onChange={this.handleCategoryChange}>
+                <Input  type='select' label="Category" defaultValue={this.state.category} onChange={this.handleCategoryChange}>
                   <option disabled='disabled'>Fitness</option>
-                  <option value="1">Gym Training</option>
-                  <option value="2">Fitness</option>
-                  <option value="2">Fitness</option>
                   <option disabled='disabled'>Sports</option>
-                  <option value="2">Ball Sports</option>
-                  <option value="2">Sports</option>
-                  <option value="2">Sports</option>
-                  <option value="2">Sports</option>
-              	</Input>
+                  <option value="1">Gym Training</option>
+                  <option value="2">Fitness/Weight Loss</option>
+                  <option value="3">Swimming</option>
+                  <option value="4">Tabletennis</option>
+                  <option value="5">Badminton</option>
+                  <option value="6">Tennis</option>
+                  <option value="7">Yoga</option>
+                  <option value="8">Other</option>
+                </Input>
               </Col>
               <Col s={6}>
                 <form onSubmit={this.handleSubmit}>
