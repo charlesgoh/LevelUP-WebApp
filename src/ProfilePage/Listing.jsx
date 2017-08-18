@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import Autocomplete from 'react-google-autocomplete';
-import { Modal, Button } from 'react-materialize';
+import { Modal, Button, CardPanel, Row, Col, Input } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class Listing extends Component {
 
@@ -15,31 +16,52 @@ export default class Listing extends Component {
       title: "",
       price: "",
       location: "",
+      warning: "",
+      category: "1",
+      id: "1"
     };
 
     this.setEditFlag = this.setEditFlag.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleListingRemoval = this.handleListingRemoval.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSummaryChange = this.handleSummaryChange.bind(this);
     this.handlePrice = this.handlePrice.bind(this);
     this.handleLocation = this.handleLocation.bind(this);
+    this.handleListingRemoval = this.handleListingRemoval.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   };
 
   setEditFlag() {
+    if(this.state.editable){
+      if(isNaN(this.state.price) || !isFinite(this.state.price)){
+        this.setState({warning: "Please fill in numbers only for prices!"});
+        return;
+      }
+      if(!this.state.summary || !this.state.title || !this.state.price){
+        this.setState({warning: "Please fill in all fields."});
+        return;
+      }
+      if(parseInt(this.state.price, 10) <= 0){
+        this.setState({warning: "Please input positive numbers only."});
+        return;
+      }
+    }
+
     this.setState({
-      editable: !this.state.editable
+      editable: !this.state.editable,
+      warning: ""
     });
 
     if (this.state.editable){
       var user = firebase.auth().currentUser;
-      firebase.database().ref('listings/' + user.uid).update({
+      firebase.database().ref('listings/' + user.uid + '/' + this.state.id).update({
         summary: this.state.summary,
         title: this.state.title,
         price: this.state.price,
-        location: this.state.location
+        location: this.state.location,
+        category: this.state.category
       });
-      console.log("Pushed data into database.");
     }
   }
 
@@ -47,10 +69,7 @@ export default class Listing extends Component {
     this.setState({
       editable: false
     });
-
-    var user = firebase.auth().currentUser;
-    firebase.database().ref('listings/' + user.uid).remove();
-    console.log("Deleted listing from database.");
+    this.props.callback(this.state.id);
   }
 
   componentWillMount() {
@@ -58,40 +77,24 @@ export default class Listing extends Component {
     if (user) {
       this.setState({ loggedIn: true })
     };
-    console.log(JSON.stringify(this.state));
   }
 
   componentDidMount() {
-    firebase.database().ref().on("value", snapshot => {
-      var thisUser = snapshot.val();
-      var uid = this.props.uid;
-
-      if (!thisUser["listings"] || !thisUser["listings"][uid]) {
-        console.log("No entries. First write to db");
-
-        this.setState({
-          summary: "Listing Summary",
-          title: "Title of Listing",
-          price: "0",
-          location: "Your preferred location"
-        });
-      } else {
-        this.setState({
-          summary: thisUser["listings"][uid]["summary"],
-          title: thisUser["listings"][uid]["title"],
-          price: thisUser["listings"][uid]["price"],
-          location: thisUser["listings"][uid]["location"]
-        });
-      }
+    this.setState({
+      summary: this.props.summary,
+      title: this.props.title,
+      price: this.props.price,
+      location: this.props.location,
+      id: this.props.id,
+      category: this.props.category
     });
   }
 
   handlePrice(event) {
-    console.log("Price handled");
     this.setState({price: event.target.value});
   }
 
-  handleChange(event) {
+  handleSummaryChange(event) {
     this.setState({summary: event.target.value});
   }
 
@@ -103,102 +106,147 @@ export default class Listing extends Component {
     this.setState({title: event.target.value});
   }
 
+  handleCategoryChange(event) {
+    this.setState({category: event.target.value});
+  }
+
   handleSubmit(event) {
     event.preventDefault();
   }
 
   render () {
-    var user = firebase.auth().currentUser;
+    var uid = (firebase.auth().currentUser ? firebase.auth().currentUser.uid : "");
 
     var clickable = {
       cursor: "pointer"
     };
 
     return (
-      <div className = "card-panel z-depth-1">
+      <CardPanel className="z-depth-1">
         <div className = "container">
-          {user ?
+          {uid === this.props.uid ?
             <div className = 'right-align flow-text'>
              <a className="grey-text" onClick={this.setEditFlag} type="submit" style={clickable}>
-               {this.state.editable ? "Update" : "Edit"}
+               {this.state.editable ?
+                 <Button waves='light'>UPDATE</Button> :
+                 <Button floating large waves='light' icon='edit' />
+               }
              </a>
              <br />
              {this.state.editable ?
-               <Modal
-                 header={"Delete listing?"}
-                 trigger={<a>Delete</a>}
-                 actions={
-                   <div>
-                    <Button modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
-                    <Button modal="close" waves='light'>Close</Button>
-                  </div>
-                 }>
-                 <p> Do you really wish to delete this listing? This action is irreversible!</p>
-               </Modal> : ""}
-           </div> : ""}
-          <div className = 'row'>
-            <div className = 'col s4 left-align'>
+               <div>
+                 <br/>
+                 <Modal
+                   header={"Delete listing?"}
+                   trigger={<Button className='red darken-4' floating large waves='light' icon='delete' />}
+                   actions={
+                     <div>
+                      <Button className='red darken-4' modal="close" waves='light' onClick={this.handleListingRemoval}>Delete Listing</Button>
+                      <Button modal="close" waves='light'>Close</Button>
+                    </div>
+                   }>
+                   <p> Do you really wish to delete this listing? This action is irreversible!</p>
+                 </Modal>
+
+               </div>
+               :
+               ""}
+            </div> : ""}
+          <Row>
+            <Col s={4} className ='left-align'>
               <br />
               <h6 className = 'flow-text grey-text text-lighten'>
                 PRICE
               </h6>
 
               {!this.state.editable ?
-                <h5 className = 'flow-text yellow-text text-darken-4'>
+                <h5 className = 'flow-text yellow-text text-darken-4 overflow-control'>
                   SG${this.state.price}
                 </h5> :
                 <form onSubmit={this.handleSubmit}>
-                  <div className = "input-field">
-                    <input defaultValue={this.state.price} className="materialize-textarea flow-text yellow-text text-darken-4" onChange={this.handlePrice}></input>
-                  </div>
+                  <Input defaultValue={this.state.price} className="flow-text yellow-text text-darken-4" onChange={this.handlePrice} />
                 </form>
               }
 
               <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
-            </div>
 
-            <div className = 'col s8'>
-              {!this.state.editable ? <h2 className = 'flow-text red-text text-darken-4'>
+              {this.state.editable ?
+                <div>
+                  <form onSubmit={this.handleSubmit}>
+                    <Input  type='select' label="Category" defaultValue={this.state.category} onChange={this.handleCategoryChange}>
+                      <option value="0">Display All</option>
+                      <option disabled='disabled'>Strength/Fitness</option>
+                      <option value="1">Fitness/Weight Loss</option>
+                      <option value="2">Gym Training</option>
+                      <option disabled='disabled'>Sports</option>
+                      <option value="3">Badminton</option>
+                      <option value="4">Golf</option>
+                      <option value="5">MMA/Martial Arts</option>
+                      <option value="6">Swimming</option>
+                      <option value="7">Tabletennis</option>
+                      <option value="8">Tennis</option>
+                      <option value="9">Yoga</option>
+                      <option value="10">Other</option>
+                  	</Input>
+                  </form>
+                </div> :
+              ""}
+            </Col>
+
+            <Col s={8}>
+              {!this.state.editable ?
+                <h2 className = 'flow-text red-text text-darken-4'>
                 {this.state.title}
-              </h2>:
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <input defaultValue= {this.state.title} type="text" className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></input>
+                </h2>
+                :
+                <form onSubmit={this.handleSubmit}>
+                  <div className="input-field">
+                    <textarea defaultValue={this.state.title} className="materialize-textarea flow-text red-text text-darken-4" onChange={this.handleTitleChange}></textarea>
+                  </div>
+                </form>
+              }
+
+              {!this.state.editable?
+                <h6 className = 'flow-text left-align grey-text overflow-control'>
+                  {this.state.location}
+                </h6>
+                :
+                <div>
+                  <Autocomplete
+                    onPlaceSelected={(place) => {
+                      // console.log(place.formatted_address);
+                      this.handleLocation(place.formatted_address);
+                    }}
+                    types={['address']}
+                    componentRestrictions={{'country': 'SG'}}>
+                  </Autocomplete>
                 </div>
-              </form>
               }
 
-              {!this.state.editable? <h6 className = 'flow-text left-align grey-text'>
-                {this.state.location}
-              </h6> :
-              <div>
-                <Autocomplete
-                  onPlaceSelected={(place) => {
-                    // console.log(place.formatted_address);
-                    this.handleLocation(place.formatted_address);
-                  }}
-                  types={['address']}
-                  componentRestrictions={{'country': 'SG'}}>
-                </Autocomplete>
-              </div>
+              {!this.state.editable ?
+                <h4 className = 'flow-text text-justify overflow-control'>
+                  {this.state.summary}
+                </h4>
+                :
+                <form onSubmit={this.handleSubmit}>
+                  <div className="input-field">
+                    <textarea defaultValue= {this.state.summary} className="materialize-textarea flow-text black-text" onChange={this.handleSummaryChange}></textarea>
+                  </div>
+                </form>
               }
-
-              {!this.state.editable ? <h6 className = 'flow-text text-justify'>
-                {this.state.summary}
-              </h6>:
-              <form onSubmit={this.handleSubmit}>
-                <div className = "input-field">
-                  <textarea defaultValue= {this.state.summary} type="text" className="materialize-textarea" onChange={this.handleChange}></textarea>
-                </div>
-              </form>
-              }
-            </div>
-
-          </div>
+            </Col>
+          </Row>
+          {this.state.editable ?
+            <p className="red-text text-darken-1 right-align">
+              {this.state.warning}
+            </p>
+            :
+            ""
+          }
         </div>
-      </div>
+      </CardPanel>
     );
   }
 };

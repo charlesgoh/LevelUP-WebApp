@@ -1,34 +1,27 @@
 import React, { Component }from 'react';
 import firebase from 'firebase';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { Row, Col, CardPanel } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class ProfileBar extends Component {
 
   render() {
     var user = firebase.auth().currentUser;
     return (
-      <div className="col s12 m8 offset-m2 l6 offset-l3">
-        <div className = 'card-panel z-depth-1'>
-          <div className = 'center-align'>
-            <div className = 'row valign-wrapper'>
-              <div className = 'col s4'>
-                <img alt="" className="circle responsive-img" src={user.photoURL} />
-              </div>
+      <CardPanel className='z-depth-1'>
+        <Row className='valign-wrapper'>
+          <Col s={4}>
+            <img alt="" className="circle responsive-img" src={user.photoURL} />
+          </Col>
 
-              <div className = 'col s8 left-align'>
-                <Link to={{
-                  pathname: "/profile/id?=" + user.uid,
-                  state: {
-                    uid: user.uid
-                  }}
-                }>
-                  <strong className="flow-text black-text">{user.displayName}</strong>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          <Col s={8} className='center-align'>
+            <a href={"/profile/id?=" + user.uid}>
+              <strong className="flow-text black-text overflow-control">{user.displayName}</strong>
+            </a>
+          </Col>
+        </Row>
+      </CardPanel>
     );
   }
 };

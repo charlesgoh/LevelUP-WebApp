@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
+import { CardPanel, Row, Col } from 'react-materialize';
+import '../GlobalStyles.css';
+import Rating from 'react-rating-system';
 
-export default class ReviewObject2 extends Component {
+export default class ReviewObject extends Component {
 
   render () {
     return (
-      <div className="container center-align">
-        <div className='row'>
-          <div className='col s3 left-align'>
+      <CardPanel className="center-align">
+        <Row className='row'>
+          <Col s={3} className='left-align'>
             <img src={this.props.photoURL} alt="" className='responsive-img circle'/>
-            <h4 className="center-align">
+            <h4 className="flow-text center-align overflow-control">
               {this.props.name}
             </h4>
 
-            {/* replace with star rating */}
-            <h5 className="center-align">
-              {this.props.score}
-            </h5>
-          </div>
-          <div className='col s9 center-align'>
-            <h3 className="left-align">
+            <Rating image={require('./star2.png')} fillBG="#f1c40f" containerStyle={{ maxWidth: '200px' }} editable={false} lockRating={true} initialValue={this.props.score}/>
+
+          </Col>
+          <Col s={9} className='center-align'>
+            <h3 className="flow-text left-align overflow-control">
               {this.props.title}
             </h3>
-            <h5 className="left-align">
+            <h5 className="flow-text left-align overflow-control">
               {this.props.feedback}
             </h5>
-          </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </CardPanel>
     );
   }
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as FirebaseService from './FirebaseService';
 import ListingInstance from './ListingInstance';
+import { Slider, Slide, Preloader } from 'react-materialize';
 
 export default class App extends Component {
   constructor(props) {
@@ -59,55 +60,95 @@ export default class App extends Component {
     var arr = [];
 
     getListings.on('value', snapshot => {
-      console.log(snapshot.val());
       var data = snapshot.val();
+
       Object.keys(data).forEach(function(key) {
-        data[key]["uid"] = key;
-        arr.push(data[key]);
+        Object.keys(data[key]).forEach(function(item) {
+          data[key][item]["uid"] = key;
+          data[key][item]["id"] = item;
+          arr.push(data[key][item]);
+        });
       });
-      this.setState({
-        listings: arr,
-        display: arr});
+
+      if(this.props.location.state){
+        if (this.props.location.state.sortOrder !== "0"){
+          if (this.props.location.state.sortOrder === "1"){
+            arr.sort(function(a, b){
+              return parseInt(a.price, 10) - parseInt(b.price, 10);
+            })
+          }
+          else {
+            arr.sort(function(a, b){
+              return parseInt(b.price, 10) - parseInt(a.price, 10);
+            })
+          }
+        }
+
+        if (this.props.location.state.category !== "0"){
+          var filterOrder = this.props.location.state.category
+          var array = arr.filter(function(item){
+            return item.category.toString() === filterOrder;
+          });
+          this.setState({
+            display: array,
+            listings: arr
+          });
+        }
+        else {
+          this.setState({
+            display: arr,
+            listings: arr
+          });
+        }
+      }
+
+      else {
+        this.setState({
+          listings: arr,
+          display: arr});
+        }
     });
   }
 
   render() {
+    var slider = (
+      <Slider>
+        <Slide src="https://lorempixel.com/800/400/sports/1" title="Tagline">
+          Slogan for slide 1
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/2" title="Tagline" placement="left">
+          Slogan for slide 2
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/3" title="Tagline" placement="right">
+          Slogan for slide 3
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/6" title="Tagline" placement="left">
+          Slogan for slide 4
+        </Slide>
+        <Slide src="https://lorempixel.com/800/400/sports/8" title="Tagline" placement="right">
+          Slogan for slide 5
+        </Slide>
+      </Slider>
+    );
 
-    var carousel = (
-      <div className="carousel carousel-slider center" data-indicators="true">
-        <div className="carousel-fixed-item center">
-          <a className="btn waves-effect white grey-text darken-text-2">button</a>
-        </div>
-        <div className="carousel-item red white-text" href="#one!">
-          <h2>First Panel</h2>
-          <p className="white-text">This is your first panel</p>
-        </div>
-        <div className="carousel-item amber white-text" href="#two!">
-          <h2>Second Panel</h2>
-          <p className="white-text">This is your second panel</p>
-        </div>
-        <div className="carousel-item green white-text" href="#three!">
-          <h2>Third Panel</h2>
-          <p className="white-text">This is your third panel</p>
-        </div>
-        <div className="carousel-item blue white-text" href="#four!">
-          <h2>Fourth Panel</h2>
-          <p className="white-text">This is your fourth panel</p>
-        </div>
+    var list = (
+      <div className = "center">
+        <br/>
+        <br/>
+        <br/>
+        <Preloader size="big" flashing/>
       </div>
     );
 
-    var list = "Loading listings. Please wait...";
-
     if(this.state.display !== 1){
       list = this.state.display.map(item =>
-        <ListingInstance key={item.uid} uid={item.uid} title={item.title} summary={item.summary} price={item.price} location={item.location}/>
+        <ListingInstance key={item.id} uid={item.uid} title={item.title} summary={item.summary} price={item.price} location={item.location}/>
       );
     }
 
     return (
       <div>
-        {carousel}
+        {slider}
         {list}
       </div>
     );

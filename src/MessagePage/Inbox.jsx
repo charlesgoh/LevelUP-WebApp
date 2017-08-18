@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import { Row, Col, CardPanel } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class Inbox extends Component {
   constructor(props){
@@ -37,6 +39,9 @@ export default class Inbox extends Component {
       for (var key in clientDic) {
         var userKey = clientDic[key].key;
         var otherUser = data[userKey];
+        if (!otherUser){
+          continue
+        }
         var newUserInboxMessage = {
           name: otherUser["name"],
           photoUrl: otherUser["photoURL"],
@@ -52,25 +57,27 @@ export default class Inbox extends Component {
 
   render(){
 
-    var messageClients = "Time stops!";
+    var messageClients = "";
+
     if (this.state.clients){
       messageClients = this.state.clients.map(item =>
-        <div className="card-panel">
-          <div className="row">
-            <div className="col s3">
+        <CardPanel>
+          <Row>
+            <Col s={3}>
               <img src={item.photoUrl} alt="" className="circle responsive-img" />
-            </div>
-            <div className="col s9">
-              <Link to={{
-                pathname: "/message/id?=" + item.key}}>
-                <h4>{item.name}</h4>
+            </Col>
+            <Col s={9}>
+              <Link to={{pathname: "/message/id?=" + item.key}}>
+                <h4 className="black-text overflow-control">
+                  {item.name}
+                </h4>
               </Link>
-              <h5>
+              <h5 className="overflow-control">
                 {item.latestMessage}
               </h5>
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </CardPanel>
       );
     }
 

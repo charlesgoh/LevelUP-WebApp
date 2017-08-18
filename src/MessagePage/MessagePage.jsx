@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-// import * as FirebaseService from '../FirebaseService.jsx';
+import { Link, Redirect } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import { Row, Col, Button, Input, CardPanel } from 'react-materialize';
+import '../GlobalStyles.css';
 
 export default class MessagePage extends Component {
 
@@ -13,13 +16,20 @@ export default class MessagePage extends Component {
       name: "",
       offerStatus: false,
       hasOffer: false,
-      confirmed: false
+      confirmed: false,
+      confirmedOthUser: false
     };
 
+    this.autoScroll = this.autoScroll.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
     this.handleOfferChange = this.handleOfferChange.bind(this);
     this.handleOfferSubmit = this.handleOfferSubmit.bind(this);
+  }
+
+  autoScroll = () => {
+    const node = ReactDOM.findDOMNode(this.messagesEnd);
+    node.scrollIntoView({ behavior: "smooth" });
   }
 
   handleMessageChange(event){
@@ -31,6 +41,7 @@ export default class MessagePage extends Component {
   handleMessageSubmit(event){
     event.preventDefault();
     var user = firebase.auth().currentUser;
+
     if (this.state.currentMessage){
       firebase.database().ref('messages/').push({
         owner: user.uid,
@@ -142,101 +153,132 @@ export default class MessagePage extends Component {
         }
       }
     });
+
+    this.autoScroll();
+  }
+
+  componentDidUpdate(){
+    this.autoScroll();
   }
 
   render(){
 
-    var inbox = "And now time flows again.";
-
-    if (this.state.messages){
-      inbox = this.state.messages.map(message =>
-        message.owner === window.location.search.slice(2) ?
-          <div className="row">
-            <div className="card-panel hoverable grey col s12 m6 lighten-5 left-align">
-              <span className="blue-text">
-                {message.message}
-              </span>
-            </div>
-            <div className="col m6"></div>
-          </div>
-
-        :
-
-          <div className="row">
-            <div className="col m6"></div>
-            <div className="card-panel hoverable grey col s12 m6 lighten-5 right-align">
-              <span className="red-text">
-                {message.message}
-              </span>
-            </div>
-          </div>
-
-      );
-    }
-
+    var inbox = " ";
+    var ownerUid = window.location.search.slice(2);
     var user = firebase.auth().currentUser;
     var uid = (user ? user.uid : "");
 
+    if (uid === ownerUid){
+      return (
+        <div ref={(el) => { this.messagesEnd = el; }}>
+          <Redirect to={"/profile/id?=" + uid} />
+        </div>
+      );
+    }
+
+    if (this.state.messages){
+      inbox = this.state.messages.map(message =>
+        message.owner === ownerUid ?
+          <Row>
+            <Col s={10} m={9}>
+              <CardPanel className="z-depth-1 grey lighten-5 left-align">
+                <p className="blue-text overflow-control">
+                  {message.message}
+                </p>
+              </CardPanel>
+            </Col>
+            <Col s={2} m={3}>
+            </Col>
+          </Row>
+        :
+          <Row>
+            <Col s={2} m={3}>
+            </Col>
+            <Col s={10} m={9}>
+              <CardPanel className="z-depth-1 grey lighten-5 right-align">
+                <p className="red-text overflow-control">
+                  {message.message}
+                </p>
+              </CardPanel>
+            </Col>
+          </Row>
+      );
+    }
+
     if (!uid){
       return (
-        <div className="card-panel center-align red darken-4">
-          <h3 className="white-text">
-            You are not logged in. Please log in before trying again.
-          </h3>
+        <div>
+          <CardPanel className="center-align red darken-4">
+            <h3 className="white-text">
+              You are not logged in. Please log in before trying again.
+            </h3>
+          </CardPanel>
+          <div ref={(el) => { this.messagesEnd = el; }}>
+            {""}
+          </div>
         </div>
       );
     }
 
     return (
       <div>
-        <div className="card-panel center-align red darken-4">
-          {/*<img src={this.state.photoUrl} alt="" className="circle responsive-img" /> */}
-          <h3 className="white-text">
-            {this.state.name}
-          </h3>
-        </div>
+        <CardPanel className="center-align red darken-4 message-header">
+          <Row>
+            <Col s={2} className="center-align">
+              <img src={this.state.photoUrl} alt="" className="circle responsive-img image-limiter" />
+            </Col>
+            <Col s={4} className='center-align'>
+              <Link to={{pathname: "/profile/id?=" + ownerUid}}>
+                <h3 className="white-text">
+                  {this.state.name}
+                </h3>
+              </Link>
+            </Col>
+            <Col s={6} className="center-align">
+              {this.state.confirmed ?
+                <Button waves='light' className="large disabled">
+                  Trade confirmed!
+                </Button> :
+                <Button waves='light' onClick={this.handleOfferChange} className='large'>
+                  {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
+                </Button>}
+              <br />
+              <br />
+              {this.state.confirmedOthUser ?
+                <Button waves='light' className="large disabled">
+                  Trade confirmed!
+                </Button>
+                :
+                (this.state.hasOffer ?
+                  <Button waves='light' onClick={this.handleOfferSubmit} className='large'>
+                    Accept offer
+                  </Button>
+                  :
+                  <p>
+                    No offers right now
+                  </p>)
+                }
+            </Col>
+          </Row>
+        </CardPanel>
 
-
-        <div className="row">
-          <div className="col s6 center-align">
-            {this.state.confirmed ?
-              <button className="disabled">
-                Trade confirmed!
-              </button> :
-              <button onClick={this.handleOfferChange}>
-                {this.state.offerStatus ? "Withdraw offer" : "Make an offer"}
-              </button>}
-          </div>
-          <div className="col s6 center-align">
-            {this.state.confirmedOthUser ?
-              <button className="disabled">
-                Trade confirmed!
-              </button> :
-              (this.state.hasOffer ?
-                <button onClick={this.handleOfferSubmit}>
-                  Accept offer
-                </button> :
-                <p>
-                  No offers right now
-                </p>)
-              }
-          </div>
-        </div>
-
-        <div className="container">
+        <div className="message-body">
           {inbox}
+          <div ref={(el) => { this.messagesEnd = el; }}>
+            {""}
+          </div>
         </div>
 
         <form onSubmit={this.handleMessageSubmit}>
-          <div className = "container input-field">
-            <input value={this.state.currentMessage} ref={'messagebox'} type="text" className="materialize-textarea" onChange={this.handleMessageChange}>
-            </input>
-            <button className="btn waves-effect waves-light" type="submit" type="submit">
-              Send<i className="material-icons right">send</i>
-            </button>
-          </div>
+          <Input className="container overflow-control message-input" value={this.state.currentMessage} onChange={this.handleMessageChange} />
+
+          <Button waves='light' type="submit">
+            Send
+          </Button>
         </form>
       </div>
+
+
     );
   }
 

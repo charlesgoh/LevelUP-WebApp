@@ -1,57 +1,55 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import firebase from "firebase";
+import './GlobalStyles.css';
+import { Row, Col, Button, Icon } from 'react-materialize';
 
 export default class ListingInstance extends Component {
-
-
-
   render() {
     var user = firebase.auth().currentUser;
     var uid = (user ? user.uid : "");
-    console.log("Key is: " + this.props.uid);
     return (
       <div className = "card-panel z-depth-1 hoverable">
         <div className = "container">
           {/* BUTTON GOES HERE */}
-          <div className = 'row'>
-            <div className = 'col s3 left-align'>
+          <Row>
+            <Col s={3} className = 'left-align'>
               <br />
               <h6 className = 'flow-text grey-text text-lighten'>
                 PRICE
               </h6>
 
-              <h5 className = 'flow-text yellow-text text-darken-4'>
+              <h5 className = 'flow-text yellow-text text-darken-4 overflow-control'>
                 SG${this.props.price}
               </h5>
 
               <h6 className = 'flow-text grey-text text-lighten'>
                 PER HOUR
               </h6>
-            </div>
+            </Col>
 
-            <div className = 'col s6'>
-              <h2 className = 'flow-text red-text text-darken-4'>
+            <Col s={6}>
+              <h2 className = 'flow-text red-text text-darken-4 overflow-control'>
                 {this.props.title}
               </h2>
 
-              <h6 className = 'flow-text left-align grey-text text-lighten-2'>
+              <h6 className = 'flow-text left-align grey-text text-lighten-2 overflow-control'>
                 {this.props.location}
               </h6>
 
-              <h6 className = 'flow-text text-justify'>
+              <h6 className = 'flow-text text-justify overflow-control'>
                 {this.props.summary}
               </h6>
-            </div>
+            </Col>
 
-            <div className = 'col s3 center-align'>
+            <Col s={3} className='center-align'>
               <Link to={{
                 pathname: "/profile/id?=" + this.props.uid
               }}>
-                <button className='btn-large waves-effect waves-light'>
+                <Button waves='light'>
                   Profile
-                  <i className="material-icons right">send</i>
-                </button>
+                  <Icon className="right">send</Icon>
+                </Button>
               </Link>
 
               <br/>
@@ -61,15 +59,14 @@ export default class ListingInstance extends Component {
               <Link to={{
                 pathname: "/message/id?=" + this.props.uid
               }}>
-              <button className='btn-large waves-effect waves-light red darken-4'>
+              <Button waves='light' className='red darken-4'>
                 Chat
-                <i className="material-icons right">email</i>
-              </button>
+                <Icon className="right">email</Icon>
+              </Button>
               </Link>
               }
-            </div>
-
-          </div>
+            </Col>
+          </Row>
         </div>
       </div>
     );
