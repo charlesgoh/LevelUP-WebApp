@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import firebase from 'firebase';
 import CategoryPage from './CategoryPage/CategoryPage.jsx';
 import * as FirebaseService from './FirebaseService';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default class Navigation extends Component {
 
@@ -11,9 +11,8 @@ export default class Navigation extends Component {
   }
 
   googleSignIn() {
-
     var provider = new firebase.auth.GoogleAuthProvider();
-    var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
+    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
 
     // Handle Successful Login
     promise.then(result => {
@@ -179,7 +178,7 @@ export default class Navigation extends Component {
                 Sign In With Google
               </button>
               <br/>
-              <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large blue disabled">
+              <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large blue">
                 <i className="fa fa-facebook left"></i>
                 Sign In With Facebook
               </button>

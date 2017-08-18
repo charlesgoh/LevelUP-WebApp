@@ -113,6 +113,9 @@ export default class App extends Component {
   render() {
     var slider = (
       <Slider>
+        <Slide src={require("./Graphics/Slider/Slider0.png")} title="No Registration Required" placement="right">
+          Sign in with Google
+        </Slide>
         <Slide src="https://lorempixel.com/800/400/sports/1" title="Tagline">
           Slogan for slide 1
         </Slide>
