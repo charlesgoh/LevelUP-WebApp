@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Carousel, Button } from 'react-materialize';
+import { Slider, Slide } from 'react-materialize';
 
 export default class WelcomePage extends Component {
   render() {
