@@ -49,33 +49,35 @@ export default class Navigation extends Component {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.addScope("public_profile");
     provider.addScope("email");
-    var promise = FirebaseService.firebaseAuth.signInWithRedirect(provider);
+    var promise = FirebaseService.firebaseAuth.signInWithPopup(provider);
 
     //Handle Successful Login
     promise.then(result => {
-      console.log("Facebook Login Successful!");
       var user = result.user;
-      // Set Firebase DB variables for user
-      FirebaseService.firebaseDB.ref('users/' + user.id).update({
+      console.log(user);
+      console.log(provider);
+
+      FirebaseService.firebaseDB.ref('users/' + user.uid).update({
         email: user.email,
-        name: user.name,
-        photoURL: user.picture
+        name: user.displayName,
+        photoURL: user.photoURL
       });
-      console.log("Facebook user saved into databse");
+
+      var userRef = FirebaseService.firebaseDB.ref('/users');
+      userRef.once('value', snapshot => {
+        var data = snapshot.val();
+        if (!data[user.uid]["initialized"]){
+          FirebaseService.firebaseDB.ref('users/' + user.uid).update({
+            initialized: true
+          });
+          this.setState({newUser: true});
+        }
+      });
     });
 
-    promise.catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      console.log(errorCode);
-      console.log(errorMessage);
-      console.log(email);
-      console.log(credential);
+    promise.catch(error => {
+      var msg = error.message;
+      console.log(msg);
     });
   }
 
@@ -178,7 +180,9 @@ export default class Navigation extends Component {
                 Sign In With Google
               </button>
               <br/>
-              <button onClick={this.facebookSignIn} className="waves-effect waves-light btn-large blue">
+              <button onClick={this.facebookSignIn}
+                id="facebook"
+                className="waves-effect waves-light btn-large blue">
                 <i className="fa fa-facebook left"></i>
                 Sign In With Facebook
               </button>
