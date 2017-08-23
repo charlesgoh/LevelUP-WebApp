@@ -1,46 +1,31 @@
 import React, {Component} from 'react';
-import { Carousel, Button } from 'react-materialize';
+import { Slider, Slide } from 'react-materialize';
 
 export default class WelcomePage extends Component {
   render() {
     return (
-      <Carousel
-        options={{ fullWidth: true }}
-        carouselId="guide"
-        fixedItem={
-        <div>
-          <Button id="welcomePrev" className='btn'>{"<"}</Button>
-          <Button id="welcomeNext" className='btn'>{">"}</Button>
-        </div>}>
-        <div className='red center-align'>
-          <h2>Welcome to LevelUP.today!</h2>
-          <p className='white-text'>A simple guide to get you started</p>
-        </div>
-        <div className='amber center-align'>
-          <h2>Setting up your profile</h2>
-          <p className='white-text'>This is your second panel</p>
-        </div>
-        <div className='green center-align'>
-          <h2>Making a new listing</h2>
-          <p className='white-text'>This is your third panel</p>
-        </div>
-        <div className='blue center-align'>
-          <h2>Finding the job you want</h2>
-          <p className='white-text'>This is your fourth panel</p>
-        </div>
-        <div className='purple center-align'>
-          <h2>Interacting with other users</h2>
-          <p className='white-text'>This is your fifth panel</p>
-        </div>
-        <div className='cyan center-align'>
-          <h2>Leaving feedback</h2>
-          <p className='white-text'>This is your sixth panel</p>
-        </div>
-        <div className='pink center-align'>
-          <h2>You are now ready to use LevelUP.today!</h2>
-          <p className='white-text'>This is your sixth panel</p>
-        </div>
-      </Carousel>
+      <Slider>
+        <Slide src="https://farm5.staticflickr.com/4436/35871686044_70c4e90578_b.jpg"
+        title="No Registration Required"
+        placement="right">
+          Sign in with Google
+        </Slide>
+        <Slide src="https://farm5.staticflickr.com/4337/36311327310_4d297ea379_b.jpg"
+        title="The secret of getting ahead is getting started"
+        placement="right">
+          Mark Twain
+        </Slide>
+        <Slide src="https://farm5.staticflickr.com/4358/36311327000_c9040dc97f_b.jpg"
+        title="Physical fitness is not only one of the most important keys to a healthy body, it is the basis of dynamic and creative intellectual activity"
+        placement="right">
+          John F. Kennedy
+        </Slide>
+        <Slide src="https://farm5.staticflickr.com/4370/36706542465_8aa13a24e6_b.jpg"
+        title="As you think, so you shall become"
+        placement="right">
+          Bruce Lee
+        </Slide>
+      </Slider>
     );
   }
 }
